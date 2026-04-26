@@ -6,7 +6,7 @@ All functions return marimo-compatible objects (plots, html, md).
 import math
 import json
 import html as _html
-import numpy as np
+import random
 import marimo as mo
 
 
@@ -19,24 +19,43 @@ ACCENT_COLORS = ["#534AB7", "#1D9E75", "#D85A30", "#BA7517",
                  "#3266ad", "#639922", "#D4537E", "#888780"]
 
 
-def _rng(seed: int) -> np.random.Generator:
-    return np.random.default_rng(seed)
+def _rng(seed: int) -> random.Random:
+    return random.Random(seed)
 
 
-def _softmax(x) -> np.ndarray:
-    arr = np.asarray(x, dtype=float)
-    shifted = arr - np.max(arr)
-    exps = np.exp(shifted)
-    return exps / (exps.sum() + 1e-12)
+def _softmax(x):
+    arr = [float(v) for v in x]
+    shifted = [v - max(arr) for v in arr]
+    exps = [math.exp(v) for v in shifted]
+    total = sum(exps) + 1e-12
+    return [v / total for v in exps]
 
 
-def _topk_indices(x, k: int) -> np.ndarray:
-    arr = np.asarray(x, dtype=float)
-    if arr.size == 0 or k <= 0:
-        return np.array([], dtype=int)
-    k = min(k, arr.size)
-    idx = np.argpartition(arr, -k)[-k:]
-    return idx[np.argsort(arr[idx])[::-1]]
+def _topk_indices(x, k: int):
+    arr = [float(v) for v in x]
+    if not arr or k <= 0:
+        return []
+    k = min(k, len(arr))
+    return [i for i, _ in sorted(enumerate(arr), key=lambda t: t[1], reverse=True)[:k]]
+
+
+def _normalize(x):
+    total = sum(x) + 1e-12
+    return [float(v) / total for v in x]
+
+
+def _corrcoef(x, y):
+    if len(x) != len(y) or not x:
+        return 0.0
+    mean_x = sum(x) / len(x)
+    mean_y = sum(y) / len(y)
+    dx = [v - mean_x for v in x]
+    dy = [v - mean_y for v in y]
+    denom_x = math.sqrt(sum(v * v for v in dx))
+    denom_y = math.sqrt(sum(v * v for v in dy))
+    if denom_x == 0 or denom_y == 0:
+        return 0.0
+    return sum(a * b for a, b in zip(dx, dy)) / (denom_x * denom_y)
 
 
 # ── Internal: robust Chart.js renderer ────────────────────────────────────────
@@ -265,18 +284,20 @@ def plot_attention_compute(max_T: int = 4096):
 def plot_attention_consistency(window_size: int = 16, head_idx: int = 0, seq_len: int = 64):
     """Show that attention patterns in the obs. window predict full-sequence attention."""
     rng = _rng(42 + head_idx)
-    true_importance = np.zeros(seq_len, dtype=float)
-    heavy_positions = rng.integers(0, max(1, seq_len - window_size), size=5)
-    true_importance[heavy_positions] = rng.random(5) * 0.5 + 0.5
-    true_importance = true_importance + rng.random(seq_len) * 0.1
-    true_importance = (true_importance / true_importance.sum()).tolist()
+    true_importance = [0.0] * seq_len
+    upper = max(1, seq_len - window_size)
+    heavy_positions = [rng.randrange(upper) for _ in range(5)]
+    for pos in heavy_positions:
+        true_importance[pos] = rng.random() * 0.5 + 0.5
+    true_importance = [v + rng.random() * 0.1 for v in true_importance]
+    true_importance = _normalize(true_importance)
 
-    obs_prediction = [(v + np.random.uniform(0, 0.02)) for v in true_importance]
+    obs_prediction = [(v + rng.uniform(0.0, 0.02)) for v in true_importance]
     obs_sum = sum(obs_prediction)
     obs_prediction = [v / obs_sum for v in obs_prediction]
 
     labels = [str(i) for i in range(seq_len)]
-    corr = np.corrcoef(true_importance, obs_prediction)[0, 1]
+    corr = _corrcoef(true_importance, obs_prediction)
 
     pre = f"""
     <div style="margin-bottom:8px;font-size:13px;color:var(--color-text-secondary)">
@@ -325,14 +346,15 @@ def plot_per_head_heatmap(prompt: str, n_heads: int = 8, n_show: int = 32):
     head_patterns = []
     for h in range(n_heads):
         if h < 2:
-            w = np.exp(-np.arange(T, dtype=float) * 0.15)[::-1]
+            w = [math.exp(-i * 0.15) for i in range(T)][::-1]
         elif h < 4:
-            w = np.zeros(T, dtype=float)
-            idx = rng.permutation(T)[:max(1, T // 5)]
-            w[idx] = rng.random(max(1, T // 5))
+            w = [0.0] * T
+            idx = rng.sample(range(T), k=min(T, max(1, T // 5)))
+            for i in idx:
+                w[i] = rng.random()
         else:
-            w = rng.random(T)
-        w = (w / (w.sum() + 1e-9)).tolist()
+            w = [rng.random() for _ in range(T)]
+        w = _normalize(w)
         head_patterns.append([round(v, 4) for v in w])
 
     tok_labels = [t[:8] for t in tokens]
@@ -455,11 +477,12 @@ def plot_vote_cluster(seq_len: int = 32, window_size: int = 6, budget: int = 8,
     """
     rng = _rng(11)
     prefix_len = seq_len - window_size
-    raw_scores = rng.random(prefix_len)
+    raw_scores = [rng.random() for _ in range(prefix_len)]
     raw_scores[5] += 1.2
     raw_scores[18] += 1.0
     raw_scores[24] += 0.8
-    raw_scores = (raw_scores / raw_scores.max()).tolist()
+    max_raw = max(raw_scores) if raw_scores else 1.0
+    raw_scores = [v / max_raw for v in raw_scores]
 
     # Max-pool 1d (kernel_size, stride=1, same padding)
     pad = kernel_size // 2
@@ -524,9 +547,9 @@ def plot_adaptive_window(prompt: str, n_heads: int = 8, seq_len: int = 48):
     base_window = 16
 
     for h in range(n_heads):
-        logits = rng.standard_normal(seq_len)
+        logits = [rng.gauss(0.0, 1.0) for _ in range(seq_len)]
         attn = _softmax(logits)
-        entropy = float(-(attn * np.log(attn + 1e-9)).sum())
+        entropy = float(-sum(v * math.log(v + 1e-9) for v in attn))
         max_entropy = math.log(seq_len)
         norm_entropy = entropy / max_entropy
 
@@ -578,12 +601,12 @@ def plot_entropy_intuition(focus_temp: float = 0.4, diffuse_temp: float = 4.0,
     with their Shannon entropies labelled. Makes the entropy formula concrete.
     """
     rng = _rng(5)
-    base = rng.standard_normal(n_positions)
-    focused = _softmax(base / max(1e-3, focus_temp))
-    diffuse = _softmax(base / max(1e-3, diffuse_temp))
+    base = [rng.gauss(0.0, 1.0) for _ in range(n_positions)]
+    focused = _softmax([v / max(1e-3, focus_temp) for v in base])
+    diffuse = _softmax([v / max(1e-3, diffuse_temp) for v in base])
 
     def H(p):
-        return float(-(p * np.log(p + 1e-12)).sum())
+        return float(-sum(v * math.log(v + 1e-12) for v in p))
 
     H_focus = H(focused)
     H_diff  = H(diffuse)
@@ -768,10 +791,12 @@ def run_demo(prompt: str, budget: float, method: str):
 
     T = len(tokens)
     rng = _rng(99)
-    importance = rng.random(T)
-    importance[0:3] += 0.4
-    importance[-4:] += 0.3
-    importance = importance / importance.sum()
+    importance = [rng.random() for _ in range(T)]
+    for i in range(min(3, T)):
+        importance[i] += 0.4
+    for i in range(max(0, T - 4), T):
+        importance[i] += 0.3
+    importance = _normalize(importance)
 
     n_keep = max(1, int(T * budget))
 
@@ -785,9 +810,10 @@ def run_demo(prompt: str, budget: float, method: str):
     elif method == "H2O":
         n_recent = max(1, n_keep // 4)
         scores = importance.copy()
-        scores[-n_recent:] = 2.0
+        for i in range(max(0, T - n_recent), T):
+            scores[i] = 2.0
         idx = _topk_indices(scores, n_keep)
-        kept = set(idx.tolist())
+        kept = set(idx)
         obs_set = set(range(T - n_recent, T))
     else:  # SnapKV
         obs_w = max(1, min(int(T * 0.25), 16))
@@ -795,7 +821,7 @@ def run_demo(prompt: str, budget: float, method: str):
         prefix_scores = importance[:-obs_w]
         n_prefix = max(1, n_keep - obs_w)
         idx = _topk_indices(prefix_scores, min(n_prefix, len(prefix_scores)))
-        kept = set(idx.tolist()) | obs_set
+        kept = set(idx) | obs_set
 
     spans = []
     for i, tok in enumerate(tokens):
@@ -841,7 +867,7 @@ def run_demo(prompt: str, budget: float, method: str):
 
 # ── Internal: shared scoring helper used by GAME 3 and GAME 4 ────────────────
 
-def _score_methods(T: int, importance: np.ndarray, n_keep: int, method: str):
+def _score_methods(T: int, importance, n_keep: int, method: str):
     """
     Returns (kept_set, obs_set) for a method on a sequence of length T.
     Same logic as run_demo, factored out so other games can reuse it.
@@ -861,16 +887,17 @@ def _score_methods(T: int, importance: np.ndarray, n_keep: int, method: str):
     if method == "H2O":
         n_recent = max(1, n_keep // 4)
         scores = importance.copy()
-        scores[-n_recent:] = 2.0
+        for i in range(max(0, T - n_recent), T):
+            scores[i] = 2.0
         idx = _topk_indices(scores, min(n_keep, T))
-        return set(idx.tolist()), set(range(T - n_recent, T))
+        return set(idx), set(range(T - n_recent, T))
     # SnapKV
     obs_w = max(1, min(int(T * 0.25), 16))
     obs_set = set(range(T - obs_w, T))
     prefix_scores = importance[:-obs_w] if obs_w < T else importance.copy()
     n_prefix = max(1, n_keep - obs_w)
     idx = _topk_indices(prefix_scores, min(n_prefix, len(prefix_scores)))
-    return set(idx.tolist()) | obs_set, obs_set
+    return set(idx) | obs_set, obs_set
 
 
 # ── GAME 3. Needle in a haystack ─────────────────────────────────────────────
@@ -904,10 +931,11 @@ def run_needle_demo(needle_position: str = "middle", budget: float = 0.30,
     # the keyword pattern), recent tokens get a small one. SnapKV's window
     # attention will *also* boost the needle if the question keywords correlate.
     rng = _rng(123 + needle_idx)
-    importance = rng.random(T) * 0.3
+    importance = [rng.random() * 0.3 for _ in range(T)]
     importance[needle_idx] = 0.95
-    importance[-4:] += 0.4
-    importance = importance / importance.sum()
+    for i in range(max(0, T - 4), T):
+        importance[i] += 0.4
+    importance = _normalize(importance)
 
     methods = ["SnapKV", "H2O", "StreamingLLM", "Recent Only", "Random"]
     rows_html = []
@@ -990,7 +1018,7 @@ def run_custom_policy(prompt: str, budget: float, recency_w: float,
     n_keep = max(1, int(T * budget))
 
     # Signal 1: recency — linearly increasing toward the end
-    recency = np.linspace(0.0, 1.0, T)
+    recency = [i / max(1, T - 1) for i in range(T)]
 
     # Signal 2: frequency — count occurrences of each token (case-insensitive)
     counts = {}
@@ -998,23 +1026,29 @@ def run_custom_policy(prompt: str, budget: float, recency_w: float,
         k = t.lower().strip(".,!?:;")
         counts[k] = counts.get(k, 0) + 1
     max_count = max(counts.values())
-    frequency = np.array(
+    frequency = [
         [counts[t.lower().strip(".,!?:;")] / max_count for t in tokens]
-    )
+    ][0]
 
     # Signal 3: simulated obs-window attention (same source as run_demo)
     rng = _rng(99)
-    attention = rng.random(T)
-    attention[0:3] += 0.4
-    attention[-4:] += 0.3
-    attention = attention / attention.max()
+    attention = [rng.random() for _ in range(T)]
+    for i in range(min(3, T)):
+        attention[i] += 0.4
+    for i in range(max(0, T - 4), T):
+        attention[i] += 0.3
+    max_attn = max(attention) if attention else 1.0
+    attention = [v / max_attn for v in attention]
 
     total_w = recency_w + frequency_w + attention_w + 1e-9
     rw, fw, aw = recency_w / total_w, frequency_w / total_w, attention_w / total_w
-    custom_score = rw * recency + fw * frequency + aw * attention
+    custom_score = [
+        rw * recency[i] + fw * frequency[i] + aw * attention[i]
+        for i in range(T)
+    ]
 
     custom_idx = _topk_indices(custom_score, n_keep)
-    custom_kept = set(custom_idx.tolist())
+    custom_kept = set(custom_idx)
 
     # SnapKV reference selection on the same prompt and budget
     snapkv_kept, _ = _score_methods(T, attention, n_keep, "SnapKV")
