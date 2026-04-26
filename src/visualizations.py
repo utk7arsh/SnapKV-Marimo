@@ -130,12 +130,14 @@ def plot_memory_breakdown(n_layers: int = 32, n_heads: int = 32,
     ]
     labels = [f"{name}\n× {val:,}" for name, val, _ in factors]
     colors = [c for _, _, c in factors]
-    # Cumulative running product for the visual (in MB scale)
+    # Cumulative running product for the visual (in MB scale).
+    # Keep full precision here: rounding early can turn the first factors into
+    # literal zeros, which breaks Chart.js on a logarithmic axis.
     running = []
     acc = 1
     for _, val, _ in factors:
         acc *= val
-        running.append(round(acc / 1e6, 3))   # MB
+        running.append(acc / 1e6)
 
     cfg = f"""{{
       type:'bar',
@@ -152,7 +154,11 @@ def plot_memory_breakdown(n_layers: int = 32, n_heads: int = 32,
         responsive:true, maintainAspectRatio:false, animation:{{duration:400}},
         plugins:{{
           legend:{{display:false}},
-          tooltip:{{callbacks:{{label: ctx => ctx.parsed.y.toLocaleString() + ' MB'}}}}
+          tooltip:{{callbacks:{{label: ctx => {{
+            const y = ctx.parsed.y;
+            return (y >= 0.01 ? y.toLocaleString(undefined, {{maximumFractionDigits: 3}})
+                              : y.toExponential(2)) + ' MB';
+          }}}}}}
         }},
         scales:{{
           x:{{ticks:{{font:{{size:11}}}}}},
@@ -1382,21 +1388,30 @@ def run_method_picker(context_length: str, workload: str,
 
     ctx_weight = ctx_to_axis.get(context_length, 0.7)
     workload_axis = workload_to_axis.get(workload, "long_context")
+    # Keep long-context fit relevant even for short prompts, but don't hand
+    # every method the same large baseline that washes out differences.
+    context_floor = 0.50
 
     scored = []
     for m in _COMPETITORS:
         score = 0.0
         score += 0.40 * (m["fit"][workload_axis])
-        score += 0.30 * (m["fit"]["long_context"] * ctx_weight + (1 - ctx_weight) * 0.6)
+        score += 0.25 * (
+            m["fit"]["long_context"] * ctx_weight
+            + (1 - ctx_weight) * context_floor
+        )
         if drop_in_required:
-            score += 0.20 * m["fit"]["drop_in"]
+            # When "drop-in" is a hard requirement, it should outweigh the
+            # small freshness bonus and meaningfully counterbalance methods
+            # that are stronger overall but require more integration work.
+            score += 0.30 * m["fit"]["drop_in"]
         else:
             score += 0.10 * m["fit"]["drop_in"]  # mild penalty for clunky setup either way
         if recovery_needed:
             score += 0.30 * m["fit"]["recovery"]
         # Small boost for being recent (signals active maintenance)
         if m["latest"]:
-            score += 0.05
+            score += 0.02
         scored.append((round(score, 3), m))
 
     scored.sort(key=lambda t: t[0], reverse=True)
@@ -1566,7 +1581,7 @@ def plot_memory_types():
     rows = [
         {
             "name": "Working",
-            "icon": "🔥",
+            "icon": "",
             "what": "What the model is actively manipulating right now to produce the next token.",
             "where": "KV cache (in GPU)",
             "where_color": "#D85A30",
@@ -1575,7 +1590,7 @@ def plot_memory_types():
         },
         {
             "name": "Short-term",
-            "icon": "⚡",
+            "icon": "",
             "what": "Recent turns of the conversation — still in the prompt the agent sees.",
             "where": "Context window → KV cache",
             "where_color": "#BA7517",
@@ -1584,7 +1599,7 @@ def plot_memory_types():
         },
         {
             "name": "Episodic",
-            "icon": "📓",
+            "icon": "",
             "what": "Specific past events: previous sessions, what the user said yesterday, prior tool calls.",
             "where": "External store · vector DB · summary log",
             "where_color": "#534AB7",
@@ -1593,7 +1608,7 @@ def plot_memory_types():
         },
         {
             "name": "Semantic",
-            "icon": "📚",
+            "icon": "",
             "what": "World knowledge and facts the model already learned during training.",
             "where": "Model weights (parametric)",
             "where_color": "#888780",
@@ -1602,7 +1617,7 @@ def plot_memory_types():
         },
         {
             "name": "Procedural",
-            "icon": "🛠",
+            "icon": "",
             "what": "Skills and how-to: tool use, output formats, reasoning patterns.",
             "where": "Model weights + tool definitions in prompt",
             "where_color": "#888780",
@@ -1761,13 +1776,18 @@ def simulate_agent_loop(n_turns: int = 12, strategy: str = "Agent + Summarise",
                 evicted += hot - kv_limit
                 hot = kv_limit
         elif strategy == "SnapKV-style (intent-aware)":
-            # Same eviction rate as streaming, but informed selection — modeled
-            # as a slightly higher effective cap because the kept tokens are
-            # the "right" ones (less re-prefill needed in practice).
-            cap = int(kv_limit * 1.0)
-            if hot > cap:
-                evicted += hot - cap
-                hot = cap
+            # SnapKV evicts the SAME number of tokens as Streaming, but it
+            # picks them via observation-window voting. Some of the "evicted"
+            # tokens remain effectively recoverable through the kept tokens'
+            # attention to neighbours — modelled as a small fraction surviving
+            # in the cold tier. The rest is fully lost. This is what makes the
+            # bar visibly different from plain Streaming.
+            if hot > kv_limit:
+                overflow = hot - kv_limit
+                hot = kv_limit
+                kept_through_attention = int(overflow * 0.30)
+                cold += kept_through_attention
+                evicted += overflow - kept_through_attention
         elif strategy == "Agent + Summarise":
             if hot > kv_limit:
                 overflow = hot - kv_limit
@@ -1838,5 +1858,3 @@ def simulate_agent_loop(n_turns: int = 12, strategy: str = "Agent + Summarise",
     """
     return mo.Html(_chart_block("Agent memory over turns by strategy", cfg,
                                 height_px=320, pre_canvas_html=summary))
-
-
