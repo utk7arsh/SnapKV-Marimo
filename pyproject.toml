@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "marimo-competition"
+version = "0.1.0"
+description = "Interactive marimo notebook exploration of SnapKV and KV-cache strategies."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "marimo>=0.23.0",
+    "torch>=2.1.0",
+    "transformers>=4.40.0",
+    "numpy>=1.26.0",
+    "einops>=0.7.0",
+]
