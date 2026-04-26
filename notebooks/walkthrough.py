@@ -4,8 +4,6 @@ __generated_with = "0.23.3"
 app = marimo.App(width="medium")
 
 
-# ── Imports ────────────────────────────────────────────────────────────────────
-
 @app.cell(hide_code=True)
 def _():
     import sys
@@ -17,31 +15,36 @@ def _():
 
     from src.visualizations import (
         plot_adaptive_window,
+        plot_attention_compute,
         plot_attention_consistency,
         plot_budget_quality,
+        plot_entropy_intuition,
         plot_human_memory,
         plot_kv_growth,
+        plot_memory_breakdown,
         plot_naive_strategy,
         plot_per_head_heatmap,
+        plot_vote_cluster,
         render_algo_step,
         run_demo,
     )
+
     return (
-        Path,
         plot_adaptive_window,
+        plot_attention_compute,
         plot_attention_consistency,
         plot_budget_quality,
+        plot_entropy_intuition,
         plot_human_memory,
         plot_kv_growth,
+        plot_memory_breakdown,
         plot_naive_strategy,
         plot_per_head_heatmap,
+        plot_vote_cluster,
         render_algo_step,
         run_demo,
-        sys,
     )
 
-
-# ── Title ──────────────────────────────────────────────────────────────────────
 
 @app.cell(hide_code=True)
 def _(mo):
@@ -76,8 +79,6 @@ def _(mo):
     return
 
 
-# ── Section 1: Why LLMs need memory ──────────────────────────────────────────
-
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
@@ -104,28 +105,60 @@ def _(mo):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    ### The memory equation
+    ### The memory equation, visualised
 
-    For a typical 7B parameter model:
+    The KV cache for one token is the product of six factors:
 
-    | Quantity | Value |
-    |---|---|
-    | Layers | 32 |
-    | Attention heads | 32 |
-    | Head dimension | 128 |
-    | Data type | float16 (2 bytes) |
+    $$\text{bytes/token} \;=\; \underbrace{2}_{K+V} \cdot L \cdot H \cdot d_{\text{head}} \cdot \text{bytes}_{\text{dtype}}$$
 
-    Memory per token = $2 \times 32 \times 32 \times 128 \times 2 \text{ bytes} = \mathbf{524{,}288}$ bytes ≈ **0.5 MB per token**
+    Drag the sliders below to see how each factor compounds. The chart's y-axis is
+    **logarithmic** — small bumps in any factor blow up the total.
+    """)
+    return
 
-    At 32K tokens, that's **~16 GB** — just for the KV cache, before weights.
-    At 128K tokens (GPT-4 context), it's **~64 GB**.
+
+@app.cell(hide_code=True)
+def _(mo):
+    layers_s   = mo.ui.slider(start=8,  stop=80,  step=4,  value=32,
+                              label="Layers (L)")
+    heads_s    = mo.ui.slider(start=8,  stop=64,  step=4,  value=32,
+                              label="Attention heads (H)")
+    headdim_s  = mo.ui.slider(start=32, stop=256, step=32, value=128,
+                              label="Head dimension (d)")
+    seqmem_s   = mo.ui.slider(start=1024, stop=131072, step=1024, value=8192,
+                              label="Sequence length (tokens)")
+    dtype_s    = mo.ui.radio(options={"fp16 (2B)": 2, "fp32 (4B)": 4, "int8 (1B)": 1},
+                             value="fp16 (2B)", label="Data type", inline=True)
+    mo.vstack([
+        mo.md("**Try changing these values:**"),
+        layers_s, heads_s, headdim_s, seqmem_s, dtype_s,
+    ])
+    return dtype_s, headdim_s, heads_s, layers_s, seqmem_s
+
+
+@app.cell
+def _(dtype_s, headdim_s, heads_s, layers_s, plot_memory_breakdown, seqmem_s):
+    plot_memory_breakdown(
+        n_layers=layers_s.value,
+        n_heads=heads_s.value,
+        head_dim=headdim_s.value,
+        seq_len=seqmem_s.value,
+        dtype_bytes=dtype_s.value,
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    For the default 7B-style config (32 / 32 / 128 / fp16): **~0.5 MB per token**.
+    At 32K tokens that's **~16 GB**. At 128K (GPT-4 context) it's **~64 GB** —
+    just for the KV cache, before the model weights themselves.
 
     This is the bottleneck that kills long-context inference at scale.
     """)
     return
 
-
-# ── Section 2: What is KV cache? ─────────────────────────────────────────────
 
 @app.cell(hide_code=True)
 def _(mo):
@@ -142,29 +175,32 @@ def _(mo):
     3. Use the weights to combine all previous $V_i$
 
     Without caching, steps 2 and 3 require recomputing $K_i$ and $V_i$ for every
-    previous token at every generation step. That's $O(T^2)$ work.
+    previous token at every generation step. That's $O(T^2)$ work per step.
 
     **The KV cache** stores each $K_i$ and $V_i$ after it's first computed and
     reuses them — reducing work to $O(T)$ per step.
 
-    ```
-    Prefill stage:
-      tokens  →  K₀ K₁ K₂ K₃ K₄ ... K_T    ← computed once, stored
-                 V₀ V₁ V₂ V₃ V₄ ... V_T    ← computed once, stored
-
-    Decode step (generating token T+1):
-      Q_{T+1}  →  attend over [K₀ ... K_T]   ← reused from cache
-               →  combine   [V₀ ... V_T]     ← reused from cache
-               →  output token T+1
-    ```
-
-    The cache grows by one row (one K, one V) with every generated token.
-    Across all layers and heads, this adds up fast.
+    The chart below makes that gap concrete: as $T$ grows, the red curve
+    (no cache) explodes while the green curve (with cache) grows linearly.
     """)
     return
 
 
-# ── Section 3: The growth problem ────────────────────────────────────────────
+@app.cell
+def _(plot_attention_compute):
+    plot_attention_compute()
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    The trade is: we save *time* but spend *memory*. The cache grows by one row
+    (one K, one V) per generated token, multiplied across every layer and every head.
+    That's exactly what the next section shows.
+    """)
+    return
+
 
 @app.cell(hide_code=True)
 def _(mo):
@@ -211,10 +247,8 @@ def _(mo, plot_kv_growth, seq_len_slider):
         · savings = **{full_mb - snap_mb:.0f} MB**
         """),
     ])
-    return full_mb, head_dim, n_heads, n_layers, s, snap_mb
+    return
 
-
-# ── Section 4: Naive solutions (the game) ────────────────────────────────────
 
 @app.cell(hide_code=True)
 def _(mo):
@@ -270,8 +304,6 @@ def _(mo):
     return
 
 
-# ── Section 5: Human memory analogy ──────────────────────────────────────────
-
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
@@ -298,7 +330,9 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("**Try changing these weights to see how the importance ranking shifts:**")
+    mo.md("""
+    **Try changing these weights to see how the importance ranking shifts:**
+    """)
     return
 
 
@@ -338,8 +372,6 @@ def _(mo):
     return
 
 
-# ── Section 6: SnapKV's insight ───────────────────────────────────────────────
-
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
@@ -374,7 +406,9 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("### Attention consistency: observation window vs full-sequence attention")
+    mo.md("""
+    ### Attention consistency: observation window vs full-sequence attention
+    """)
     return
 
 
@@ -413,8 +447,6 @@ def _(mo):
     """)
     return
 
-
-# ── Section 7: The SnapKV algorithm ──────────────────────────────────────────
 
 @app.cell(hide_code=True)
 def _(mo):
@@ -459,6 +491,40 @@ def _(algo_step, render_algo_step):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
+    ### Watch it run on a toy sequence
+
+    Below: a 32-token prefix gets scored by a 6-token observation window.
+    Purple bars are the raw votes. The orange line is what max-pooling does to
+    them — it spreads each peak over its neighbours so we keep local context,
+    not just isolated winners. Green bars are the tokens SnapKV ultimately keeps.
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    pool_kernel_s = mo.ui.slider(start=1, stop=9, step=2, value=3,
+                                 label="Pooling kernel size (kₚₒₒₗ)")
+    toy_budget_s  = mo.ui.slider(start=4, stop=20, step=1, value=10,
+                                 label="Cache budget (k + w)")
+    mo.vstack([pool_kernel_s, toy_budget_s])
+    return pool_kernel_s, toy_budget_s
+
+
+@app.cell
+def _(plot_vote_cluster, pool_kernel_s, toy_budget_s):
+    plot_vote_cluster(
+        seq_len=32,
+        window_size=6,
+        budget=toy_budget_s.value,
+        kernel_size=pool_kernel_s.value,
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
     ### Pseudocode
 
     ```python
@@ -485,8 +551,6 @@ def _(mo):
     """)
     return
 
-
-# ── Section 8: Memory DJ — Live Demo ─────────────────────────────────────────
 
 @app.cell(hide_code=True)
 def _(mo):
@@ -551,8 +615,6 @@ def _(mo):
     return
 
 
-# ── Section 9: Per-head specialization ───────────────────────────────────────
-
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
@@ -589,8 +651,6 @@ def _(mo):
     return
 
 
-# ── Section 10: Extension — Adaptive Window ──────────────────────────────────
-
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
@@ -617,6 +677,40 @@ def _(mo):
 
     where $H(a_h)$ is the Shannon entropy of head $h$'s attention distribution
     and $H_{\max} = \log(S)$ is the maximum possible entropy.
+
+    **What does entropy look like?** Two heads from the same model, side by side:
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    focus_temp_s   = mo.ui.slider(start=0.2, stop=1.5, step=0.1, value=0.4,
+                                  label="Focused-head sharpness (low → spikier)")
+    diffuse_temp_s = mo.ui.slider(start=1.5, stop=8.0, step=0.5, value=4.0,
+                                  label="Diffuse-head sharpness (high → flatter)")
+    mo.vstack([focus_temp_s, diffuse_temp_s])
+    return diffuse_temp_s, focus_temp_s
+
+
+@app.cell
+def _(diffuse_temp_s, focus_temp_s, plot_entropy_intuition):
+    plot_entropy_intuition(
+        focus_temp=focus_temp_s.value,
+        diffuse_temp=diffuse_temp_s.value,
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    The green head's attention concentrates on a handful of positions — its
+    entropy is far below the maximum, and a small observation window already
+    sees what matters. The orange head spreads weight everywhere — high entropy,
+    needs a wider window to capture the right tokens.
+
+    Now apply that idea per head across the model:
     """)
     return
 
@@ -638,8 +732,6 @@ def _(mo):
     """)
     return
 
-
-# ── Section 11: Budget vs quality ────────────────────────────────────────────
 
 @app.cell(hide_code=True)
 def _(mo):
@@ -676,8 +768,6 @@ def _(mo):
     return
 
 
-# ── Summary ────────────────────────────────────────────────────────────────────
-
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
@@ -708,11 +798,10 @@ def _(mo):
     return
 
 
-# ── marimo import (resolved by DAG, position doesn't matter) ─────────────────
-
 @app.cell(hide_code=True)
 def _():
     import marimo as mo
+
     return (mo,)
 
 
