@@ -1108,6 +1108,379 @@ def plot_two_axes():
     """)
 
 
+# ── Competitors: comparison table, capability matrix, method picker ──────────
+#
+# Nine KV-cache compression methods that compete with or extend SnapKV.
+# Single source of truth — used by all three competitor visualizations below.
+#
+# Fields per method:
+#   year     publication year
+#   venue    venue label (short)
+#   mech     one-line core mechanism
+#   budget   budget granularity
+#   latest   True for 2025 papers (D2O, CAKE, SCOPE)
+#   anchor   True for SnapKV (the notebook's anchor paper)
+#   caps     dict of capabilities — values: 1 (yes), 0.5 (partial), 0 (no)
+#            keys: per_head, per_layer, adaptive, decode_aware, recovery
+#   fit      dict of fitness scores per scenario axis (1.0 best, 0 worst)
+
+_COMPETITORS = [
+    {
+        "name": "H2O", "year": 2023, "venue": "NeurIPS '23",
+        "mech": "Recent tokens + attention heavy hitters",
+        "budget": "Fixed",
+        "latest": False, "anchor": False,
+        "caps": {"per_head": 0,   "per_layer": 0,   "adaptive": 0.5, "decode_aware": 1, "recovery": 0},
+        "fit":  {"long_context": 0.6, "streaming": 0.7, "long_gen": 0.7, "drop_in": 0.9, "recovery": 0},
+    },
+    {
+        "name": "Scissorhands", "year": 2023, "venue": "NeurIPS '23",
+        "mech": "Persistent pivotal tokens — no finetuning",
+        "budget": "Fixed",
+        "latest": False, "anchor": False,
+        "caps": {"per_head": 0,   "per_layer": 0,   "adaptive": 0.5, "decode_aware": 1, "recovery": 0},
+        "fit":  {"long_context": 0.6, "streaming": 0.6, "long_gen": 0.7, "drop_in": 0.8, "recovery": 0},
+    },
+    {
+        "name": "StreamingLLM", "year": 2024, "venue": "ICLR '24",
+        "mech": "Attention sinks + sliding recent window",
+        "budget": "Fixed",
+        "latest": False, "anchor": False,
+        "caps": {"per_head": 0,   "per_layer": 0,   "adaptive": 0,   "decode_aware": 1, "recovery": 0},
+        "fit":  {"long_context": 0.7, "streaming": 1.0, "long_gen": 0.6, "drop_in": 1.0, "recovery": 0},
+    },
+    {
+        "name": "FastGen", "year": 2024, "venue": "ICLR '24",
+        "mech": "Per-module attention profiling",
+        "budget": "Adaptive",
+        "latest": False, "anchor": False,
+        "caps": {"per_head": 1,   "per_layer": 1,   "adaptive": 1,   "decode_aware": 0.5, "recovery": 0},
+        "fit":  {"long_context": 0.7, "streaming": 0.6, "long_gen": 0.7, "drop_in": 0.6, "recovery": 0},
+    },
+    {
+        "name": "SnapKV", "year": 2024, "venue": "NeurIPS '24",
+        "mech": "Obs-window voting + max-pool clustering",
+        "budget": "Per-head fixed",
+        "latest": False, "anchor": True,
+        "caps": {"per_head": 1,   "per_layer": 0,   "adaptive": 0.5, "decode_aware": 0.5, "recovery": 0},
+        "fit":  {"long_context": 0.85, "streaming": 0.7, "long_gen": 0.8, "drop_in": 1.0, "recovery": 0},
+    },
+    {
+        "name": "PyramidKV", "year": 2024, "venue": "—",
+        "mech": "Layer-wise budget allocation",
+        "budget": "Per-layer",
+        "latest": False, "anchor": False,
+        "caps": {"per_head": 0.5, "per_layer": 1,   "adaptive": 1,   "decode_aware": 0.5, "recovery": 0},
+        "fit":  {"long_context": 0.9,  "streaming": 0.5, "long_gen": 0.7, "drop_in": 0.6, "recovery": 0},
+    },
+    {
+        "name": "NACL", "year": 2024, "venue": "ACL '24",
+        "mech": "One-shot prefill eviction (proxy + random)",
+        "budget": "Fixed",
+        "latest": False, "anchor": False,
+        "caps": {"per_head": 0,   "per_layer": 0,   "adaptive": 0,   "decode_aware": 0,   "recovery": 0},
+        "fit":  {"long_context": 0.7, "streaming": 0.5, "long_gen": 0.5, "drop_in": 0.9, "recovery": 0},
+    },
+    {
+        "name": "D2O", "year": 2025, "venue": "ICLR '25",
+        "mech": "Layer-aware budget + recall/merge of evicted",
+        "budget": "Per-layer dynamic",
+        "latest": True, "anchor": False,
+        "caps": {"per_head": 0.5, "per_layer": 1,   "adaptive": 1,   "decode_aware": 1,   "recovery": 1},
+        "fit":  {"long_context": 1.0, "streaming": 0.6, "long_gen": 0.9, "drop_in": 0.5, "recovery": 1.0},
+    },
+    {
+        "name": "CAKE", "year": 2025, "venue": "ICLR '25",
+        "mech": "Cascading adaptive eviction + layer prefs",
+        "budget": "Per-layer",
+        "latest": True, "anchor": False,
+        "caps": {"per_head": 0.5, "per_layer": 1,   "adaptive": 1,   "decode_aware": 1,   "recovery": 0.5},
+        "fit":  {"long_context": 1.0, "streaming": 0.6, "long_gen": 0.9, "drop_in": 0.5, "recovery": 0.6},
+    },
+    {
+        "name": "SCOPE", "year": 2025, "venue": "ACL '25",
+        "mech": "Separate prefill vs decoding compression",
+        "budget": "Phase-aware",
+        "latest": True, "anchor": False,
+        "caps": {"per_head": 0.5, "per_layer": 0.5, "adaptive": 1,   "decode_aware": 1,   "recovery": 0.5},
+        "fit":  {"long_context": 0.8, "streaming": 0.7, "long_gen": 1.0, "drop_in": 0.6, "recovery": 0.5},
+    },
+]
+
+
+def plot_competitors_table():
+    """Comparison table of the 9 competitor methods (SnapKV row highlighted)."""
+    LATEST_BG, LATEST_BORDER = "#1D9E7522", "#1D9E75"
+    ANCHOR_BG = "#534AB715"
+
+    rows = ""
+    for m in _COMPETITORS:
+        row_bg = ANCHOR_BG if m["anchor"] else "transparent"
+        anchor_label = (
+            f' <span style="background:#534AB7;color:white;border-radius:3px;'
+            f'padding:1px 6px;font-size:9px;letter-spacing:.05em;margin-left:6px;'
+            f'vertical-align:middle">ANCHOR</span>' if m["anchor"] else ""
+        )
+        latest_label = (
+            f' <span style="background:{LATEST_BG};color:{LATEST_BORDER};'
+            f'border:1px solid {LATEST_BORDER};border-radius:10px;padding:1px 8px;'
+            f'font-size:10px;font-weight:600;letter-spacing:.04em;margin-left:6px;'
+            f'vertical-align:middle">LATEST · 2025</span>' if m["latest"] else ""
+        )
+        rows += f"""
+        <tr style="background:{row_bg}">
+          <td style="padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);
+                     vertical-align:middle;font-size:13px;font-weight:600;
+                     color:var(--color-text-primary)">{m['name']}{anchor_label}{latest_label}</td>
+          <td style="padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);
+                     vertical-align:middle;font-size:11px;color:var(--color-text-secondary);
+                     font-family:var(--font-mono)">{m['venue']}</td>
+          <td style="padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);
+                     vertical-align:middle;font-size:12px;color:var(--color-text-secondary);
+                     line-height:1.5">{m['mech']}</td>
+          <td style="padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);
+                     vertical-align:middle">
+            <span style="background:#BA751722;color:#BA7517;border:1px solid #BA7517;
+                         border-radius:10px;padding:2px 8px;font-size:11px;font-weight:500">
+              {m['budget']}
+            </span>
+          </td>
+        </tr>
+        """
+
+    return mo.Html(f"""
+    <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:10px;line-height:1.6">
+      Nine methods in the same family as SnapKV. The
+      <span style="color:#534AB7;font-weight:600">anchor row</span> is SnapKV;
+      the <span style="color:{LATEST_BORDER};font-weight:600">LATEST · 2025</span>
+      badges mark the freshest work (D2O, CAKE, SCOPE) — all push toward
+      per-layer dynamic budgets and recoverability.
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:8px;
+                padding:4px 10px;overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse">
+        <thead>
+          <tr>
+            <th style="text-align:left;padding:8px 12px;font-size:10px;
+                       text-transform:uppercase;letter-spacing:.06em;
+                       color:var(--color-text-secondary);font-weight:600">Method</th>
+            <th style="text-align:left;padding:8px 12px;font-size:10px;
+                       text-transform:uppercase;letter-spacing:.06em;
+                       color:var(--color-text-secondary);font-weight:600">Venue</th>
+            <th style="text-align:left;padding:8px 12px;font-size:10px;
+                       text-transform:uppercase;letter-spacing:.06em;
+                       color:var(--color-text-secondary);font-weight:600">Core mechanism</th>
+            <th style="text-align:left;padding:8px 12px;font-size:10px;
+                       text-transform:uppercase;letter-spacing:.06em;
+                       color:var(--color-text-secondary);font-weight:600">Budget</th>
+          </tr>
+        </thead>
+        <tbody>{rows}</tbody>
+      </table>
+    </div>
+    """)
+
+
+def plot_capability_matrix():
+    """Methods × capabilities matrix with color-coded cells."""
+    cap_labels = {
+        "per_head":     ("Per-head budget",   "Each attention head gets its own kept set"),
+        "per_layer":    ("Per-layer budget",  "Different layers get different cache sizes"),
+        "adaptive":     ("Adaptive sizing",   "Budget responds to attention statistics"),
+        "decode_aware": ("Decode-aware",      "Maintains quality through long generation"),
+        "recovery":     ("Recovery",          "Can resurrect / merge evicted entries"),
+    }
+
+    def cell(value: float) -> str:
+        if value >= 0.99:
+            color, dot, label = "#1D9E75", "●", "yes"
+        elif value >= 0.5:
+            color, dot, label = "#BA7517", "◐", "partial"
+        else:
+            color, dot, label = "#88878055", "○", "no"
+        return (
+            f'<td title="{label}" style="text-align:center;padding:8px 6px;'
+            f'border-bottom:1px solid var(--color-border, #e5e5e5);'
+            f'font-size:18px;color:{color};line-height:1">{dot}</td>'
+        )
+
+    head_cells = "".join(
+        f'<th title="{tooltip}" style="text-align:center;padding:8px 6px;font-size:10px;'
+        f'text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-secondary);'
+        f'font-weight:600;line-height:1.3">{label}</th>'
+        for _, (label, tooltip) in cap_labels.items()
+    )
+
+    body = ""
+    for m in _COMPETITORS:
+        anchor_style = "background:#534AB715;font-weight:600" if m["anchor"] else ""
+        latest = (
+            ' <span style="background:#1D9E7522;color:#1D9E75;border:1px solid #1D9E75;'
+            'border-radius:8px;padding:0 6px;font-size:9px;font-weight:600">2025</span>'
+            if m["latest"] else ""
+        )
+        cells = "".join(cell(m["caps"][k]) for k in cap_labels)
+        body += f"""
+        <tr style="{anchor_style}">
+          <td style="padding:8px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);
+                     font-size:13px;color:var(--color-text-primary);font-weight:500">
+            {m['name']}{latest}
+          </td>
+          {cells}
+        </tr>
+        """
+
+    return mo.Html(f"""
+    <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:10px;line-height:1.6">
+      Five capabilities that differentiate these methods.
+      <span style="color:#1D9E75;font-weight:600">●</span> supported,
+      <span style="color:#BA7517;font-weight:600">◐</span> partial,
+      <span style="color:#88878088;font-weight:600">○</span> not supported.
+      Hover any cell for a label.
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:8px;
+                padding:4px 10px;overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse">
+        <thead>
+          <tr>
+            <th style="text-align:left;padding:8px 12px;font-size:10px;
+                       text-transform:uppercase;letter-spacing:.06em;
+                       color:var(--color-text-secondary);font-weight:600">Method</th>
+            {head_cells}
+          </tr>
+        </thead>
+        <tbody>{body}</tbody>
+      </table>
+    </div>
+    <div style="margin-top:12px;padding:10px 14px;background:#534AB715;border-left:3px solid #534AB7;
+         border-radius:0 6px 6px 0;font-size:12px;color:var(--color-text-secondary);line-height:1.6">
+      The 2025 wave (D2O, CAKE, SCOPE) is filling the right-hand columns —
+      <strong style="color:var(--color-text-primary)">decode-aware</strong> and
+      <strong style="color:var(--color-text-primary)">recovery</strong> were
+      mostly empty even a year ago.
+    </div>
+    """)
+
+
+def run_method_picker(context_length: str, workload: str,
+                      drop_in_required: bool, recovery_needed: bool):
+    """
+    Score every method against the user's scenario and recommend the top fits.
+    Pure ranking — no ML, just fitness lookups defined per method above.
+    """
+    ctx_to_axis = {
+        "Short (< 8K)":       0.5,
+        "Medium (8–32K)":     0.7,
+        "Long (32–128K)":     0.95,
+        "Very long (> 128K)": 1.0,
+    }
+    workload_to_axis = {
+        "Single-shot Q&A":     "long_context",
+        "Streaming chat":      "streaming",
+        "Long generation / reasoning": "long_gen",
+    }
+
+    ctx_weight = ctx_to_axis.get(context_length, 0.7)
+    workload_axis = workload_to_axis.get(workload, "long_context")
+
+    scored = []
+    for m in _COMPETITORS:
+        score = 0.0
+        score += 0.40 * (m["fit"][workload_axis])
+        score += 0.30 * (m["fit"]["long_context"] * ctx_weight + (1 - ctx_weight) * 0.6)
+        if drop_in_required:
+            score += 0.20 * m["fit"]["drop_in"]
+        else:
+            score += 0.10 * m["fit"]["drop_in"]  # mild penalty for clunky setup either way
+        if recovery_needed:
+            score += 0.30 * m["fit"]["recovery"]
+        # Small boost for being recent (signals active maintenance)
+        if m["latest"]:
+            score += 0.05
+        scored.append((round(score, 3), m))
+
+    scored.sort(key=lambda t: t[0], reverse=True)
+    top3 = scored[:3]
+    max_score = top3[0][0] or 1.0
+
+    cards = ""
+    medals = ["#1D9E75", "#BA7517", "#534AB7"]
+    medal_labels = ["BEST FIT", "RUNNER-UP", "ALSO WORTH TRYING"]
+    for i, (score, m) in enumerate(top3):
+        bar_pct = int(100 * score / max_score)
+        latest = (
+            ' <span style="background:#1D9E7522;color:#1D9E75;border:1px solid #1D9E75;'
+            'border-radius:8px;padding:0 6px;font-size:10px;font-weight:600">LATEST</span>'
+            if m["latest"] else ""
+        )
+        cards += f"""
+        <div style="border-left:4px solid {medals[i]};padding:12px 14px;
+                    background:var(--color-background-secondary);border-radius:0 8px 8px 0;
+                    margin-bottom:10px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px">
+            <div>
+              <span style="font-size:10px;font-weight:600;color:{medals[i]};
+                           letter-spacing:.06em">{medal_labels[i]}</span>
+              <span style="font-size:15px;font-weight:600;margin-left:8px;
+                           color:var(--color-text-primary)">{m['name']}</span>
+              {latest}
+              <span style="font-size:11px;color:var(--color-text-secondary);
+                           font-family:var(--font-mono);margin-left:6px">{m['venue']}</span>
+            </div>
+            <div style="font-size:11px;color:var(--color-text-secondary)">score {score:.2f}</div>
+          </div>
+          <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:6px">
+            {m['mech']} &nbsp;·&nbsp;
+            <span style="color:#BA7517;font-weight:500">{m['budget']}</span>
+          </div>
+          <div style="background:var(--color-background-primary, #fff);height:6px;border-radius:3px;
+                      overflow:hidden">
+            <div style="width:{bar_pct}%;height:100%;background:{medals[i]};
+                        border-radius:3px"></div>
+          </div>
+        </div>
+        """
+
+    full_table = ""
+    for score, m in scored:
+        bar_pct = int(100 * score / max_score)
+        full_table += f"""
+        <tr>
+          <td style="padding:6px 10px;font-size:12px;color:var(--color-text-primary);
+                     border-bottom:1px solid var(--color-border, #e5e5e5)">{m['name']}</td>
+          <td style="padding:6px 10px;font-size:11px;color:var(--color-text-secondary);
+                     border-bottom:1px solid var(--color-border, #e5e5e5);width:60%">
+            <div style="background:var(--color-background-primary, #fff);height:5px;
+                        border-radius:3px;overflow:hidden">
+              <div style="width:{bar_pct}%;height:100%;background:#888780;border-radius:3px"></div>
+            </div>
+          </td>
+          <td style="padding:6px 10px;font-size:11px;color:var(--color-text-secondary);
+                     border-bottom:1px solid var(--color-border, #e5e5e5);text-align:right;
+                     font-family:var(--font-mono)">{score:.2f}</td>
+        </tr>
+        """
+
+    return mo.Html(f"""
+    <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:12px">
+      Scenario: <strong>{context_length}</strong> context ·
+      <strong>{workload}</strong> ·
+      drop-in {"required" if drop_in_required else "optional"} ·
+      recovery {"needed" if recovery_needed else "not needed"}
+    </div>
+    {cards}
+    <details style="margin-top:8px">
+      <summary style="cursor:pointer;font-size:12px;color:var(--color-text-secondary)">
+        Full ranking (all {len(scored)} methods)
+      </summary>
+      <div style="background:var(--color-background-secondary);border-radius:8px;
+                  padding:4px 10px;margin-top:8px">
+        <table style="width:100%;border-collapse:collapse">{full_table}</table>
+      </div>
+    </details>
+    """)
+
+
 # ── Agentic memory: 3-tier hierarchy panel ───────────────────────────────────
 
 def plot_memory_hierarchy():

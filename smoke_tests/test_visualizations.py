@@ -31,6 +31,8 @@ from src.visualizations import (  # noqa: E402
     plot_attention_compute,
     plot_attention_consistency,
     plot_budget_quality,
+    plot_capability_matrix,
+    plot_competitors_table,
     plot_entropy_intuition,
     plot_human_memory,
     plot_kv_growth,
@@ -44,6 +46,7 @@ from src.visualizations import (  # noqa: E402
     render_algo_step,
     run_custom_policy,
     run_demo,
+    run_method_picker,
     run_needle_demo,
     simulate_agent_loop,
 )
@@ -92,6 +95,11 @@ CASES = [
     ("simulate_agent_loop/stream",lambda: simulate_agent_loop(12, "Streaming (recent only)", 800), True),
     ("simulate_agent_loop/snap",  lambda: simulate_agent_loop(12, "SnapKV-style (intent-aware)", 800), True),
     ("simulate_agent_loop/sum",   lambda: simulate_agent_loop(12, "Agent + Summarise", 800), True),
+    ("plot_competitors_table",    lambda: plot_competitors_table(),                          False),
+    ("plot_capability_matrix",    lambda: plot_capability_matrix(),                          False),
+    ("run_method_picker/long",    lambda: run_method_picker("Long (32–128K)", "Single-shot Q&A", True, False), False),
+    ("run_method_picker/recover", lambda: run_method_picker("Very long (> 128K)", "Long generation / reasoning", False, True), False),
+    ("run_method_picker/stream",  lambda: run_method_picker("Medium (8–32K)", "Streaming chat", True, False), False),
 ]
 
 IFRAME_RE = re.compile(r'<iframe srcdoc="([^"]+)"', re.S)

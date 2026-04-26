@@ -7,7 +7,7 @@
   "cells": [
     {
       "id": "Hbol",
-      "code_hash": "0159a9c0eb4f9f44424dc7a60fd919da",
+      "code_hash": "2e13e0e17f591bcda8cb39a437c2c227",
       "outputs": [
         {
           "type": "data",
@@ -60,27 +60,13 @@
     {
       "id": "lEQa",
       "code_hash": "73d675dc63398d42e7a235f58e014c52",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/html": "<div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Try changing these values:</strong></span></span><marimo-ui-element object-id='lEQa-0' random-id='bdf14b88-3855-7b91-6a35-c46142bb8ca5'><marimo-slider data-initial-value='32' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Layers (L)&lt;/span&gt;&lt;/span&gt;&quot;' data-start='8' data-stop='80' data-step='4' data-steps='[]' data-debounce='false' data-disabled='false' data-orientation='&quot;horizontal&quot;' data-show-value='false' data-include-input='false' data-full-width='false'></marimo-slider></marimo-ui-element><marimo-ui-element object-id='lEQa-1' random-id='f644aa4c-ae25-d84b-f530-3963da1f2940'><marimo-slider data-initial-value='32' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Attention heads (H)&lt;/span&gt;&lt;/span&gt;&quot;' data-start='8' data-stop='64' data-step='4' data-steps='[]' data-debounce='false' data-disabled='false' data-orientation='&quot;horizontal&quot;' data-show-value='false' data-include-input='false' data-full-width='false'></marimo-slider></marimo-ui-element><marimo-ui-element object-id='lEQa-2' random-id='c10c9633-274a-0633-bd46-b7e2c6ad7fc6'><marimo-slider data-initial-value='128' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Head dimension (d)&lt;/span&gt;&lt;/span&gt;&quot;' data-start='32' data-stop='256' data-step='32' data-steps='[]' data-debounce='false' data-disabled='false' data-orientation='&quot;horizontal&quot;' data-show-value='false' data-include-input='false' data-full-width='false'></marimo-slider></marimo-ui-element><marimo-ui-element object-id='lEQa-3' random-id='4853d41b-fdfc-1d5b-10b7-0fa3ca615370'><marimo-slider data-initial-value='8192' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Sequence length (tokens)&lt;/span&gt;&lt;/span&gt;&quot;' data-start='1024' data-stop='131072' data-step='1024' data-steps='[]' data-debounce='false' data-disabled='false' data-orientation='&quot;horizontal&quot;' data-show-value='false' data-include-input='false' data-full-width='false'></marimo-slider></marimo-ui-element><marimo-ui-element object-id='lEQa-4' random-id='390c962f-15b1-cff3-55f1-a905ee473427'><marimo-radio data-initial-value='&quot;fp16 (2B)&quot;' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Data type&lt;/span&gt;&lt;/span&gt;&quot;' data-options='[&quot;fp16 (2B)&quot;,&quot;fp32 (4B)&quot;,&quot;int8 (1B)&quot;]' data-inline='true' data-disabled='false'></marimo-radio></marimo-ui-element></div>"
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
       "id": "PKri",
       "code_hash": "a9d304a868246070a3e254aa8c51d8d1",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/html": "\n    <div style=\"display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;\">\n      <div style=\"background:var(--color-background-secondary);border-radius:8px;padding:10px;text-align:center\">\n        <div style=\"font-size:10px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.06em\">Bytes per token</div>\n        <div style=\"font-size:18px;font-weight:500;color:#534AB7\">512.0 KB</div>\n      </div>\n      <div style=\"background:var(--color-background-secondary);border-radius:8px;padding:10px;text-align:center\">\n        <div style=\"font-size:10px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.06em\">Tokens</div>\n        <div style=\"font-size:18px;font-weight:500;color:#D85A30\">8,192</div>\n      </div>\n      <div style=\"background:var(--color-background-secondary);border-radius:8px;padding:10px;text-align:center\">\n        <div style=\"font-size:10px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.06em\">Total KV cache</div>\n        <div style=\"font-size:18px;font-weight:500;color:#1D9E75\">4.29 GB</div>\n      </div>\n    </div>\n    <div style=\"font-size:12px;color:var(--color-text-secondary);margin-bottom:6px\">\n      Each bar is a factor in the product. Hover to see the running total.\n      The y-axis is logarithmic \u2014 the final value compounds <em>fast</em>.\n    </div>\n    <iframe srcdoc=\"&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js&quot;&gt;&lt;/script&gt;&lt;style&gt;html,body{margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:transparent;color:inherit}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div style=&quot;position:relative;width:100%;height:300px;&quot;&gt;&lt;canvas id=&quot;c&quot; role=&quot;img&quot; aria-label=&quot;KV cache memory breakdown by factor&quot;&gt;&lt;/canvas&gt;&lt;/div&gt;&lt;script&gt;(function(){  function go(){    if(!window.Chart){return setTimeout(go,30);}    new Chart(document.getElementById(&#x27;c&#x27;), {\n      type:&#x27;bar&#x27;,\n      data:{\n        labels:[&quot;K + V\\n\\u00d7 2&quot;, &quot;layers\\n\\u00d7 32&quot;, &quot;heads\\n\\u00d7 32&quot;, &quot;head dim\\n\\u00d7 128&quot;, &quot;bytes/elem\\n\\u00d7 2&quot;, &quot;tokens\\n\\u00d7 8,192&quot;],\n        datasets:[{\n          label:&#x27;Cumulative product (MB, log scale)&#x27;,\n          data:[0.0, 0.0, 0.002, 0.262, 0.524, 4294.967],\n          backgroundColor:[&quot;#534AB7&quot;, &quot;#1D9E75&quot;, &quot;#BA7517&quot;, &quot;#D4537E&quot;, &quot;#3266ad&quot;, &quot;#D85A30&quot;],\n          borderWidth:0, borderRadius:4\n        }]\n      },\n      options:{\n        responsive:true, maintainAspectRatio:false, animation:{duration:400},\n        plugins:{\n          legend:{display:false},\n          tooltip:{callbacks:{label: ctx =&gt; ctx.parsed.y.toLocaleString() + &#x27; MB&#x27;}}\n        },\n        scales:{\n          x:{ticks:{font:{size:11}}},\n          y:{type:&#x27;logarithmic&#x27;, title:{display:true,text:&#x27;Running total (MB, log)&#x27;}}\n        }\n      }\n    });  } go();})();&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;\" style=\"width:100%;height:324px;border:0;display:block;background:transparent\" sandbox=\"allow-scripts\"></iframe>"
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
@@ -112,14 +98,7 @@
     {
       "id": "BYtC",
       "code_hash": "1bf275495decaea6e42ee1e07f3f9b2b",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/html": "<iframe srcdoc=\"&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js&quot;&gt;&lt;/script&gt;&lt;style&gt;html,body{margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:transparent;color:inherit}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div style=&quot;position:relative;width:100%;height:280px;&quot;&gt;&lt;canvas id=&quot;c&quot; role=&quot;img&quot; aria-label=&quot;Per-step attention compute, with vs without cache&quot;&gt;&lt;/canvas&gt;&lt;/div&gt;&lt;script&gt;(function(){  function go(){    if(!window.Chart){return setTimeout(go,30);}    new Chart(document.getElementById(&#x27;c&#x27;), {\n      type:&#x27;line&#x27;,\n      data:{\n        labels:[64, 128, 192, 256, 320, 384, 448, 512, 576, 640, 704, 768, 832, 896, 960, 1024, 1088, 1152, 1216, 1280, 1344, 1408, 1472, 1536, 1600, 1664, 1728, 1792, 1856, 1920, 1984, 2048, 2112, 2176, 2240, 2304, 2368, 2432, 2496, 2560, 2624, 2688, 2752, 2816, 2880, 2944, 3008, 3072, 3136, 3200, 3264, 3328, 3392, 3456, 3520, 3584, 3648, 3712, 3776, 3840, 3904, 3968, 4032, 4096],\n        datasets:[\n          {label:&#x27;Without cache: O(T\u00b2) per step&#x27;,\n            data:[0.0002, 0.001, 0.0022, 0.0039, 0.0061, 0.0088, 0.012, 0.0156, 0.0198, 0.0244, 0.0295, 0.0352, 0.0413, 0.0479, 0.0549, 0.0625, 0.0706, 0.0791, 0.0881, 0.0977, 0.1077, 0.1182, 0.1292, 0.1406, 0.1526, 0.165, 0.178, 0.1914, 0.2053, 0.2197, 0.2346, 0.25, 0.2659, 0.2822, 0.2991, 0.3164, 0.3342, 0.3525, 0.3713, 0.3906, 0.4104, 0.4307, 0.4514, 0.4727, 0.4944, 0.5166, 0.5393, 0.5625, 0.5862, 0.6104, 0.635, 0.6602, 0.6858, 0.7119, 0.7385, 0.7656, 0.7932, 0.8213, 0.8499, 0.8789, 0.9084, 0.9385, 0.969, 1.0],\n            borderColor:&#x27;#D85A30&#x27;, borderWidth:2, pointRadius:0, fill:false, tension:0.3},\n          {label:&#x27;With KV cache: O(T) per step&#x27;,\n            data:[0.0156, 0.0312, 0.0469, 0.0625, 0.0781, 0.0938, 0.1094, 0.125, 0.1406, 0.1562, 0.1719, 0.1875, 0.2031, 0.2188, 0.2344, 0.25, 0.2656, 0.2812, 0.2969, 0.3125, 0.3281, 0.3438, 0.3594, 0.375, 0.3906, 0.4062, 0.4219, 0.4375, 0.4531, 0.4688, 0.4844, 0.5, 0.5156, 0.5312, 0.5469, 0.5625, 0.5781, 0.5938, 0.6094, 0.625, 0.6406, 0.6562, 0.6719, 0.6875, 0.7031, 0.7188, 0.7344, 0.75, 0.7656, 0.7812, 0.7969, 0.8125, 0.8281, 0.8438, 0.8594, 0.875, 0.8906, 0.9062, 0.9219, 0.9375, 0.9531, 0.9688, 0.9844, 1.0],\n            borderColor:&#x27;#1D9E75&#x27;, borderWidth:2, pointRadius:0, fill:false, tension:0.3}\n        ]\n      },\n      options:{\n        responsive:true, maintainAspectRatio:false, animation:{duration:400},\n        plugins:{legend:{position:&#x27;top&#x27;,labels:{boxWidth:12,font:{size:12}}}},\n        scales:{\n          x:{title:{display:true,text:&#x27;Sequence length T&#x27;}, ticks:{maxTicksLimit:10}},\n          y:{title:{display:true,text:&#x27;Per-step work (normalised)&#x27;}, beginAtZero:true}\n        }\n      }\n    });  } go();})();&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;\" style=\"width:100%;height:304px;border:0;display:block;background:transparent\" sandbox=\"allow-scripts\"></iframe>"
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
@@ -151,50 +130,29 @@
     {
       "id": "emfo",
       "code_hash": "cde2cb8bed77e7a1718d74eac4f02e65",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/html": "<iframe srcdoc=\"&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js&quot;&gt;&lt;/script&gt;&lt;style&gt;html,body{margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:transparent;color:inherit}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div style=&quot;position:relative;width:100%;height:320px;&quot;&gt;&lt;canvas id=&quot;c&quot; role=&quot;img&quot; aria-label=&quot;KV cache memory vs sequence length&quot;&gt;&lt;/canvas&gt;&lt;/div&gt;&lt;script&gt;(function(){  function go(){    if(!window.Chart){return setTimeout(go,30);}    new Chart(document.getElementById(&#x27;c&#x27;), {\n      type:&#x27;bar&#x27;,\n      data:{\n        labels:[&quot;1K&quot;, &quot;2K&quot;, &quot;4K&quot;, &quot;8K&quot;, &quot;16K&quot;, &quot;32K&quot;],\n        datasets:[\n          {label:&#x27;Full cache&#x27;,   data:[536.9, 1073.7, 2147.5, 4295.0, 8589.9, 17179.9],   backgroundColor:&#x27;#B4B2A9&#x27;, borderWidth:0},\n          {label:&#x27;H2O (20%)&#x27;,    data:[107.0, 214.4, 429.4, 858.8, 1717.6, 3435.7],    backgroundColor:&#x27;#BA7517&#x27;, borderWidth:0},\n          {label:&#x27;StreamingLLM&#x27;, data:[80.2, 161.0, 321.9, 643.8, 1288.2, 2576.9], backgroundColor:&#x27;#534AB7&#x27;, borderWidth:0},\n          {label:&#x27;SnapKV (25%)&#x27;, data:[134.2, 268.4, 536.9, 1073.7, 2147.5, 4295.0], backgroundColor:&#x27;#1D9E75&#x27;, borderWidth:0}\n        ]\n      },\n      options:{\n        responsive:true, maintainAspectRatio:false, animation:{duration:400},\n        plugins:{legend:{position:&#x27;top&#x27;, labels:{boxWidth:12,font:{size:12}}}},\n        scales:{\n          x:{title:{display:true,text:&#x27;Sequence length&#x27;}},\n          y:{title:{display:true,text:&#x27;Memory (MB)&#x27;},beginAtZero:true}\n        }\n      }\n    });  } go();})();&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;\" style=\"width:100%;height:344px;border:0;display:block;background:transparent\" sandbox=\"allow-scripts\"></iframe>"
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
       "id": "Hstk",
       "code_hash": "b75d62bf79b260ea881838e372697593",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/html": "<div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">Zoom in on a specific context length:</span></span><marimo-ui-element object-id='Hstk-0' random-id='ee335e02-8133-8456-2559-448f55e6e6f6'><marimo-slider data-initial-value='8192' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Sequence length (tokens)&lt;/span&gt;&lt;/span&gt;&quot;' data-start='1024' data-stop='32768' data-step='1024' data-steps='[]' data-debounce='false' data-disabled='false' data-orientation='&quot;horizontal&quot;' data-show-value='false' data-include-input='false' data-full-width='false'></marimo-slider></marimo-ui-element></div>"
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
       "id": "nWHF",
       "code_hash": "a6be7edfed42f70850013646740a3754",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/html": "<div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><iframe srcdoc=\"&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js&quot;&gt;&lt;/script&gt;&lt;style&gt;html,body{margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:transparent;color:inherit}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div style=&quot;position:relative;width:100%;height:320px;&quot;&gt;&lt;canvas id=&quot;c&quot; role=&quot;img&quot; aria-label=&quot;KV cache memory vs sequence length&quot;&gt;&lt;/canvas&gt;&lt;/div&gt;&lt;script&gt;(function(){  function go(){    if(!window.Chart){return setTimeout(go,30);}    new Chart(document.getElementById(&#x27;c&#x27;), {\n      type:&#x27;bar&#x27;,\n      data:{\n        labels:[&quot;24K&quot;],\n        datasets:[\n          {label:&#x27;Full cache&#x27;,   data:[12884.9],   backgroundColor:&#x27;#B4B2A9&#x27;, borderWidth:0},\n          {label:&#x27;H2O (20%)&#x27;,    data:[2576.9],    backgroundColor:&#x27;#BA7517&#x27;, borderWidth:0},\n          {label:&#x27;StreamingLLM&#x27;, data:[1932.5], backgroundColor:&#x27;#534AB7&#x27;, borderWidth:0},\n          {label:&#x27;SnapKV (25%)&#x27;, data:[3221.2], backgroundColor:&#x27;#1D9E75&#x27;, borderWidth:0}\n        ]\n      },\n      options:{\n        responsive:true, maintainAspectRatio:false, animation:{duration:400},\n        plugins:{legend:{position:&#x27;top&#x27;, labels:{boxWidth:12,font:{size:12}}}},\n        scales:{\n          x:{title:{display:true,text:&#x27;Sequence length&#x27;}},\n          y:{title:{display:true,text:&#x27;Memory (MB)&#x27;},beginAtZero:true}\n        }\n      }\n    });  } go();})();&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;\" style=\"width:100%;height:344px;border:0;display:block;background:transparent\" sandbox=\"allow-scripts\"></iframe><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">At <strong>24,576 tokens</strong>: full cache = <strong>12885 MB</strong> \u00b7\nSnapKV (25% budget) = <strong>3221 MB</strong>\n\u00b7 savings = <strong>9664 MB</strong></span></span></div>"
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
       "id": "iLit",
-      "code_hash": "ca6f090adca71887c95ab666c7ffde1c",
+      "code_hash": "44d1c1be551972bc6697d8c100adbc94",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<h2 id=\"4-a-game-what-would-you-keep\">4 \u00b7 A Game: What Would You Keep?</h2>\n<span class=\"paragraph\">Suppose you must throw away some tokens to fit within a memory budget.\nYou don't yet know exactly what the model will need to generate next.</span>\n<span class=\"paragraph\">What would you keep?</span>\n<span class=\"paragraph\">Here are the natural strategies people reach for first.\nEach one has a fatal flaw.</span></span>"
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<h2 id=\"game-1-what-would-you-keep\">GAME 1 \u00b7 What Would You Keep?</h2>\n<span class=\"paragraph\">Suppose you must throw away some tokens to fit within a memory budget.\nYou don't yet know exactly what the model will need to generate next.</span>\n<span class=\"paragraph\">What would you keep?</span>\n<span class=\"paragraph\">Here are the natural strategies people reach for first.\nEach one has a fatal flaw.</span></span>"
           }
         }
       ],
@@ -203,27 +161,13 @@
     {
       "id": "ZHCJ",
       "code_hash": "35b3effbdc4fc10f00c1f18ec2c53314",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/html": "<div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Choose a strategy and a budget:</strong></span></span><marimo-ui-element object-id='ZHCJ-0' random-id='b1c94e45-cd91-7ffc-b989-c53fd6d327ef'><marimo-radio data-initial-value='&quot;Keep Everything&quot;' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Eviction strategy&lt;/span&gt;&lt;/span&gt;&quot;' data-options='[&quot;Keep Everything&quot;,&quot;Recent Only&quot;,&quot;Random Drop&quot;,&quot;Uniform Stride&quot;]' data-inline='true' data-disabled='false'></marimo-radio></marimo-ui-element><marimo-ui-element object-id='ZHCJ-1' random-id='fac450bc-07a3-7b19-9fb4-f256df483127'><marimo-slider data-initial-value='0.35' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Cache budget (fraction of tokens to keep)&lt;/span&gt;&lt;/span&gt;&quot;' data-start='0.1' data-stop='0.9' data-step='0.05' data-steps='[]' data-debounce='false' data-disabled='false' data-orientation='&quot;horizontal&quot;' data-show-value='false' data-include-input='false' data-full-width='false'></marimo-slider></marimo-ui-element></div>"
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
       "id": "ROlb",
       "code_hash": "2eb373d77c1dff3e0241cc93f223a2fd",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/html": "\n    <div style=\"display:flex;gap:12px;margin-bottom:14px;align-items:center\">\n      <div style=\"background:var(--color-background-secondary);border-radius:8px;padding:10px 16px;text-align:center\">\n        <div style=\"font-size:10px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.06em\">Strategy</div>\n        <div style=\"font-size:16px;font-weight:500;color:var(--color-text-primary)\">Uniform Stride</div>\n      </div>\n      <div style=\"background:var(--color-background-secondary);border-radius:8px;padding:10px 16px;text-align:center\">\n        <div style=\"font-size:10px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.06em\">Tokens kept</div>\n        <div style=\"font-size:16px;font-weight:500;color:#1D9E75\">14 / 40</div>\n      </div>\n      <div style=\"background:var(--color-background-secondary);border-radius:8px;padding:10px 16px;text-align:center\">\n        <div style=\"font-size:10px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.06em\">Cache size</div>\n        <div style=\"font-size:16px;font-weight:500;color:#BA7517\">35%</div>\n      </div>\n    </div>\n    <div style=\"background:var(--color-background-secondary);border-radius:8px;padding:12px;line-height:2;margin-bottom:10px\">\n      <span title=\"kept\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#1D9E7533;border:1.5px solid #1D9E75;border-radius:4px;font-size:11px;font-family:monospace\">t0</span><span title=\"evicted\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#D85A3033;border:1.5px solid #D85A30;border-radius:4px;font-size:11px;font-family:monospace\">t1</span><span title=\"kept\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#1D9E7533;border:1.5px solid #1D9E75;border-radius:4px;font-size:11px;font-family:monospace\">t2</span><span title=\"evicted\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#D85A3033;border:1.5px solid #D85A30;border-radius:4px;font-size:11px;font-family:monospace\">t3</span><span title=\"kept\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#1D9E7533;border:1.5px solid #1D9E75;border-radius:4px;font-size:11px;font-family:monospace\">t4</span><span title=\"evicted\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#D85A3033;border:1.5px solid #D85A30;border-radius:4px;font-size:11px;font-family:monospace\">t5</span><span title=\"kept\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#1D9E7533;border:1.5px solid #1D9E75;border-radius:4px;font-size:11px;font-family:monospace\">t6</span><span title=\"evicted\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#D85A3033;border:1.5px solid #D85A30;border-radius:4px;font-size:11px;font-family:monospace\">t7</span><span title=\"kept\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#1D9E7533;border:1.5px solid #1D9E75;border-radius:4px;font-size:11px;font-family:monospace\">t8</span><span title=\"evicted\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#D85A3033;border:1.5px solid #D85A30;border-radius:4px;font-size:11px;font-family:monospace\">t9</span><span title=\"kept\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#1D9E7533;border:1.5px solid #1D9E75;border-radius:4px;font-size:11px;font-family:monospace\">t10</span><span title=\"evicted\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#D85A3033;border:1.5px solid #D85A30;border-radius:4px;font-size:11px;font-family:monospace\">t11</span><span title=\"kept\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#1D9E7533;border:1.5px solid #1D9E75;border-radius:4px;font-size:11px;font-family:monospace\">t12</span><span title=\"evicted\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#D85A3033;border:1.5px solid #D85A30;border-radius:4px;font-size:11px;font-family:monospace\">t13</span><span title=\"kept\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#1D9E7533;border:1.5px solid #1D9E75;border-radius:4px;font-size:11px;font-family:monospace\">t14</span><span title=\"evicted\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#D85A3033;border:1.5px solid #D85A30;border-radius:4px;font-size:11px;font-family:monospace\">t15</span><span title=\"kept\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#1D9E7533;border:1.5px solid #1D9E75;border-radius:4px;font-size:11px;font-family:monospace\">t16</span><span title=\"evicted\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#D85A3033;border:1.5px solid #D85A30;border-radius:4px;font-size:11px;font-family:monospace\">t17</span><span title=\"kept\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#1D9E7533;border:1.5px solid #1D9E75;border-radius:4px;font-size:11px;font-family:monospace\">t18</span><span title=\"evicted\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#D85A3033;border:1.5px solid #D85A30;border-radius:4px;font-size:11px;font-family:monospace\">t19</span><span title=\"kept\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#1D9E7533;border:1.5px solid #1D9E75;border-radius:4px;font-size:11px;font-family:monospace\">t20</span><span title=\"evicted\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#D85A3033;border:1.5px solid #D85A30;border-radius:4px;font-size:11px;font-family:monospace\">t21</span><span title=\"kept\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#1D9E7533;border:1.5px solid #1D9E75;border-radius:4px;font-size:11px;font-family:monospace\">t22</span><span title=\"evicted\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#D85A3033;border:1.5px solid #D85A30;border-radius:4px;font-size:11px;font-family:monospace\">t23</span><span title=\"kept\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#1D9E7533;border:1.5px solid #1D9E75;border-radius:4px;font-size:11px;font-family:monospace\">t24</span><span title=\"evicted\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#D85A3033;border:1.5px solid #D85A30;border-radius:4px;font-size:11px;font-family:monospace\">t25</span><span title=\"kept\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#1D9E7533;border:1.5px solid #1D9E75;border-radius:4px;font-size:11px;font-family:monospace\">t26</span><span title=\"evicted\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#D85A3033;border:1.5px solid #D85A30;border-radius:4px;font-size:11px;font-family:monospace\">t27</span><span title=\"evicted\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#D85A3033;border:1.5px solid #D85A30;border-radius:4px;font-size:11px;font-family:monospace\">t28</span><span title=\"evicted\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#D85A3033;border:1.5px solid #D85A30;border-radius:4px;font-size:11px;font-family:monospace\">t29</span><span title=\"evicted\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#D85A3033;border:1.5px solid #D85A30;border-radius:4px;font-size:11px;font-family:monospace\">t30</span><span title=\"evicted\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#D85A3033;border:1.5px solid #D85A30;border-radius:4px;font-size:11px;font-family:monospace\">t31</span><span title=\"evicted\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#D85A3033;border:1.5px solid #D85A30;border-radius:4px;font-size:11px;font-family:monospace\">t32</span><span title=\"evicted\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#D85A3033;border:1.5px solid #D85A30;border-radius:4px;font-size:11px;font-family:monospace\">t33</span><span title=\"evicted\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#D85A3033;border:1.5px solid #D85A30;border-radius:4px;font-size:11px;font-family:monospace\">t34</span><span title=\"evicted\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#D85A3033;border:1.5px solid #D85A30;border-radius:4px;font-size:11px;font-family:monospace\">t35</span><span title=\"evicted\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#D85A3033;border:1.5px solid #D85A30;border-radius:4px;font-size:11px;font-family:monospace\">t36</span><span title=\"evicted\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#D85A3033;border:1.5px solid #D85A30;border-radius:4px;font-size:11px;font-family:monospace\">t37</span><span title=\"evicted\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#D85A3033;border:1.5px solid #D85A30;border-radius:4px;font-size:11px;font-family:monospace\">t38</span><span title=\"evicted\" style=\"display:inline-block;margin:2px 1px;padding:4px 7px;background:#D85A3033;border:1.5px solid #D85A30;border-radius:4px;font-size:11px;font-family:monospace\">t39</span>\n    </div>\n    <div style=\"padding:10px 14px;background:#D85A3015;border-left:3px solid #D85A30;\n         border-radius:0 6px 6px 0;font-size:13px;color:var(--color-text-secondary)\">\n      \u26a0 Problem: no notion of importance. Evenly spaced tokens often miss key content.\n    </div>\n    "
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
@@ -268,27 +212,13 @@
     {
       "id": "DnEU",
       "code_hash": "884a6cce1d469b8e32891158d6ebc702",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/html": "<div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><marimo-ui-element object-id='DnEU-0' random-id='bf4eab4c-2b03-ef4c-127c-045b02e0ca69'><marimo-slider data-initial-value='0.35' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Recency weight&lt;/span&gt;&lt;/span&gt;&quot;' data-start='0.0' data-stop='1.0' data-step='0.05' data-steps='[]' data-debounce='false' data-disabled='false' data-orientation='&quot;horizontal&quot;' data-show-value='false' data-include-input='false' data-full-width='false'></marimo-slider></marimo-ui-element><marimo-ui-element object-id='DnEU-1' random-id='ca4b29d4-7b16-6573-fb74-a4be1637ee94'><marimo-slider data-initial-value='0.25' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Repetition weight&lt;/span&gt;&lt;/span&gt;&quot;' data-start='0.0' data-stop='1.0' data-step='0.05' data-steps='[]' data-debounce='false' data-disabled='false' data-orientation='&quot;horizontal&quot;' data-show-value='false' data-include-input='false' data-full-width='false'></marimo-slider></marimo-ui-element><marimo-ui-element object-id='DnEU-2' random-id='842df682-3e09-ba2a-45f6-889f22a2aebc'><marimo-slider data-initial-value='0.4' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Goal relevance weight&lt;/span&gt;&lt;/span&gt;&quot;' data-start='0.0' data-stop='1.0' data-step='0.05' data-steps='[]' data-debounce='false' data-disabled='false' data-orientation='&quot;horizontal&quot;' data-show-value='false' data-include-input='false' data-full-width='false'></marimo-slider></marimo-ui-element><marimo-ui-element object-id='DnEU-3' random-id='9c91b40a-1539-785c-4653-aeee7d7057f0'><marimo-slider data-initial-value='3' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Memories to keep (top-k)&lt;/span&gt;&lt;/span&gt;&quot;' data-start='1' data-stop='7' data-step='1' data-steps='[]' data-debounce='false' data-disabled='false' data-orientation='&quot;horizontal&quot;' data-show-value='false' data-include-input='false' data-full-width='false'></marimo-slider></marimo-ui-element></div>"
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
       "id": "ulZA",
       "code_hash": "083ffd4960b3a60664871d0fe87d4c12",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/html": "\n    <div style=\"font-size:13px;color:var(--color-text-secondary);margin-bottom:12px;line-height:1.7\">\n      Current goal: <strong style=\"color:var(--color-text-primary)\">\"Which running shoes fit my trip under budget?\"</strong>\n      &nbsp;\u2014 which past events should you remember?\n      &nbsp;<span style=\"color:#1D9E75\">\u25a0 kept</span>\n      &nbsp;<span style=\"color:#888780\">\u25a0 evicted</span>\n    </div>\n    <iframe srcdoc=\"&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js&quot;&gt;&lt;/script&gt;&lt;style&gt;html,body{margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:transparent;color:inherit}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div style=&quot;position:relative;width:100%;height:280px;&quot;&gt;&lt;canvas id=&quot;c&quot; role=&quot;img&quot; aria-label=&quot;Human memory triage&quot;&gt;&lt;/canvas&gt;&lt;/div&gt;&lt;script&gt;(function(){  function go(){    if(!window.Chart){return setTimeout(go,30);}    new Chart(document.getElementById(&#x27;c&#x27;), {\n      type:&#x27;bar&#x27;,\n      data:{\n        labels:[&quot;saw a shoe ad&quot;, &quot;friend mentioned sneakers&quot;, &quot;walked past a sports store&quot;, &quot;read laptop review&quot;, &quot;checked running routes&quot;, &quot;opened shoe size chart&quot;, &quot;searched: best running shoes&quot;],\n        datasets:[{\n          label:&#x27;Memory importance score&#x27;,\n          data:[0.2947, 0.6421, 0.6001, 0.2526, 0.5789, 0.8264, 1.0],\n          backgroundColor:[&quot;#888780&quot;, &quot;#1D9E75&quot;, &quot;#1D9E75&quot;, &quot;#888780&quot;, &quot;#888780&quot;, &quot;#1D9E75&quot;, &quot;#1D9E75&quot;],\n          borderWidth:0, borderRadius:4\n        }]\n      },\n      options:{\n        responsive:true, maintainAspectRatio:false, animation:{duration:400},\n        plugins:{\n          legend:{display:false},\n          tooltip:{callbacks:{label: ctx =&gt; &#x27;score: &#x27; + ctx.parsed.y.toFixed(3)}}\n        },\n        scales:{\n          x:{ticks:{maxRotation:30, font:{size:11}}},\n          y:{beginAtZero:true, max:1.05, title:{display:true,text:&#x27;Importance score&#x27;}}\n        }\n      }\n    });  } go();})();&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;\" style=\"width:100%;height:304px;border:0;display:block;background:transparent\" sandbox=\"allow-scripts\"></iframe>\n    <div style=\"margin-top:10px;font-size:12px;color:var(--color-text-secondary)\">\n      Weights: recency=15% \u00b7 repetition=70% \u00b7 goal relevance=10%\n      &nbsp;\u00b7&nbsp; keeping top 4 memories\n    </div>\n    "
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
@@ -333,27 +263,13 @@
     {
       "id": "aLJB",
       "code_hash": "b2952562f818ad1d5e06873d35e07b48",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/html": "<div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">The dashed line shows what SnapKV <em>predicts</em> from the observation window. The solid line is the true full-sequence attention. Try different window sizes.</span></span><marimo-ui-element object-id='aLJB-0' random-id='02a17cb5-bc22-59b9-ea28-94da1779f7b2'><marimo-slider data-initial-value='16' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Observation window size (w)&lt;/span&gt;&lt;/span&gt;&quot;' data-start='4' data-stop='64' data-step='4' data-steps='[]' data-debounce='false' data-disabled='false' data-orientation='&quot;horizontal&quot;' data-show-value='false' data-include-input='false' data-full-width='false'></marimo-slider></marimo-ui-element><marimo-ui-element object-id='aLJB-1' random-id='84eac0d5-db4f-bc69-1e0f-745caac81126'><marimo-dropdown data-initial-value='[&quot;Head 0&quot;]' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Attention head&lt;/span&gt;&lt;/span&gt;&quot;' data-options='[&quot;Head 0&quot;,&quot;Head 1&quot;,&quot;Head 2&quot;,&quot;Head 3&quot;]' data-allow-select-none='false' data-searchable='false' data-full-width='false'></marimo-dropdown></marimo-ui-element></div>"
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
       "id": "nHfw",
       "code_hash": "923c4b008cb3c74ddc30d11d5ed8dd2d",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/html": "\n    <div style=\"margin-bottom:8px;font-size:13px;color:var(--color-text-secondary)\">\n      Correlation between obs. window prediction and full-sequence attention:\n      <strong style=\"color:#1D9E75\">0.986</strong>\n      &nbsp;(window size = 16, head 2)\n    </div>\n    <iframe srcdoc=\"&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js&quot;&gt;&lt;/script&gt;&lt;style&gt;html,body{margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:transparent;color:inherit}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div style=&quot;position:relative;width:100%;height:260px;&quot;&gt;&lt;canvas id=&quot;c&quot; role=&quot;img&quot; aria-label=&quot;Obs. window vs full-sequence attention&quot;&gt;&lt;/canvas&gt;&lt;/div&gt;&lt;script&gt;(function(){  function go(){    if(!window.Chart){return setTimeout(go,30);}    new Chart(document.getElementById(&#x27;c&#x27;), {\n      type:&#x27;line&#x27;,\n      data:{\n        labels:[&quot;0&quot;, &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;, &quot;7&quot;, &quot;8&quot;, &quot;9&quot;, &quot;10&quot;, &quot;11&quot;, &quot;12&quot;, &quot;13&quot;, &quot;14&quot;, &quot;15&quot;, &quot;16&quot;, &quot;17&quot;, &quot;18&quot;, &quot;19&quot;, &quot;20&quot;, &quot;21&quot;, &quot;22&quot;, &quot;23&quot;, &quot;24&quot;, &quot;25&quot;, &quot;26&quot;, &quot;27&quot;, &quot;28&quot;, &quot;29&quot;, &quot;30&quot;, &quot;31&quot;, &quot;32&quot;, &quot;33&quot;, &quot;34&quot;, &quot;35&quot;, &quot;36&quot;, &quot;37&quot;, &quot;38&quot;, &quot;39&quot;, &quot;40&quot;, &quot;41&quot;, &quot;42&quot;, &quot;43&quot;, &quot;44&quot;, &quot;45&quot;, &quot;46&quot;, &quot;47&quot;, &quot;48&quot;, &quot;49&quot;, &quot;50&quot;, &quot;51&quot;, &quot;52&quot;, &quot;53&quot;, &quot;54&quot;, &quot;55&quot;, &quot;56&quot;, &quot;57&quot;, &quot;58&quot;, &quot;59&quot;, &quot;60&quot;, &quot;61&quot;, &quot;62&quot;, &quot;63&quot;],\n        datasets:[\n          {label:&#x27;Full-sequence attention&#x27;,\n            data:[0.0132, 0.0937, 0.0111, 0.0008, 0.1283, 0.0046, 0.0073, 0.0097, 0.0109, 0.0038, 0.0123, 0.0092, 0.0123, 0.0061, 0.0066, 0.0048, 0.0006, 0.0102, 0.0107, 0.0059, 0.0015, 0.0115, 0.0068, 0.0049, 0.0102, 0.0012, 0.0066, 0.1349, 0.0101, 0.0054, 0.0004, 0.0105, 0.0085, 0.0012, 0.0059, 0.0886, 0.0097, 0.0055, 0.0022, 0.0099, 0.0028, 0.0109, 0.0116, 0.0002, 0.0014, 0.1466, 0.0016, 0.0085, 0.0102, 0.007, 0.0036, 0.0072, 0.0086, 0.0122, 0.013, 0.0071, 0.0072, 0.0043, 0.0056, 0.0052, 0.0089, 0.0079, 0.0012, 0.0094],\n            borderColor:&#x27;#534AB7&#x27;, borderWidth:1.5, pointRadius:0, fill:false, tension:0.3},\n          {label:&#x27;Obs. window prediction (w=16)&#x27;,\n            data:[0.0146, 0.0652, 0.0116, 0.0037, 0.0844, 0.0111, 0.0086, 0.0059, 0.0127, 0.0043, 0.0179, 0.0125, 0.0092, 0.0119, 0.0084, 0.0144, 0.0007, 0.01, 0.0166, 0.0042, 0.0033, 0.0075, 0.0145, 0.0048, 0.0121, 0.008, 0.0111, 0.0818, 0.0105, 0.0088, 0.0109, 0.0152, 0.0138, 0.0038, 0.0129, 0.0576, 0.0157, 0.0105, 0.0058, 0.0094, 0.0121, 0.0174, 0.0134, 0.009, 0.0103, 0.095, 0.0086, 0.0127, 0.015, 0.0103, 0.0112, 0.0087, 0.01, 0.0102, 0.0174, 0.0045, 0.0159, 0.0074, 0.0108, 0.0117, 0.0131, 0.0134, 0.0035, 0.012],\n            borderColor:&#x27;#1D9E75&#x27;, borderWidth:1.5, borderDash:[4,2],\n            pointRadius:0, fill:false, tension:0.3}\n        ]\n      },\n      options:{\n        responsive:true, maintainAspectRatio:false, animation:{duration:400},\n        plugins:{legend:{position:&#x27;top&#x27;,labels:{boxWidth:12,font:{size:12}}}},\n        scales:{\n          x:{title:{display:true,text:&#x27;Token position&#x27;},ticks:{maxTicksLimit:16}},\n          y:{title:{display:true,text:&#x27;Attention score&#x27;},beginAtZero:true}\n        }\n      }\n    });  } go();})();&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;\" style=\"width:100%;height:284px;border:0;display:block;background:transparent\" sandbox=\"allow-scripts\"></iframe>"
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
@@ -385,27 +301,13 @@
     {
       "id": "pHFh",
       "code_hash": "8174961a2a4c80a44016992722d4c98d",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/html": "<marimo-ui-element object-id='pHFh-0' random-id='87ec6ee1-17c2-3d39-bc0d-51b84b78033f'><marimo-slider data-initial-value='1' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Algorithm step (drag or click)&lt;/span&gt;&lt;/span&gt;&quot;' data-start='1' data-stop='4' data-step='1' data-steps='[]' data-debounce='false' data-disabled='false' data-orientation='&quot;horizontal&quot;' data-show-value='false' data-include-input='false' data-full-width='false'></marimo-slider></marimo-ui-element>"
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
       "id": "NCOB",
       "code_hash": "fc425ae7e7ac1bad21c0b926ac51500f",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/html": "\n    <div style=\"border-left:3px solid #534AB7;padding:12px 16px;border-radius:0 8px 8px 0;\n         background:var(--color-background-secondary);margin:8px 0;\">\n      <div style=\"font-size:11px;font-weight:500;color:#534AB7;letter-spacing:.06em;\n           text-transform:uppercase;margin-bottom:4px;\">Step 1 / 4</div>\n      <div style=\"font-size:15px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px;\">\n        Prefill the full sequence\n      </div>\n      <div style=\"font-size:13px;color:var(--color-text-secondary);line-height:1.6;\">\n        The model processes the entire prompt and builds the full KV cache. Every token has a Key and Value vector stored in GPU memory.\n      </div>\n    </div>\n    "
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
@@ -424,27 +326,13 @@
     {
       "id": "TRpd",
       "code_hash": "99491d4940b03e50482ac478cd35e142",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/html": "<div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><marimo-ui-element object-id='TRpd-0' random-id='43151a29-64da-b7e5-084c-9669650dcd6c'><marimo-slider data-initial-value='3' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Pooling kernel size (k\u209a\u2092\u2092\u2097)&lt;/span&gt;&lt;/span&gt;&quot;' data-start='1' data-stop='9' data-step='2' data-steps='[]' data-debounce='false' data-disabled='false' data-orientation='&quot;horizontal&quot;' data-show-value='false' data-include-input='false' data-full-width='false'></marimo-slider></marimo-ui-element><marimo-ui-element object-id='TRpd-1' random-id='744479c4-6219-1be6-5e04-a614dc8ad325'><marimo-slider data-initial-value='10' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Cache budget (k + w)&lt;/span&gt;&lt;/span&gt;&quot;' data-start='4' data-stop='20' data-step='1' data-steps='[]' data-debounce='false' data-disabled='false' data-orientation='&quot;horizontal&quot;' data-show-value='false' data-include-input='false' data-full-width='false'></marimo-slider></marimo-ui-element></div>"
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
       "id": "TXez",
       "code_hash": "52aa898aa7ef730ad2d3ad48daa24ad1",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/html": "\n    <div style=\"font-size:12px;color:var(--color-text-secondary);margin-bottom:8px\">\n      Toy run: prefix length <strong>26</strong>,\n      observation window <strong>6</strong>,\n      budget <strong>10</strong>,\n      pool kernel <strong>3</strong>.\n      Green bars are the tokens SnapKV would keep. Notice how the orange line\n      <em>smooths</em> the raw purple votes so neighbours of a winner survive too.\n    </div>\n    <iframe srcdoc=\"&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js&quot;&gt;&lt;/script&gt;&lt;style&gt;html,body{margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:transparent;color:inherit}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div style=&quot;position:relative;width:100%;height:300px;&quot;&gt;&lt;canvas id=&quot;c&quot; role=&quot;img&quot; aria-label=&quot;SnapKV vote and cluster on a toy sequence&quot;&gt;&lt;/canvas&gt;&lt;/div&gt;&lt;script&gt;(function(){  function go(){    if(!window.Chart){return setTimeout(go,30);}    new Chart(document.getElementById(&#x27;c&#x27;), {\n      type:&#x27;bar&#x27;,\n      data:{\n        labels:[&quot;0&quot;, &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;, &quot;7&quot;, &quot;8&quot;, &quot;9&quot;, &quot;10&quot;, &quot;11&quot;, &quot;12&quot;, &quot;13&quot;, &quot;14&quot;, &quot;15&quot;, &quot;16&quot;, &quot;17&quot;, &quot;18&quot;, &quot;19&quot;, &quot;20&quot;, &quot;21&quot;, &quot;22&quot;, &quot;23&quot;, &quot;24&quot;, &quot;25&quot;],\n        datasets:[\n          {label:&#x27;Stage 1 \u2014 raw votes from window&#x27;,\n            data:[0.0787, 0.2569, 0.5205, 0.0889, 0.3084, 1.0, 0.3079, 0.0678, 0.3021, 0.4884, 0.1422, 0.4132, 0.1436, 0.2446, 0.4051, 0.2653, 0.0541, 0.4014, 0.9524, 0.4041, 0.4599, 0.3818, 0.4417, 0.3074, 0.8658, 0.0314],\n            backgroundColor:&#x27;#534AB755&#x27;, borderColor:&#x27;#534AB7&#x27;, borderWidth:1, order:3},\n          {label:&#x27;Stage 2 \u2014 after max-pool (k=3)&#x27;,\n            data:[0.2569, 0.5205, 0.5205, 0.5205, 1.0, 1.0, 1.0, 0.3079, 0.4884, 0.4884, 0.4884, 0.4132, 0.4132, 0.4051, 0.4051, 0.4051, 0.4014, 0.9524, 0.9524, 0.9524, 0.4599, 0.4599, 0.4417, 0.8658, 0.8658, 0.8658], type:&#x27;line&#x27;,\n            borderColor:&#x27;#BA7517&#x27;, borderWidth:2, pointRadius:0, fill:false, tension:0.3, order:2},\n          {label:&#x27;Selected (top-4)&#x27;,\n            data:[0, 0, 0, 0, 1.0, 1.0, 1.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.9524, 0, 0, 0, 0, 0, 0, 0, 0],\n            backgroundColor:&#x27;#1D9E75&#x27;, borderWidth:0, order:1}\n        ]\n      },\n      options:{\n        responsive:true, maintainAspectRatio:false, animation:{duration:400},\n        plugins:{legend:{position:&#x27;top&#x27;,labels:{boxWidth:12,font:{size:11}}}},\n        scales:{\n          x:{title:{display:true,text:&#x27;Prefix token position&#x27;}, ticks:{maxTicksLimit:16}},\n          y:{beginAtZero:true, title:{display:true,text:&#x27;Importance&#x27;}}\n        }\n      }\n    });  } go();})();&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;\" style=\"width:100%;height:324px;border:0;display:block;background:transparent\" sandbox=\"allow-scripts\"></iframe>"
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
@@ -462,12 +350,12 @@
     },
     {
       "id": "yCnT",
-      "code_hash": "1551e87b9793699eeddecd243994f078",
+      "code_hash": "fd6ddee596e21362d20161c86d590b87",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<h2 id=\"8-memory-dj-live-demo\">8 \u00b7 Memory DJ: Live Demo</h2>\n<span class=\"paragraph\">Paste any prompt below. Choose an eviction method and a cache budget.\nWatch which tokens each method keeps \u2014 and which it throws away.</span>\n<span class=\"paragraph\">The <strong>observation window</strong> (purple) is always kept by SnapKV and used\nto vote on the prefix. <strong>Kept</strong> tokens (green) survive compression.\n<strong>Evicted</strong> tokens (coral) are dropped.</span></span>"
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<h2 id=\"game-2-live-demo-memory-dj\">GAME 2 \u00b7 Live Demo \u2014 Memory DJ</h2>\n<span class=\"paragraph\">Paste any prompt below. Choose an eviction method and a cache budget.\nWatch which tokens each method keeps \u2014 and which it throws away.</span>\n<span class=\"paragraph\">The <strong>observation window</strong> (purple) is always kept by SnapKV and used\nto vote on the prefix. <strong>Kept</strong> tokens (green) survive compression.\n<strong>Evicted</strong> tokens (coral) are dropped.</span></span>"
           }
         }
       ],
@@ -476,37 +364,23 @@
     {
       "id": "wlCL",
       "code_hash": "4d59e72aedf632fabdc6122ad51e7624",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/html": "<div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><marimo-ui-element object-id='wlCL-0' random-id='1b371e18-4c34-a45b-74b2-fdd6217b82ad'><marimo-text-area data-initial-value='&quot;The Eiffel Tower is 324 metres tall, about the same height as an 81-storey building and the tallest structure in Paris. Its base is square, measuring 125 metres on each side. During its construction, the Eiffel Tower surpassed the Washington Monument to become the tallest man-made structure in the world, a title it held for 41 years until the Chrysler Building in New York City was finished in 1930. What is the height of the Eiffel Tower?&quot;' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Input prompt&lt;/span&gt;&lt;/span&gt;&quot;' data-placeholder='&quot;&quot;' data-disabled='false' data-debounce='true' data-full-width='true' data-rows='5'></marimo-text-area></marimo-ui-element><marimo-ui-element object-id='wlCL-1' random-id='2407673f-f30d-255d-4136-4d80b7a5c2f6'><marimo-slider data-initial-value='0.3' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Cache budget (fraction of tokens to keep)&lt;/span&gt;&lt;/span&gt;&quot;' data-start='0.1' data-stop='1.0' data-step='0.05' data-steps='[]' data-debounce='false' data-disabled='false' data-orientation='&quot;horizontal&quot;' data-show-value='false' data-include-input='false' data-full-width='false'></marimo-slider></marimo-ui-element><marimo-ui-element object-id='wlCL-2' random-id='84ee0c21-c642-5608-295f-a922ad8403d5'><marimo-radio data-initial-value='&quot;SnapKV&quot;' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Eviction method&lt;/span&gt;&lt;/span&gt;&quot;' data-options='[&quot;SnapKV&quot;,&quot;H2O&quot;,&quot;StreamingLLM&quot;,&quot;Full Cache&quot;]' data-inline='true' data-disabled='false'></marimo-radio></marimo-ui-element></div>"
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
       "id": "kqZH",
       "code_hash": "de5f2b1c28ad1b7d2a81dd8974bcc0c9",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/html": "\n    <div style=\"display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;\">\n      <div style=\"background:var(--color-background-secondary);border-radius:8px;padding:12px;text-align:center\">\n        <div style=\"font-size:11px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em\">Method</div>\n        <div style=\"font-size:18px;font-weight:500;color:var(--color-text-primary)\">SnapKV</div>\n      </div>\n      <div style=\"background:var(--color-background-secondary);border-radius:8px;padding:12px;text-align:center\">\n        <div style=\"font-size:11px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em\">Tokens kept</div>\n        <div style=\"font-size:18px;font-weight:500;color:#1D9E75\">23 / 77</div>\n      </div>\n      <div style=\"background:var(--color-background-secondary);border-radius:8px;padding:12px;text-align:center\">\n        <div style=\"font-size:11px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em\">Cache size</div>\n        <div style=\"font-size:18px;font-weight:500;color:#BA7517\">30%</div>\n      </div>\n    </div>\n    <div style=\"background:var(--color-background-secondary);border-radius:8px;padding:14px;line-height:1.9\">\n      <div style=\"font-size:11px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px\">\n        Token selection\n        &nbsp;\u00b7&nbsp;<span style=\"background:#9FE1CB;border:1px solid #1D9E75;border-radius:3px;padding:1px 6px;font-size:11px\">kept</span>\n        &nbsp;<span style=\"background:#AFA9EC;border:1px solid #534AB7;border-radius:3px;padding:1px 6px;font-size:11px\">obs. window</span>\n        &nbsp;<span style=\"background:#F5C4B3;border:1px solid #D85A30;border-radius:3px;padding:1px 6px;font-size:11px\">evicted</span>\n      </div>\n      <span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">The</span><span title=\"kept\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#9FE1CB;border:1px solid #1D9E75;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">Eiffel</span><span title=\"kept\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#9FE1CB;border:1px solid #1D9E75;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">Tower</span><span title=\"kept\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#9FE1CB;border:1px solid #1D9E75;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">is</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">324</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">metres</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">tall,</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">about</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">the</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">same</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">height</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">as</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">an</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">81-storey</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">building</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">and</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">the</span><span title=\"kept\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#9FE1CB;border:1px solid #1D9E75;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">tallest</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">structure</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">in</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">Paris.</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">Its</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">base</span><span title=\"kept\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#9FE1CB;border:1px solid #1D9E75;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">is</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">square,</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">measuring</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">125</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">metres</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">on</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">each</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">side.</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">During</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">its</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">construction,</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">the</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">Eiffel</span><span title=\"kept\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#9FE1CB;border:1px solid #1D9E75;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">Tower</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">surpassed</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">the</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">Washington</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">Monument</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">to</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">become</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">the</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">tallest</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">man-made</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">structure</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">in</span><span title=\"kept\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#9FE1CB;border:1px solid #1D9E75;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">the</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">world,</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">a</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">title</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">it</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">held</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">for</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">41</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">years</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">until</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">the</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">Chrysler</span><span title=\"evicted\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#F5C4B3;border:1px solid #D85A30;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">Building</span><span title=\"obs. window\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#AFA9EC;border:1px solid #534AB7;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">in</span><span title=\"obs. window\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#AFA9EC;border:1px solid #534AB7;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">New</span><span title=\"obs. window\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#AFA9EC;border:1px solid #534AB7;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">York</span><span title=\"obs. window\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#AFA9EC;border:1px solid #534AB7;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">City</span><span title=\"obs. window\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#AFA9EC;border:1px solid #534AB7;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">was</span><span title=\"obs. window\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#AFA9EC;border:1px solid #534AB7;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">finished</span><span title=\"obs. window\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#AFA9EC;border:1px solid #534AB7;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">in</span><span title=\"obs. window\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#AFA9EC;border:1px solid #534AB7;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">1930.</span><span title=\"obs. window\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#AFA9EC;border:1px solid #534AB7;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">What</span><span title=\"obs. window\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#AFA9EC;border:1px solid #534AB7;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">is</span><span title=\"obs. window\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#AFA9EC;border:1px solid #534AB7;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">the</span><span title=\"obs. window\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#AFA9EC;border:1px solid #534AB7;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">height</span><span title=\"obs. window\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#AFA9EC;border:1px solid #534AB7;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">of</span><span title=\"obs. window\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#AFA9EC;border:1px solid #534AB7;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">the</span><span title=\"obs. window\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#AFA9EC;border:1px solid #534AB7;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">Eiffel</span><span title=\"obs. window\" style=\"display:inline-block;margin:3px 2px;padding:3px 6px;background:#AFA9EC;border:1px solid #534AB7;border-radius:4px;font-size:13px;font-family:var(--font-mono)\">Tower?</span>\n    </div>\n    "
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
       "id": "wAgl",
-      "code_hash": "643bc6cfb977683eee99cbc633088fd0",
+      "code_hash": "5e2611ed0fa18a5699173cfb714edf4e",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">Try the <strong>needle-in-a-haystack</strong> pattern: put a key fact early in the prompt,\nfill the middle with unrelated text, and put the question at the end.</span>\n<span class=\"paragraph\">SnapKV should keep the needle because the question (observation window) attends\nto it. \"Recent Only\" will drop it. \"Random Drop\" is unpredictable.</span></span>"
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">Try the <strong>needle-in-a-haystack</strong> pattern: put a key fact early in the prompt,\nfill the middle with unrelated text, and put the question at the end.</span>\n<span class=\"paragraph\">SnapKV should keep the needle because the question (observation window) attends\nto it. \"Recent Only\" will drop it. \"Random Drop\" is unpredictable.</span>\n<span class=\"paragraph\">GAME 3 below makes that contrast explicit.</span></span>"
           }
         }
       ],
@@ -514,6 +388,44 @@
     },
     {
       "id": "rEll",
+      "code_hash": "fe5f2f73f8b584bc37ff09f15dd3a947",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<h2 id=\"game-3-needle-in-a-haystack\">GAME 3 \u00b7 Needle in a Haystack</h2>\n<span class=\"paragraph\">A long prompt with one key fact buried inside, plus a question at the end.\nPick where to hide the needle and how tight your cache budget is \u2014 then\nwatch which policies actually preserve it.</span>\n<span class=\"paragraph\">SnapKV's observation window picks up the question's intent, so it tends to\npull the needle in. Recent-only and random can't.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "dGlV",
+      "code_hash": "79b191ddf743a7f677d9a56f6dc18423",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "SdmI",
+      "code_hash": "bff92bb11fe51d9d4d44d8545c5bf132",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "lgWD",
+      "code_hash": "635c8f50527609c40105f17a6aeb313d",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">Move the needle to \"early\" with a tight budget \u2014 Recent Only will fail\nimmediately. SnapKV usually keeps it, because the question keywords at\nthe end light up the needle's position via window attention.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "yOPj",
       "code_hash": "75e17a2063d6debe1fd38b9b38ef9e6d",
       "outputs": [
         {
@@ -526,20 +438,13 @@
       "console": []
     },
     {
-      "id": "dGlV",
+      "id": "fwwy",
       "code_hash": "023b83823ed174d39f35d9199e1bf3a9",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/html": "<iframe srcdoc=\"&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js&quot;&gt;&lt;/script&gt;&lt;style&gt;html,body{margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:transparent;color:inherit}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div style=&quot;position:relative;width:100%;height:280px;&quot;&gt;&lt;canvas id=&quot;c&quot; role=&quot;img&quot; aria-label=&quot;Per-head attention patterns&quot;&gt;&lt;/canvas&gt;&lt;/div&gt;&lt;script&gt;(function(){  function go(){    if(!window.Chart){return setTimeout(go,30);}    new Chart(document.getElementById(&#x27;c&#x27;), {\n      type:&#x27;line&#x27;,\n      data:{labels:[&quot;The&quot;, &quot;Eiffel&quot;, &quot;Tower&quot;, &quot;is&quot;, &quot;324&quot;, &quot;metres&quot;, &quot;tall,&quot;, &quot;about&quot;, &quot;the&quot;, &quot;same&quot;, &quot;height&quot;, &quot;as&quot;, &quot;an&quot;, &quot;81-store&quot;, &quot;building&quot;, &quot;and&quot;, &quot;the&quot;, &quot;tallest&quot;, &quot;structur&quot;, &quot;in&quot;, &quot;Paris.&quot;, &quot;Its&quot;, &quot;base&quot;, &quot;is&quot;, &quot;square,&quot;, &quot;measurin&quot;, &quot;125&quot;, &quot;metres&quot;, &quot;on&quot;, &quot;each&quot;, &quot;side.&quot;, &quot;During&quot;],datasets:[{&quot;label&quot;: &quot;Head 0&quot;, &quot;data&quot;: [0.0013, 0.0016, 0.0018, 0.0021, 0.0024, 0.0028, 0.0033, 0.0038, 0.0045, 0.0052, 0.006, 0.007, 0.0081, 0.0094, 0.011, 0.0127, 0.0148, 0.0172, 0.02, 0.0232, 0.027, 0.0313, 0.0364, 0.0423, 0.0491, 0.0571, 0.0663, 0.0771, 0.0896, 0.104, 0.1209, 0.1404], &quot;borderColor&quot;: &quot;#534AB7&quot;, &quot;backgroundColor&quot;: &quot;#534AB722&quot;, &quot;borderWidth&quot;: 1.2, &quot;pointRadius&quot;: 0, &quot;fill&quot;: false, &quot;tension&quot;: 0.2}, {&quot;label&quot;: &quot;Head 1&quot;, &quot;data&quot;: [0.0013, 0.0016, 0.0018, 0.0021, 0.0024, 0.0028, 0.0033, 0.0038, 0.0045, 0.0052, 0.006, 0.007, 0.0081, 0.0094, 0.011, 0.0127, 0.0148, 0.0172, 0.02, 0.0232, 0.027, 0.0313, 0.0364, 0.0423, 0.0491, 0.0571, 0.0663, 0.0771, 0.0896, 0.104, 0.1209, 0.1404], &quot;borderColor&quot;: &quot;#1D9E75&quot;, &quot;backgroundColor&quot;: &quot;#1D9E7522&quot;, &quot;borderWidth&quot;: 1.2, &quot;pointRadius&quot;: 0, &quot;fill&quot;: false, &quot;tension&quot;: 0.2}, {&quot;label&quot;: &quot;Head 2&quot;, &quot;data&quot;: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.157, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.086, 0.0, 0.0, 0.0734, 0.0, 0.2426, 0.0, 0.0, 0.0, 0.1976, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.2435, 0.0], &quot;borderColor&quot;: &quot;#D85A30&quot;, &quot;backgroundColor&quot;: &quot;#D85A3022&quot;, &quot;borderWidth&quot;: 1.2, &quot;pointRadius&quot;: 0, &quot;fill&quot;: false, &quot;tension&quot;: 0.2}, {&quot;label&quot;: &quot;Head 3&quot;, &quot;data&quot;: [0.0, 0.0968, 0.1098, 0.1855, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.1156, 0.0, 0.0, 0.3671, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.1253, 0.0], &quot;borderColor&quot;: &quot;#BA7517&quot;, &quot;backgroundColor&quot;: &quot;#BA751722&quot;, &quot;borderWidth&quot;: 1.2, &quot;pointRadius&quot;: 0, &quot;fill&quot;: false, &quot;tension&quot;: 0.2}, {&quot;label&quot;: &quot;Head 4&quot;, &quot;data&quot;: [0.0256, 0.0651, 0.0396, 0.0358, 0.0448, 0.0253, 0.0621, 0.0062, 0.0243, 0.0277, 0.0197, 0.0252, 0.0542, 0.0518, 0.0353, 0.0626, 0.0098, 0.0135, 0.0486, 0.0317, 0.003, 0.0103, 0.0131, 0.0593, 0.0486, 0.0594, 0.0086, 0.0008, 0.0115, 0.0371, 0.0269, 0.0124], &quot;borderColor&quot;: &quot;#3266ad&quot;, &quot;backgroundColor&quot;: &quot;#3266ad22&quot;, &quot;borderWidth&quot;: 1.2, &quot;pointRadius&quot;: 0, &quot;fill&quot;: false, &quot;tension&quot;: 0.2}, {&quot;label&quot;: &quot;Head 5&quot;, &quot;data&quot;: [0.0579, 0.0227, 0.0141, 0.049, 0.0245, 0.0549, 0.0415, 0.0343, 0.0405, 0.0083, 0.0156, 0.0178, 0.0145, 0.0395, 0.0402, 0.0196, 0.0554, 0.0149, 0.0403, 0.0239, 0.0044, 0.0117, 0.0472, 0.0468, 0.0128, 0.0231, 0.0022, 0.0515, 0.0625, 0.0445, 0.0128, 0.0512], &quot;borderColor&quot;: &quot;#639922&quot;, &quot;backgroundColor&quot;: &quot;#63992222&quot;, &quot;borderWidth&quot;: 1.2, &quot;pointRadius&quot;: 0, &quot;fill&quot;: false, &quot;tension&quot;: 0.2}, {&quot;label&quot;: &quot;Head 6&quot;, &quot;data&quot;: [0.0638, 0.0277, 0.0291, 0.0469, 0.0393, 0.0233, 0.0025, 0.0104, 0.0367, 0.033, 0.0636, 0.036, 0.0259, 0.0008, 0.0028, 0.0493, 0.0659, 0.0343, 0.0037, 0.0472, 0.0632, 0.0118, 0.0257, 0.0378, 0.015, 0.0025, 0.0501, 0.0063, 0.0261, 0.0163, 0.0611, 0.0416], &quot;borderColor&quot;: &quot;#D4537E&quot;, &quot;backgroundColor&quot;: &quot;#D4537E22&quot;, &quot;borderWidth&quot;: 1.2, &quot;pointRadius&quot;: 0, &quot;fill&quot;: false, &quot;tension&quot;: 0.2}, {&quot;label&quot;: &quot;Head 7&quot;, &quot;data&quot;: [0.0409, 0.009, 0.0514, 0.0304, 0.0124, 0.0261, 0.0081, 0.0266, 0.0435, 0.0154, 0.0515, 0.0364, 0.023, 0.0366, 0.0228, 0.0214, 0.0096, 0.0442, 0.0447, 0.0375, 0.0444, 0.0558, 0.0542, 0.001, 0.0343, 0.0255, 0.0374, 0.0225, 0.0357, 0.0022, 0.0407, 0.0547], &quot;borderColor&quot;: &quot;#888780&quot;, &quot;backgroundColor&quot;: &quot;#88878022&quot;, &quot;borderWidth&quot;: 1.2, &quot;pointRadius&quot;: 0, &quot;fill&quot;: false, &quot;tension&quot;: 0.2}]},\n      options:{\n        responsive:true, maintainAspectRatio:false, animation:{duration:400},\n        plugins:{legend:{position:&#x27;top&#x27;,labels:{boxWidth:10,font:{size:11}}}},\n        scales:{\n          x:{ticks:{maxRotation:45,font:{size:10}}},\n          y:{beginAtZero:true,title:{display:true,text:&#x27;Attention weight&#x27;}}\n        }\n      }\n    });  } go();})();&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;\" style=\"width:100%;height:304px;border:0;display:block;background:transparent\" sandbox=\"allow-scripts\"></iframe>"
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
-      "id": "SdmI",
+      "id": "LJZf",
       "code_hash": "bc0830b666b74182c5818175e9230230",
       "outputs": [
         {
@@ -552,7 +457,7 @@
       "console": []
     },
     {
-      "id": "lgWD",
+      "id": "urSm",
       "code_hash": "12444c7b8e88b76ab119bb1325e0dffb",
       "outputs": [
         {
@@ -565,33 +470,19 @@
       "console": []
     },
     {
-      "id": "yOPj",
+      "id": "jxvo",
       "code_hash": "5e69f7fd8ff9c968126f83219dea3c10",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/html": "<div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><marimo-ui-element object-id='yOPj-0' random-id='d8f37654-158f-764c-aa6c-07d7c9528bef'><marimo-slider data-initial-value='0.4' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Focused-head sharpness (low \u2192 spikier)&lt;/span&gt;&lt;/span&gt;&quot;' data-start='0.2' data-stop='1.5' data-step='0.1' data-steps='[]' data-debounce='false' data-disabled='false' data-orientation='&quot;horizontal&quot;' data-show-value='false' data-include-input='false' data-full-width='false'></marimo-slider></marimo-ui-element><marimo-ui-element object-id='yOPj-1' random-id='def4e30d-f878-4388-2c67-b38940a51e25'><marimo-slider data-initial-value='4.0' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Diffuse-head sharpness (high \u2192 flatter)&lt;/span&gt;&lt;/span&gt;&quot;' data-start='1.5' data-stop='8.0' data-step='0.5' data-steps='[]' data-debounce='false' data-disabled='false' data-orientation='&quot;horizontal&quot;' data-show-value='false' data-include-input='false' data-full-width='false'></marimo-slider></marimo-ui-element></div>"
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
-      "id": "fwwy",
+      "id": "mWxS",
       "code_hash": "6d8b9bf70972a02d17cccfbbb78f1e0b",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/html": "\n    <div style=\"font-size:13px;color:var(--color-text-secondary);margin-bottom:8px;line-height:1.6\">\n      Entropy <em>H(p) = \u2212 \u03a3 p<sub>i</sub> log p<sub>i</sub></em> measures how spread out attention is.\n      <span style=\"color:#1D9E75\">Focused heads</span> spike on a few tokens \u2014 small window suffices.\n      <span style=\"color:#D85A30\">Diffuse heads</span> spread weight everywhere \u2014 larger window helps.\n      Maximum possible entropy here is log(32) \u2248 3.47.\n    </div>\n    <iframe srcdoc=\"&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js&quot;&gt;&lt;/script&gt;&lt;style&gt;html,body{margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:transparent;color:inherit}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div style=&quot;position:relative;width:100%;height:280px;&quot;&gt;&lt;canvas id=&quot;c&quot; role=&quot;img&quot; aria-label=&quot;Focused vs diffuse attention distributions&quot;&gt;&lt;/canvas&gt;&lt;/div&gt;&lt;script&gt;(function(){  function go(){    if(!window.Chart){return setTimeout(go,30);}    new Chart(document.getElementById(&#x27;c&#x27;), {\n      type:&#x27;bar&#x27;,\n      data:{\n        labels:[&quot;0&quot;, &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;, &quot;7&quot;, &quot;8&quot;, &quot;9&quot;, &quot;10&quot;, &quot;11&quot;, &quot;12&quot;, &quot;13&quot;, &quot;14&quot;, &quot;15&quot;, &quot;16&quot;, &quot;17&quot;, &quot;18&quot;, &quot;19&quot;, &quot;20&quot;, &quot;21&quot;, &quot;22&quot;, &quot;23&quot;, &quot;24&quot;, &quot;25&quot;, &quot;26&quot;, &quot;27&quot;, &quot;28&quot;, &quot;29&quot;, &quot;30&quot;, &quot;31&quot;],\n        datasets:[\n          {label:&#x27;Focused head \u2014 H = 1.14 (33% of max)&#x27;,\n            data:[0.0677, 0.0025, 0.0, 0.0, 0.1054, 0.0003, 0.0005, 0.0, 0.0018, 0.0006, 0.0, 0.0001, 0.008, 0.0002, 0.0002, 0.0001, 0.7056, 0.0144, 0.0003, 0.0001, 0.0005, 0.0002, 0.001, 0.0005, 0.0002, 0.0047, 0.0006, 0.0, 0.0276, 0.0023, 0.0013, 0.0534],\n            backgroundColor:&#x27;#1D9E75&#x27;, borderWidth:0, borderRadius:2},\n          {label:&#x27;Diffuse head \u2014 H = 3.44 (99% of max)&#x27;,\n            data:[0.0425, 0.0334, 0.0223, 0.0223, 0.0439, 0.029, 0.0297, 0.0234, 0.0327, 0.0303, 0.0238, 0.0266, 0.0364, 0.0282, 0.0274, 0.0264, 0.0504, 0.038, 0.0286, 0.0255, 0.0297, 0.0273, 0.0312, 0.0296, 0.0281, 0.0351, 0.0301, 0.021, 0.0398, 0.0333, 0.0318, 0.0418],\n            backgroundColor:&#x27;#D85A3099&#x27;, borderWidth:0, borderRadius:2}\n        ]\n      },\n      options:{\n        responsive:true, maintainAspectRatio:false, animation:{duration:400},\n        plugins:{legend:{position:&#x27;top&#x27;,labels:{boxWidth:12,font:{size:11}}}},\n        scales:{\n          x:{title:{display:true,text:&#x27;Token position&#x27;},ticks:{maxTicksLimit:16}},\n          y:{title:{display:true,text:&#x27;Attention probability&#x27;}, beginAtZero:true}\n        }\n      }\n    });  } go();})();&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;\" style=\"width:100%;height:304px;border:0;display:block;background:transparent\" sandbox=\"allow-scripts\"></iframe>"
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
-      "id": "LJZf",
+      "id": "CcZR",
       "code_hash": "b9fd5c7f0e234371e164f530462addbf",
       "outputs": [
         {
@@ -604,20 +495,13 @@
       "console": []
     },
     {
-      "id": "urSm",
+      "id": "YWSi",
       "code_hash": "6ee43c040e65ba77ede09f0a63aade45",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/html": "\n    <div style=\"font-size:13px;color:var(--color-text-secondary);margin-bottom:12px;line-height:1.6\">\n      <strong style=\"color:var(--color-text-primary)\">Adaptive obs. window (our extension):</strong>\n      heads with high attention entropy (diffuse, uncertain) get a larger observation window;\n      focused heads need fewer tokens to identify what matters.\n    </div>\n    <iframe srcdoc=\"&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js&quot;&gt;&lt;/script&gt;&lt;style&gt;html,body{margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:transparent;color:inherit}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div style=&quot;position:relative;width:100%;height:280px;&quot;&gt;&lt;canvas id=&quot;c&quot; role=&quot;img&quot; aria-label=&quot;Per-head adaptive observation window&quot;&gt;&lt;/canvas&gt;&lt;/div&gt;&lt;script&gt;(function(){  function go(){    if(!window.Chart){return setTimeout(go,30);}    new Chart(document.getElementById(&#x27;c&#x27;), {\n      type:&#x27;bar&#x27;,\n      data:{\n        labels:[&quot;H0&quot;, &quot;H1&quot;, &quot;H2&quot;, &quot;H3&quot;, &quot;H4&quot;, &quot;H5&quot;, &quot;H6&quot;, &quot;H7&quot;],\n        datasets:[\n          {type:&#x27;bar&#x27;, label:&#x27;Fixed window (baseline)&#x27;,\n            data:[16, 16, 16, 16, 16, 16, 16, 16], backgroundColor:&#x27;#B4B2A980&#x27;, yAxisID:&#x27;y1&#x27;},\n          {type:&#x27;bar&#x27;, label:&#x27;Adaptive window (ours)&#x27;,\n            data:[22.2, 22.0, 21.4, 20.8, 21.7, 22.2, 21.9, 21.8], backgroundColor:&#x27;#1D9E7599&#x27;, yAxisID:&#x27;y1&#x27;},\n          {type:&#x27;line&#x27;, label:&#x27;Attention entropy&#x27;,\n            data:[0.887, 0.873, 0.839, 0.797, 0.858, 0.885, 0.871, 0.859],\n            borderColor:&#x27;#D85A30&#x27;, borderWidth:2, pointRadius:4, fill:false, yAxisID:&#x27;y2&#x27;}\n        ]\n      },\n      options:{\n        responsive:true, maintainAspectRatio:false, animation:{duration:400},\n        plugins:{legend:{position:&#x27;top&#x27;,labels:{boxWidth:12,font:{size:12}}}},\n        scales:{\n          y1:{position:&#x27;left&#x27;, title:{display:true,text:&#x27;Window size (tokens)&#x27;},beginAtZero:true},\n          y2:{position:&#x27;right&#x27;, title:{display:true,text:&#x27;Entropy (normalised)&#x27;},\n               min:0,max:1,grid:{drawOnChartArea:false}}\n        }\n      }\n    });  } go();})();&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;\" style=\"width:100%;height:304px;border:0;display:block;background:transparent\" sandbox=\"allow-scripts\"></iframe>"
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
-      "id": "jxvo",
+      "id": "zlud",
       "code_hash": "256acaba65f2f3a5a933d03472aa391d",
       "outputs": [
         {
@@ -630,7 +514,7 @@
       "console": []
     },
     {
-      "id": "mWxS",
+      "id": "tZnO",
       "code_hash": "eabf6c8415d1953c13e14305059b30a8",
       "outputs": [
         {
@@ -643,20 +527,13 @@
       "console": []
     },
     {
-      "id": "CcZR",
+      "id": "xvXZ",
       "code_hash": "f4fda4b7f3d6c6dc38d15b5ca2d2e284",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/html": "<iframe srcdoc=\"&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js&quot;&gt;&lt;/script&gt;&lt;style&gt;html,body{margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:transparent;color:inherit}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div style=&quot;position:relative;width:100%;height:300px;&quot;&gt;&lt;canvas id=&quot;c&quot; role=&quot;img&quot; aria-label=&quot;LongBench score vs KV cache budget&quot;&gt;&lt;/canvas&gt;&lt;/div&gt;&lt;script&gt;(function(){  function go(){    if(!window.Chart){return setTimeout(go,30);}    new Chart(document.getElementById(&#x27;c&#x27;), {\n      type:&#x27;line&#x27;,\n      data:{\n        labels:[&quot;5%&quot;, &quot;10%&quot;, &quot;15%&quot;, &quot;20%&quot;, &quot;25%&quot;, &quot;30%&quot;, &quot;40%&quot;, &quot;50%&quot;, &quot;75%&quot;, &quot;100%&quot;],\n        datasets:[\n          {label:&#x27;Full cache&#x27;,   data:[62.0, 62.0, 62.0, 62.0, 62.0, 62.0, 62.0, 62.0, 62.0, 62.0], borderColor:&#x27;#B4B2A9&#x27;, borderDash:[6,3], borderWidth:1.5, pointRadius:0, fill:false},\n          {label:&#x27;StreamingLLM&#x27;, data:[4.2, 6.7, 10.2, 15.1, 21.1, 28.0, 40.9, 49.3, 55.4, 55.9],     borderColor:&#x27;#534AB7&#x27;, borderWidth:1.5, pointRadius:3, fill:false},\n          {label:&#x27;H2O&#x27;,          data:[4.9, 8.4, 13.7, 20.9, 29.5, 38.1, 50.6, 56.2, 58.9, 59.0],        borderColor:&#x27;#BA7517&#x27;, borderWidth:1.5, pointRadius:3, fill:false},\n          {label:&#x27;SnapKV&#x27;,       data:[7.7, 14.2, 23.9, 35.3, 45.6, 52.8, 59.3, 61.0, 61.5, 61.5],     borderColor:&#x27;#1D9E75&#x27;, borderWidth:2.5, pointRadius:4, fill:false}\n        ]\n      },\n      options:{\n        responsive:true, maintainAspectRatio:false, animation:{duration:400},\n        plugins:{\n          legend:{position:&#x27;top&#x27;,labels:{boxWidth:12,font:{size:12}}},\n          tooltip:{callbacks:{label: ctx =&gt; ctx.dataset.label + &#x27;: &#x27; + ctx.parsed.y.toFixed(1)}}\n        },\n        scales:{\n          x:{title:{display:true,text:&#x27;KV cache budget (fraction of full)&#x27;}},\n          y:{title:{display:true,text:&#x27;LongBench score&#x27;},min:30,max:65}\n        }\n      }\n    });  } go();})();&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;\" style=\"width:100%;height:324px;border:0;display:block;background:transparent\" sandbox=\"allow-scripts\"></iframe>"
-          }
-        }
-      ],
+      "outputs": [],
       "console": []
     },
     {
-      "id": "YWSi",
+      "id": "CLip",
       "code_hash": "ab880697dc29c5dd2b03ccd320e31ff6",
       "outputs": [
         {
@@ -669,20 +546,335 @@
       "console": []
     },
     {
-      "id": "zlud",
-      "code_hash": "4d8c56b34ff6fe3f48589e01521108e5",
+      "id": "YECM",
+      "code_hash": "4fa65de7684183f78a7ec910e6f111fa",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<h2 id=\"summary\">Summary</h2>\n<table>\n<thead>\n<tr>\n<th>Method</th>\n<th>Core idea</th>\n<th>Budget type</th>\n<th>Long-context quality</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Full cache</td>\n<td>Keep everything</td>\n<td>100%</td>\n<td>Baseline</td>\n</tr>\n<tr>\n<td>StreamingLLM</td>\n<td>Sink tokens + recent window</td>\n<td>Fixed</td>\n<td>Degrades</td>\n</tr>\n<tr>\n<td>H2O</td>\n<td>Greedy top-k by cumulative attention</td>\n<td>Fixed</td>\n<td>Good</td>\n</tr>\n<tr>\n<td><strong>SnapKV</strong></td>\n<td><strong>Obs. window voting + clustering</strong></td>\n<td><strong>Fixed per head</strong></td>\n<td><strong>Best</strong></td>\n</tr>\n<tr>\n<td><em>Adaptive SnapKV (ours)</em></td>\n<td><em>Entropy-guided window sizing</em></td>\n<td><em>Dynamic per head</em></td>\n<td><em>\u2265 SnapKV</em></td>\n</tr>\n</tbody>\n</table>\n<hr />\n<h3 id=\"the-one-sentence-version\">The one-sentence version</h3>\n<blockquote>\n<span class=\"paragraph\">SnapKV works because the model's <strong>current intent</strong> \u2014 expressed in the last\nfew tokens of the prompt \u2014 reliably predicts which past tokens it will need\nduring generation. So we look there first, and throw the rest away.</span>\n</blockquote>\n<hr />\n<span class=\"paragraph\"><strong>Paper:</strong> Li et al., \"SnapKV: LLM Knows What You Are Looking for Before Generation\",\nNeurIPS 2024. <a href=\"https://arxiv.org/abs/2404.14469\" rel=\"noopener noreferrer\" target=\"_blank\">arxiv.org/abs/2404.14469</a></span></span>"
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<h2 id=\"game-4-live-demo-build-your-own-memory-policy\">GAME 4 \u00b7 Live Demo \u2014 Build Your Own Memory Policy</h2>\n<span class=\"paragraph\">You've now seen recency, frequency, and the SnapKV-style window-attention\nsignal. Combine them yourself and see how close you can get to SnapKV\nwith a hand-tuned formula:</span>\n<marimo-tex class=\"arithmatex\">||[\\text{score}(t) \\;=\\; w_r \\cdot \\text{recency}(t) \\;+\\; w_f \\cdot \\text{frequency}(t) \\;+\\; w_a \\cdot \\text{attention}(t)||]</marimo-tex><span class=\"paragraph\">Then keep the top-budget tokens. Compare your selection to SnapKV's on\nthe same prompt.</span></span>"
           }
         }
       ],
       "console": []
     },
     {
-      "id": "tZnO",
+      "id": "cEAS",
+      "code_hash": "f8515c1eb1115468bacf991937179ba9",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "iXej",
+      "code_hash": "69474b6e9636a12ac1a5344f56701515",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "EJmg",
+      "code_hash": "72889527fdc7de0cdb56df30984f54af",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">Two ways to play:</span>\n<ul>\n<li><strong>Reverse-engineer SnapKV.</strong> Set attention = 1, others = 0. Watch the\n  overlap with SnapKV jump to ~100%.</li>\n<li><strong>Reverse-engineer StreamingLLM.</strong> Set recency = 1, others = 0. Watch\n  it collapse onto the tail of the prompt and miss any earlier needle.</li>\n</ul>\n<span class=\"paragraph\">Mixed weights interpolate between these extremes \u2014 that's the whole\neviction-policy design space, in three sliders.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "UmEG",
+      "code_hash": "9b2d70d599490916a4508d606a45cb73",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<h2 id=\"12-competitors\">12 \u00b7 Competitors</h2>\n<span class=\"paragraph\">SnapKV isn't alone \u2014 it sits in a fast-moving family of KV-cache\ncompression methods. Here are the nine most directly comparable papers,\nwith the <strong>2025 wave</strong> marked: D2O, CAKE, and SCOPE all push into\nper-layer dynamic budgets and recoverability \u2014 territory that was mostly\nempty when SnapKV first landed.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "vEBW",
+      "code_hash": "14c8691c73106f376f4352083134b782",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "\n    <div style=\"font-size:12px;color:var(--color-text-secondary);margin-bottom:10px;line-height:1.6\">\n      Nine methods in the same family as SnapKV. The\n      <span style=\"color:#534AB7;font-weight:600\">anchor row</span> is SnapKV;\n      the <span style=\"color:#1D9E75;font-weight:600\">LATEST \u00b7 2025</span>\n      badges mark the freshest work (D2O, CAKE, SCOPE) \u2014 all push toward\n      per-layer dynamic budgets and recoverability.\n    </div>\n    <div style=\"background:var(--color-background-secondary);border-radius:8px;\n                padding:4px 10px;overflow-x:auto\">\n      <table style=\"width:100%;border-collapse:collapse\">\n        <thead>\n          <tr>\n            <th style=\"text-align:left;padding:8px 12px;font-size:10px;\n                       text-transform:uppercase;letter-spacing:.06em;\n                       color:var(--color-text-secondary);font-weight:600\">Method</th>\n            <th style=\"text-align:left;padding:8px 12px;font-size:10px;\n                       text-transform:uppercase;letter-spacing:.06em;\n                       color:var(--color-text-secondary);font-weight:600\">Venue</th>\n            <th style=\"text-align:left;padding:8px 12px;font-size:10px;\n                       text-transform:uppercase;letter-spacing:.06em;\n                       color:var(--color-text-secondary);font-weight:600\">Core mechanism</th>\n            <th style=\"text-align:left;padding:8px 12px;font-size:10px;\n                       text-transform:uppercase;letter-spacing:.06em;\n                       color:var(--color-text-secondary);font-weight:600\">Budget</th>\n          </tr>\n        </thead>\n        <tbody>\n        <tr style=\"background:transparent\">\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle;font-size:13px;font-weight:600;\n                     color:var(--color-text-primary)\">H2O</td>\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle;font-size:11px;color:var(--color-text-secondary);\n                     font-family:var(--font-mono)\">NeurIPS '23</td>\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle;font-size:12px;color:var(--color-text-secondary);\n                     line-height:1.5\">Recent tokens + attention heavy hitters</td>\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle\">\n            <span style=\"background:#BA751722;color:#BA7517;border:1px solid #BA7517;\n                         border-radius:10px;padding:2px 8px;font-size:11px;font-weight:500\">\n              Fixed\n            </span>\n          </td>\n        </tr>\n        \n        <tr style=\"background:transparent\">\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle;font-size:13px;font-weight:600;\n                     color:var(--color-text-primary)\">Scissorhands</td>\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle;font-size:11px;color:var(--color-text-secondary);\n                     font-family:var(--font-mono)\">NeurIPS '23</td>\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle;font-size:12px;color:var(--color-text-secondary);\n                     line-height:1.5\">Persistent pivotal tokens \u2014 no finetuning</td>\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle\">\n            <span style=\"background:#BA751722;color:#BA7517;border:1px solid #BA7517;\n                         border-radius:10px;padding:2px 8px;font-size:11px;font-weight:500\">\n              Fixed\n            </span>\n          </td>\n        </tr>\n        \n        <tr style=\"background:transparent\">\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle;font-size:13px;font-weight:600;\n                     color:var(--color-text-primary)\">StreamingLLM</td>\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle;font-size:11px;color:var(--color-text-secondary);\n                     font-family:var(--font-mono)\">ICLR '24</td>\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle;font-size:12px;color:var(--color-text-secondary);\n                     line-height:1.5\">Attention sinks + sliding recent window</td>\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle\">\n            <span style=\"background:#BA751722;color:#BA7517;border:1px solid #BA7517;\n                         border-radius:10px;padding:2px 8px;font-size:11px;font-weight:500\">\n              Fixed\n            </span>\n          </td>\n        </tr>\n        \n        <tr style=\"background:transparent\">\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle;font-size:13px;font-weight:600;\n                     color:var(--color-text-primary)\">FastGen</td>\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle;font-size:11px;color:var(--color-text-secondary);\n                     font-family:var(--font-mono)\">ICLR '24</td>\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle;font-size:12px;color:var(--color-text-secondary);\n                     line-height:1.5\">Per-module attention profiling</td>\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle\">\n            <span style=\"background:#BA751722;color:#BA7517;border:1px solid #BA7517;\n                         border-radius:10px;padding:2px 8px;font-size:11px;font-weight:500\">\n              Adaptive\n            </span>\n          </td>\n        </tr>\n        \n        <tr style=\"background:#534AB715\">\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle;font-size:13px;font-weight:600;\n                     color:var(--color-text-primary)\">SnapKV <span style=\"background:#534AB7;color:white;border-radius:3px;padding:1px 6px;font-size:9px;letter-spacing:.05em;margin-left:6px;vertical-align:middle\">ANCHOR</span></td>\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle;font-size:11px;color:var(--color-text-secondary);\n                     font-family:var(--font-mono)\">NeurIPS '24</td>\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle;font-size:12px;color:var(--color-text-secondary);\n                     line-height:1.5\">Obs-window voting + max-pool clustering</td>\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle\">\n            <span style=\"background:#BA751722;color:#BA7517;border:1px solid #BA7517;\n                         border-radius:10px;padding:2px 8px;font-size:11px;font-weight:500\">\n              Per-head fixed\n            </span>\n          </td>\n        </tr>\n        \n        <tr style=\"background:transparent\">\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle;font-size:13px;font-weight:600;\n                     color:var(--color-text-primary)\">PyramidKV</td>\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle;font-size:11px;color:var(--color-text-secondary);\n                     font-family:var(--font-mono)\">\u2014</td>\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle;font-size:12px;color:var(--color-text-secondary);\n                     line-height:1.5\">Layer-wise budget allocation</td>\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle\">\n            <span style=\"background:#BA751722;color:#BA7517;border:1px solid #BA7517;\n                         border-radius:10px;padding:2px 8px;font-size:11px;font-weight:500\">\n              Per-layer\n            </span>\n          </td>\n        </tr>\n        \n        <tr style=\"background:transparent\">\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle;font-size:13px;font-weight:600;\n                     color:var(--color-text-primary)\">NACL</td>\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle;font-size:11px;color:var(--color-text-secondary);\n                     font-family:var(--font-mono)\">ACL '24</td>\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle;font-size:12px;color:var(--color-text-secondary);\n                     line-height:1.5\">One-shot prefill eviction (proxy + random)</td>\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle\">\n            <span style=\"background:#BA751722;color:#BA7517;border:1px solid #BA7517;\n                         border-radius:10px;padding:2px 8px;font-size:11px;font-weight:500\">\n              Fixed\n            </span>\n          </td>\n        </tr>\n        \n        <tr style=\"background:transparent\">\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle;font-size:13px;font-weight:600;\n                     color:var(--color-text-primary)\">D2O <span style=\"background:#1D9E7522;color:#1D9E75;border:1px solid #1D9E75;border-radius:10px;padding:1px 8px;font-size:10px;font-weight:600;letter-spacing:.04em;margin-left:6px;vertical-align:middle\">LATEST \u00b7 2025</span></td>\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle;font-size:11px;color:var(--color-text-secondary);\n                     font-family:var(--font-mono)\">ICLR '25</td>\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle;font-size:12px;color:var(--color-text-secondary);\n                     line-height:1.5\">Layer-aware budget + recall/merge of evicted</td>\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle\">\n            <span style=\"background:#BA751722;color:#BA7517;border:1px solid #BA7517;\n                         border-radius:10px;padding:2px 8px;font-size:11px;font-weight:500\">\n              Per-layer dynamic\n            </span>\n          </td>\n        </tr>\n        \n        <tr style=\"background:transparent\">\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle;font-size:13px;font-weight:600;\n                     color:var(--color-text-primary)\">CAKE <span style=\"background:#1D9E7522;color:#1D9E75;border:1px solid #1D9E75;border-radius:10px;padding:1px 8px;font-size:10px;font-weight:600;letter-spacing:.04em;margin-left:6px;vertical-align:middle\">LATEST \u00b7 2025</span></td>\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle;font-size:11px;color:var(--color-text-secondary);\n                     font-family:var(--font-mono)\">ICLR '25</td>\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle;font-size:12px;color:var(--color-text-secondary);\n                     line-height:1.5\">Cascading adaptive eviction + layer prefs</td>\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle\">\n            <span style=\"background:#BA751722;color:#BA7517;border:1px solid #BA7517;\n                         border-radius:10px;padding:2px 8px;font-size:11px;font-weight:500\">\n              Per-layer\n            </span>\n          </td>\n        </tr>\n        \n        <tr style=\"background:transparent\">\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle;font-size:13px;font-weight:600;\n                     color:var(--color-text-primary)\">SCOPE <span style=\"background:#1D9E7522;color:#1D9E75;border:1px solid #1D9E75;border-radius:10px;padding:1px 8px;font-size:10px;font-weight:600;letter-spacing:.04em;margin-left:6px;vertical-align:middle\">LATEST \u00b7 2025</span></td>\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle;font-size:11px;color:var(--color-text-secondary);\n                     font-family:var(--font-mono)\">ACL '25</td>\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle;font-size:12px;color:var(--color-text-secondary);\n                     line-height:1.5\">Separate prefill vs decoding compression</td>\n          <td style=\"padding:9px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     vertical-align:middle\">\n            <span style=\"background:#BA751722;color:#BA7517;border:1px solid #BA7517;\n                         border-radius:10px;padding:2px 8px;font-size:11px;font-weight:500\">\n              Phase-aware\n            </span>\n          </td>\n        </tr>\n        </tbody>\n      </table>\n    </div>\n    "
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "kLmu",
+      "code_hash": "bc25ba4014de357bb77598638bc110bc",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"what-each-one-actually-does-differently\">What each one actually does differently</h3>\n<span class=\"paragraph\">Mechanisms read similarly in prose, so here they are as a capability\nmatrix. Five axes \u2014 per-head budget, per-layer budget, adaptive sizing,\ndecode-aware behaviour, and the ability to recover evicted entries.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "IpqN",
+      "code_hash": "affb8b1359b896880989cfd4f87a81b0",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "\n    <div style=\"font-size:12px;color:var(--color-text-secondary);margin-bottom:10px;line-height:1.6\">\n      Five capabilities that differentiate these methods.\n      <span style=\"color:#1D9E75;font-weight:600\">\u25cf</span> supported,\n      <span style=\"color:#BA7517;font-weight:600\">\u25d0</span> partial,\n      <span style=\"color:#88878088;font-weight:600\">\u25cb</span> not supported.\n      Hover any cell for a label.\n    </div>\n    <div style=\"background:var(--color-background-secondary);border-radius:8px;\n                padding:4px 10px;overflow-x:auto\">\n      <table style=\"width:100%;border-collapse:collapse\">\n        <thead>\n          <tr>\n            <th style=\"text-align:left;padding:8px 12px;font-size:10px;\n                       text-transform:uppercase;letter-spacing:.06em;\n                       color:var(--color-text-secondary);font-weight:600\">Method</th>\n            <th title=\"Each attention head gets its own kept set\" style=\"text-align:center;padding:8px 6px;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-secondary);font-weight:600;line-height:1.3\">Per-head budget</th><th title=\"Different layers get different cache sizes\" style=\"text-align:center;padding:8px 6px;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-secondary);font-weight:600;line-height:1.3\">Per-layer budget</th><th title=\"Budget responds to attention statistics\" style=\"text-align:center;padding:8px 6px;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-secondary);font-weight:600;line-height:1.3\">Adaptive sizing</th><th title=\"Maintains quality through long generation\" style=\"text-align:center;padding:8px 6px;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-secondary);font-weight:600;line-height:1.3\">Decode-aware</th><th title=\"Can resurrect / merge evicted entries\" style=\"text-align:center;padding:8px 6px;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-secondary);font-weight:600;line-height:1.3\">Recovery</th>\n          </tr>\n        </thead>\n        <tbody>\n        <tr style=\"\">\n          <td style=\"padding:8px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     font-size:13px;color:var(--color-text-primary);font-weight:500\">\n            H2O\n          </td>\n          <td title=\"no\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#88878055;line-height:1\">\u25cb</td><td title=\"no\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#88878055;line-height:1\">\u25cb</td><td title=\"partial\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#BA7517;line-height:1\">\u25d0</td><td title=\"yes\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#1D9E75;line-height:1\">\u25cf</td><td title=\"no\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#88878055;line-height:1\">\u25cb</td>\n        </tr>\n        \n        <tr style=\"\">\n          <td style=\"padding:8px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     font-size:13px;color:var(--color-text-primary);font-weight:500\">\n            Scissorhands\n          </td>\n          <td title=\"no\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#88878055;line-height:1\">\u25cb</td><td title=\"no\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#88878055;line-height:1\">\u25cb</td><td title=\"partial\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#BA7517;line-height:1\">\u25d0</td><td title=\"yes\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#1D9E75;line-height:1\">\u25cf</td><td title=\"no\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#88878055;line-height:1\">\u25cb</td>\n        </tr>\n        \n        <tr style=\"\">\n          <td style=\"padding:8px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     font-size:13px;color:var(--color-text-primary);font-weight:500\">\n            StreamingLLM\n          </td>\n          <td title=\"no\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#88878055;line-height:1\">\u25cb</td><td title=\"no\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#88878055;line-height:1\">\u25cb</td><td title=\"no\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#88878055;line-height:1\">\u25cb</td><td title=\"yes\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#1D9E75;line-height:1\">\u25cf</td><td title=\"no\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#88878055;line-height:1\">\u25cb</td>\n        </tr>\n        \n        <tr style=\"\">\n          <td style=\"padding:8px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     font-size:13px;color:var(--color-text-primary);font-weight:500\">\n            FastGen\n          </td>\n          <td title=\"yes\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#1D9E75;line-height:1\">\u25cf</td><td title=\"yes\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#1D9E75;line-height:1\">\u25cf</td><td title=\"yes\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#1D9E75;line-height:1\">\u25cf</td><td title=\"partial\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#BA7517;line-height:1\">\u25d0</td><td title=\"no\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#88878055;line-height:1\">\u25cb</td>\n        </tr>\n        \n        <tr style=\"background:#534AB715;font-weight:600\">\n          <td style=\"padding:8px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     font-size:13px;color:var(--color-text-primary);font-weight:500\">\n            SnapKV\n          </td>\n          <td title=\"yes\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#1D9E75;line-height:1\">\u25cf</td><td title=\"no\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#88878055;line-height:1\">\u25cb</td><td title=\"partial\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#BA7517;line-height:1\">\u25d0</td><td title=\"partial\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#BA7517;line-height:1\">\u25d0</td><td title=\"no\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#88878055;line-height:1\">\u25cb</td>\n        </tr>\n        \n        <tr style=\"\">\n          <td style=\"padding:8px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     font-size:13px;color:var(--color-text-primary);font-weight:500\">\n            PyramidKV\n          </td>\n          <td title=\"partial\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#BA7517;line-height:1\">\u25d0</td><td title=\"yes\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#1D9E75;line-height:1\">\u25cf</td><td title=\"yes\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#1D9E75;line-height:1\">\u25cf</td><td title=\"partial\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#BA7517;line-height:1\">\u25d0</td><td title=\"no\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#88878055;line-height:1\">\u25cb</td>\n        </tr>\n        \n        <tr style=\"\">\n          <td style=\"padding:8px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     font-size:13px;color:var(--color-text-primary);font-weight:500\">\n            NACL\n          </td>\n          <td title=\"no\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#88878055;line-height:1\">\u25cb</td><td title=\"no\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#88878055;line-height:1\">\u25cb</td><td title=\"no\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#88878055;line-height:1\">\u25cb</td><td title=\"no\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#88878055;line-height:1\">\u25cb</td><td title=\"no\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#88878055;line-height:1\">\u25cb</td>\n        </tr>\n        \n        <tr style=\"\">\n          <td style=\"padding:8px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     font-size:13px;color:var(--color-text-primary);font-weight:500\">\n            D2O <span style=\"background:#1D9E7522;color:#1D9E75;border:1px solid #1D9E75;border-radius:8px;padding:0 6px;font-size:9px;font-weight:600\">2025</span>\n          </td>\n          <td title=\"partial\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#BA7517;line-height:1\">\u25d0</td><td title=\"yes\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#1D9E75;line-height:1\">\u25cf</td><td title=\"yes\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#1D9E75;line-height:1\">\u25cf</td><td title=\"yes\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#1D9E75;line-height:1\">\u25cf</td><td title=\"yes\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#1D9E75;line-height:1\">\u25cf</td>\n        </tr>\n        \n        <tr style=\"\">\n          <td style=\"padding:8px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     font-size:13px;color:var(--color-text-primary);font-weight:500\">\n            CAKE <span style=\"background:#1D9E7522;color:#1D9E75;border:1px solid #1D9E75;border-radius:8px;padding:0 6px;font-size:9px;font-weight:600\">2025</span>\n          </td>\n          <td title=\"partial\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#BA7517;line-height:1\">\u25d0</td><td title=\"yes\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#1D9E75;line-height:1\">\u25cf</td><td title=\"yes\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#1D9E75;line-height:1\">\u25cf</td><td title=\"yes\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#1D9E75;line-height:1\">\u25cf</td><td title=\"partial\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#BA7517;line-height:1\">\u25d0</td>\n        </tr>\n        \n        <tr style=\"\">\n          <td style=\"padding:8px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);\n                     font-size:13px;color:var(--color-text-primary);font-weight:500\">\n            SCOPE <span style=\"background:#1D9E7522;color:#1D9E75;border:1px solid #1D9E75;border-radius:8px;padding:0 6px;font-size:9px;font-weight:600\">2025</span>\n          </td>\n          <td title=\"partial\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#BA7517;line-height:1\">\u25d0</td><td title=\"partial\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#BA7517;line-height:1\">\u25d0</td><td title=\"yes\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#1D9E75;line-height:1\">\u25cf</td><td title=\"yes\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#1D9E75;line-height:1\">\u25cf</td><td title=\"partial\" style=\"text-align:center;padding:8px 6px;border-bottom:1px solid var(--color-border, #e5e5e5);font-size:18px;color:#BA7517;line-height:1\">\u25d0</td>\n        </tr>\n        </tbody>\n      </table>\n    </div>\n    <div style=\"margin-top:12px;padding:10px 14px;background:#534AB715;border-left:3px solid #534AB7;\n         border-radius:0 6px 6px 0;font-size:12px;color:var(--color-text-secondary);line-height:1.6\">\n      The 2025 wave (D2O, CAKE, SCOPE) is filling the right-hand columns \u2014\n      <strong style=\"color:var(--color-text-primary)\">decode-aware</strong> and\n      <strong style=\"color:var(--color-text-primary)\">recovery</strong> were\n      mostly empty even a year ago.\n    </div>\n    "
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "dxZZ",
+      "code_hash": "c418f2b4b92dae18bc1c2c94fc3c0210",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">A few patterns worth pausing on:</span>\n<ul>\n<li><strong>SnapKV</strong> owns the per-head column from 2024 \u2014 that's its central\n  contribution. It doesn't push per-layer or recovery, which is\n  exactly where the 2025 work has gone.</li>\n<li><strong>PyramidKV</strong> was the first to seriously vary budget per layer; D2O\n  and CAKE refined the idea with dynamic and cascading variants.</li>\n<li><strong>Recovery</strong> (resurrecting evicted entries from a summary or merge)\n  barely existed before D2O. It's the cleanest systems-style answer\n  to \"what if the obs-window vote was wrong?\"</li>\n<li><strong>SCOPE</strong> is the odd one out \u2014 it doesn't push per-layer or per-head,\n  it splits compression by <em>phase</em> (prefill vs decode), which matters\n  most for long-output reasoning chains.</li>\n</ul></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "dlnW",
+      "code_hash": "a88f64ddf066a226aa244ebc44f57217",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"game-5-method-picker\">GAME 5 \u00b7 Method Picker</h3>\n<span class=\"paragraph\">Pick a scenario and the picker scores all nine methods against it,\nusing the fitness profiles encoded in <a href=\"src/visualizations.py\"><code>src/visualizations.py</code></a>.\nNo ML \u2014 just transparent ranking on top of the capability matrix above.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "TTti",
+      "code_hash": "a0f0aee90d8a98a226e4df25c41b31cc",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><marimo-ui-element object-id='TTti-0' random-id='d16c1dd9-7004-6491-5f5e-c82255e6f75a'><marimo-dropdown data-initial-value='[&quot;Long (32\u2013128K)&quot;]' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Context length&lt;/span&gt;&lt;/span&gt;&quot;' data-options='[&quot;Short (&lt; 8K)&quot;,&quot;Medium (8\u201332K)&quot;,&quot;Long (32\u2013128K)&quot;,&quot;Very long (&gt; 128K)&quot;]' data-allow-select-none='false' data-searchable='false' data-full-width='false'></marimo-dropdown></marimo-ui-element><marimo-ui-element object-id='TTti-1' random-id='0f8f0769-b721-4a6a-7b9b-4550f81bdf0f'><marimo-radio data-initial-value='&quot;Single-shot Q&amp;A&quot;' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Workload type&lt;/span&gt;&lt;/span&gt;&quot;' data-options='[&quot;Single-shot Q&amp;A&quot;,&quot;Streaming chat&quot;,&quot;Long generation / reasoning&quot;]' data-inline='false' data-disabled='false'></marimo-radio></marimo-ui-element><marimo-ui-element object-id='TTti-2' random-id='0f5060ac-028e-1711-2305-ba062126ae63'><marimo-checkbox data-initial-value='true' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Drop-in required (no model surgery)&lt;/span&gt;&lt;/span&gt;&quot;' data-disabled='false'></marimo-checkbox></marimo-ui-element><marimo-ui-element object-id='TTti-3' random-id='cff440eb-06bb-2321-4c82-43c06493274c'><marimo-checkbox data-initial-value='false' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Need to recover evicted info&lt;/span&gt;&lt;/span&gt;&quot;' data-disabled='false'></marimo-checkbox></marimo-ui-element></div>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "RKFZ",
+      "code_hash": "d8089e8f2bcdd9d36f4bfa1ff916b08b",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "\n    <div style=\"font-size:12px;color:var(--color-text-secondary);margin-bottom:12px\">\n      Scenario: <strong>Long (32\u2013128K)</strong> context \u00b7\n      <strong>Long generation / reasoning</strong> \u00b7\n      drop-in required \u00b7\n      recovery not needed\n    </div>\n    \n        <div style=\"border-left:4px solid #1D9E75;padding:12px 14px;\n                    background:var(--color-background-secondary);border-radius:0 8px 8px 0;\n                    margin-bottom:10px\">\n          <div style=\"display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px\">\n            <div>\n              <span style=\"font-size:10px;font-weight:600;color:#1D9E75;\n                           letter-spacing:.06em\">BEST FIT</span>\n              <span style=\"font-size:15px;font-weight:600;margin-left:8px;\n                           color:var(--color-text-primary)\">SCOPE</span>\n               <span style=\"background:#1D9E7522;color:#1D9E75;border:1px solid #1D9E75;border-radius:8px;padding:0 6px;font-size:10px;font-weight:600\">LATEST</span>\n              <span style=\"font-size:11px;color:var(--color-text-secondary);\n                           font-family:var(--font-mono);margin-left:6px\">ACL '25</span>\n            </div>\n            <div style=\"font-size:11px;color:var(--color-text-secondary)\">score 0.81</div>\n          </div>\n          <div style=\"font-size:12px;color:var(--color-text-secondary);margin-bottom:6px\">\n            Separate prefill vs decoding compression &nbsp;\u00b7&nbsp;\n            <span style=\"color:#BA7517;font-weight:500\">Phase-aware</span>\n          </div>\n          <div style=\"background:var(--color-background-primary, #fff);height:6px;border-radius:3px;\n                      overflow:hidden\">\n            <div style=\"width:100%;height:100%;background:#1D9E75;\n                        border-radius:3px\"></div>\n          </div>\n        </div>\n        \n        <div style=\"border-left:4px solid #BA7517;padding:12px 14px;\n                    background:var(--color-background-secondary);border-radius:0 8px 8px 0;\n                    margin-bottom:10px\">\n          <div style=\"display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px\">\n            <div>\n              <span style=\"font-size:10px;font-weight:600;color:#BA7517;\n                           letter-spacing:.06em\">RUNNER-UP</span>\n              <span style=\"font-size:15px;font-weight:600;margin-left:8px;\n                           color:var(--color-text-primary)\">D2O</span>\n               <span style=\"background:#1D9E7522;color:#1D9E75;border:1px solid #1D9E75;border-radius:8px;padding:0 6px;font-size:10px;font-weight:600\">LATEST</span>\n              <span style=\"font-size:11px;color:var(--color-text-secondary);\n                           font-family:var(--font-mono);margin-left:6px\">ICLR '25</span>\n            </div>\n            <div style=\"font-size:11px;color:var(--color-text-secondary)\">score 0.80</div>\n          </div>\n          <div style=\"font-size:12px;color:var(--color-text-secondary);margin-bottom:6px\">\n            Layer-aware budget + recall/merge of evicted &nbsp;\u00b7&nbsp;\n            <span style=\"color:#BA7517;font-weight:500\">Per-layer dynamic</span>\n          </div>\n          <div style=\"background:var(--color-background-primary, #fff);height:6px;border-radius:3px;\n                      overflow:hidden\">\n            <div style=\"width:99%;height:100%;background:#BA7517;\n                        border-radius:3px\"></div>\n          </div>\n        </div>\n        \n        <div style=\"border-left:4px solid #534AB7;padding:12px 14px;\n                    background:var(--color-background-secondary);border-radius:0 8px 8px 0;\n                    margin-bottom:10px\">\n          <div style=\"display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px\">\n            <div>\n              <span style=\"font-size:10px;font-weight:600;color:#534AB7;\n                           letter-spacing:.06em\">ALSO WORTH TRYING</span>\n              <span style=\"font-size:15px;font-weight:600;margin-left:8px;\n                           color:var(--color-text-primary)\">CAKE</span>\n               <span style=\"background:#1D9E7522;color:#1D9E75;border:1px solid #1D9E75;border-radius:8px;padding:0 6px;font-size:10px;font-weight:600\">LATEST</span>\n              <span style=\"font-size:11px;color:var(--color-text-secondary);\n                           font-family:var(--font-mono);margin-left:6px\">ICLR '25</span>\n            </div>\n            <div style=\"font-size:11px;color:var(--color-text-secondary)\">score 0.80</div>\n          </div>\n          <div style=\"font-size:12px;color:var(--color-text-secondary);margin-bottom:6px\">\n            Cascading adaptive eviction + layer prefs &nbsp;\u00b7&nbsp;\n            <span style=\"color:#BA7517;font-weight:500\">Per-layer</span>\n          </div>\n          <div style=\"background:var(--color-background-primary, #fff);height:6px;border-radius:3px;\n                      overflow:hidden\">\n            <div style=\"width:99%;height:100%;background:#534AB7;\n                        border-radius:3px\"></div>\n          </div>\n        </div>\n        \n    <details style=\"margin-top:8px\">\n      <summary style=\"cursor:pointer;font-size:12px;color:var(--color-text-secondary)\">\n        Full ranking (all 10 methods)\n      </summary>\n      <div style=\"background:var(--color-background-secondary);border-radius:8px;\n                  padding:4px 10px;margin-top:8px\">\n        <table style=\"width:100%;border-collapse:collapse\">\n        <tr>\n          <td style=\"padding:6px 10px;font-size:12px;color:var(--color-text-primary);\n                     border-bottom:1px solid var(--color-border, #e5e5e5)\">SCOPE</td>\n          <td style=\"padding:6px 10px;font-size:11px;color:var(--color-text-secondary);\n                     border-bottom:1px solid var(--color-border, #e5e5e5);width:60%\">\n            <div style=\"background:var(--color-background-primary, #fff);height:5px;\n                        border-radius:3px;overflow:hidden\">\n              <div style=\"width:100%;height:100%;background:#888780;border-radius:3px\"></div>\n            </div>\n          </td>\n          <td style=\"padding:6px 10px;font-size:11px;color:var(--color-text-secondary);\n                     border-bottom:1px solid var(--color-border, #e5e5e5);text-align:right;\n                     font-family:var(--font-mono)\">0.81</td>\n        </tr>\n        \n        <tr>\n          <td style=\"padding:6px 10px;font-size:12px;color:var(--color-text-primary);\n                     border-bottom:1px solid var(--color-border, #e5e5e5)\">D2O</td>\n          <td style=\"padding:6px 10px;font-size:11px;color:var(--color-text-secondary);\n                     border-bottom:1px solid var(--color-border, #e5e5e5);width:60%\">\n            <div style=\"background:var(--color-background-primary, #fff);height:5px;\n                        border-radius:3px;overflow:hidden\">\n              <div style=\"width:99%;height:100%;background:#888780;border-radius:3px\"></div>\n            </div>\n          </td>\n          <td style=\"padding:6px 10px;font-size:11px;color:var(--color-text-secondary);\n                     border-bottom:1px solid var(--color-border, #e5e5e5);text-align:right;\n                     font-family:var(--font-mono)\">0.80</td>\n        </tr>\n        \n        <tr>\n          <td style=\"padding:6px 10px;font-size:12px;color:var(--color-text-primary);\n                     border-bottom:1px solid var(--color-border, #e5e5e5)\">CAKE</td>\n          <td style=\"padding:6px 10px;font-size:11px;color:var(--color-text-secondary);\n                     border-bottom:1px solid var(--color-border, #e5e5e5);width:60%\">\n            <div style=\"background:var(--color-background-primary, #fff);height:5px;\n                        border-radius:3px;overflow:hidden\">\n              <div style=\"width:99%;height:100%;background:#888780;border-radius:3px\"></div>\n            </div>\n          </td>\n          <td style=\"padding:6px 10px;font-size:11px;color:var(--color-text-secondary);\n                     border-bottom:1px solid var(--color-border, #e5e5e5);text-align:right;\n                     font-family:var(--font-mono)\">0.80</td>\n        </tr>\n        \n        <tr>\n          <td style=\"padding:6px 10px;font-size:12px;color:var(--color-text-primary);\n                     border-bottom:1px solid var(--color-border, #e5e5e5)\">SnapKV</td>\n          <td style=\"padding:6px 10px;font-size:11px;color:var(--color-text-secondary);\n                     border-bottom:1px solid var(--color-border, #e5e5e5);width:60%\">\n            <div style=\"background:var(--color-background-primary, #fff);height:5px;\n                        border-radius:3px;overflow:hidden\">\n              <div style=\"width:95%;height:100%;background:#888780;border-radius:3px\"></div>\n            </div>\n          </td>\n          <td style=\"padding:6px 10px;font-size:11px;color:var(--color-text-secondary);\n                     border-bottom:1px solid var(--color-border, #e5e5e5);text-align:right;\n                     font-family:var(--font-mono)\">0.77</td>\n        </tr>\n        \n        <tr>\n          <td style=\"padding:6px 10px;font-size:12px;color:var(--color-text-primary);\n                     border-bottom:1px solid var(--color-border, #e5e5e5)\">PyramidKV</td>\n          <td style=\"padding:6px 10px;font-size:11px;color:var(--color-text-secondary);\n                     border-bottom:1px solid var(--color-border, #e5e5e5);width:60%\">\n            <div style=\"background:var(--color-background-primary, #fff);height:5px;\n                        border-radius:3px;overflow:hidden\">\n              <div style=\"width:82%;height:100%;background:#888780;border-radius:3px\"></div>\n            </div>\n          </td>\n          <td style=\"padding:6px 10px;font-size:11px;color:var(--color-text-secondary);\n                     border-bottom:1px solid var(--color-border, #e5e5e5);text-align:right;\n                     font-family:var(--font-mono)\">0.67</td>\n        </tr>\n        \n        <tr>\n          <td style=\"padding:6px 10px;font-size:12px;color:var(--color-text-primary);\n                     border-bottom:1px solid var(--color-border, #e5e5e5)\">StreamingLLM</td>\n          <td style=\"padding:6px 10px;font-size:11px;color:var(--color-text-secondary);\n                     border-bottom:1px solid var(--color-border, #e5e5e5);width:60%\">\n            <div style=\"background:var(--color-background-primary, #fff);height:5px;\n                        border-radius:3px;overflow:hidden\">\n              <div style=\"width:80%;height:100%;background:#888780;border-radius:3px\"></div>\n            </div>\n          </td>\n          <td style=\"padding:6px 10px;font-size:11px;color:var(--color-text-secondary);\n                     border-bottom:1px solid var(--color-border, #e5e5e5);text-align:right;\n                     font-family:var(--font-mono)\">0.65</td>\n        </tr>\n        \n        <tr>\n          <td style=\"padding:6px 10px;font-size:12px;color:var(--color-text-primary);\n                     border-bottom:1px solid var(--color-border, #e5e5e5)\">H2O</td>\n          <td style=\"padding:6px 10px;font-size:11px;color:var(--color-text-secondary);\n                     border-bottom:1px solid var(--color-border, #e5e5e5);width:60%\">\n            <div style=\"background:var(--color-background-primary, #fff);height:5px;\n                        border-radius:3px;overflow:hidden\">\n              <div style=\"width:79%;height:100%;background:#888780;border-radius:3px\"></div>\n            </div>\n          </td>\n          <td style=\"padding:6px 10px;font-size:11px;color:var(--color-text-secondary);\n                     border-bottom:1px solid var(--color-border, #e5e5e5);text-align:right;\n                     font-family:var(--font-mono)\">0.64</td>\n        </tr>\n        \n        <tr>\n          <td style=\"padding:6px 10px;font-size:12px;color:var(--color-text-primary);\n                     border-bottom:1px solid var(--color-border, #e5e5e5)\">Scissorhands</td>\n          <td style=\"padding:6px 10px;font-size:11px;color:var(--color-text-secondary);\n                     border-bottom:1px solid var(--color-border, #e5e5e5);width:60%\">\n            <div style=\"background:var(--color-background-primary, #fff);height:5px;\n                        border-radius:3px;overflow:hidden\">\n              <div style=\"width:76%;height:100%;background:#888780;border-radius:3px\"></div>\n            </div>\n          </td>\n          <td style=\"padding:6px 10px;font-size:11px;color:var(--color-text-secondary);\n                     border-bottom:1px solid var(--color-border, #e5e5e5);text-align:right;\n                     font-family:var(--font-mono)\">0.62</td>\n        </tr>\n        \n        <tr>\n          <td style=\"padding:6px 10px;font-size:12px;color:var(--color-text-primary);\n                     border-bottom:1px solid var(--color-border, #e5e5e5)\">FastGen</td>\n          <td style=\"padding:6px 10px;font-size:11px;color:var(--color-text-secondary);\n                     border-bottom:1px solid var(--color-border, #e5e5e5);width:60%\">\n            <div style=\"background:var(--color-background-primary, #fff);height:5px;\n                        border-radius:3px;overflow:hidden\">\n              <div style=\"width:75%;height:100%;background:#888780;border-radius:3px\"></div>\n            </div>\n          </td>\n          <td style=\"padding:6px 10px;font-size:11px;color:var(--color-text-secondary);\n                     border-bottom:1px solid var(--color-border, #e5e5e5);text-align:right;\n                     font-family:var(--font-mono)\">0.61</td>\n        </tr>\n        \n        <tr>\n          <td style=\"padding:6px 10px;font-size:12px;color:var(--color-text-primary);\n                     border-bottom:1px solid var(--color-border, #e5e5e5)\">NACL</td>\n          <td style=\"padding:6px 10px;font-size:11px;color:var(--color-text-secondary);\n                     border-bottom:1px solid var(--color-border, #e5e5e5);width:60%\">\n            <div style=\"background:var(--color-background-primary, #fff);height:5px;\n                        border-radius:3px;overflow:hidden\">\n              <div style=\"width:72%;height:100%;background:#888780;border-radius:3px\"></div>\n            </div>\n          </td>\n          <td style=\"padding:6px 10px;font-size:11px;color:var(--color-text-secondary);\n                     border-bottom:1px solid var(--color-border, #e5e5e5);text-align:right;\n                     font-family:var(--font-mono)\">0.59</td>\n        </tr>\n        </table>\n      </div>\n    </details>\n    "
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "IaQp",
+      "code_hash": "6f2658127cb1051edc805df11abbfaac",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">Try a few scenarios:</span>\n<ul>\n<li><strong>Drop-in required + Single-shot Q&amp;A on 32\u2013128K context</strong> \u2192 SnapKV\n  tends to win. It's the cleanest plug-and-play option in this regime.</li>\n<li><strong>Long generation + recovery needed</strong> \u2192 D2O or SCOPE jump to the top \u2014\n  they're built for long decode and the 2025 wave's recovery mechanisms.</li>\n<li><strong>Streaming chat</strong> \u2192 StreamingLLM is hard to beat for that exact\n  workload; it was designed for it.</li>\n</ul>\n<span class=\"paragraph\">The picker has no ground truth \u2014 it's a transparent scoring function\nover the capability matrix above. Useful as an orientation tool, not\na benchmark.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "IWgg",
+      "code_hash": "579d82f376c293cab52fa372b8c29243",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<h2 id=\"13-the-bigger-picture-two-axes\">13 \u00b7 The Bigger Picture: Two Axes</h2>\n<span class=\"paragraph\">SnapKV is one move on a board with two axes. People tackling long-context\ninference usually pick one \u2014 or, increasingly, both at once.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "fCoF",
+      "code_hash": "61aef5ea5f605361f824bb1854308f67",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "\n    <div style=\"display:grid;grid-template-columns:1fr 1fr;gap:14px\">\n      <div style=\"background:var(--color-background-secondary);border-left:3px solid #534AB7;\n                  border-radius:0 8px 8px 0;padding:14px 16px\">\n        <div style=\"font-size:11px;color:#534AB7;font-weight:600;text-transform:uppercase;\n                    letter-spacing:.06em;margin-bottom:6px\">Axis 1 \u00b7 Sparse attention</div>\n        <div style=\"font-size:14px;font-weight:500;margin-bottom:8px\">Reduce <em>compute</em></div>\n        <div style=\"font-size:12px;color:var(--color-text-secondary);line-height:1.6\">\n          Change the attention math itself so each token only attends to a\n          subset of others \u2014 sliding windows, global tokens, blocks, random\n          patterns. The full KV cache is still built; you just don't visit\n          all of it.\n          <br><br>\n          <strong style=\"color:var(--color-text-primary)\">Examples:</strong>\n          Longformer, BigBird, sliding-window attention, block-sparse attention.\n          <br><br>\n          <strong style=\"color:var(--color-text-primary)\">Cost cut:</strong>\n          attention compute drops from O(T\u00b2) toward O(T\u00b7w).\n        </div>\n      </div>\n\n      <div style=\"background:var(--color-background-secondary);border-left:3px solid #1D9E75;\n                  border-radius:0 8px 8px 0;padding:14px 16px\">\n        <div style=\"font-size:11px;color:#1D9E75;font-weight:600;text-transform:uppercase;\n                    letter-spacing:.06em;margin-bottom:6px\">Axis 2 \u00b7 KV cache eviction</div>\n        <div style=\"font-size:14px;font-weight:500;margin-bottom:8px\">Reduce <em>memory</em></div>\n        <div style=\"font-size:12px;color:var(--color-text-secondary);line-height:1.6\">\n          Keep the attention math intact. After computing K and V for every\n          token, throw away the entries that aren't worth holding onto. The\n          model still sees full attention during prefill \u2014 it just decodes\n          against a slimmer cache.\n          <br><br>\n          <strong style=\"color:var(--color-text-primary)\">Examples:</strong>\n          SnapKV, H2O, StreamingLLM, Scissorhands, Ada-KV.\n          <br><br>\n          <strong style=\"color:var(--color-text-primary)\">Cost cut:</strong>\n          KV memory drops from O(T) toward O(k) per layer per head.\n        </div>\n      </div>\n    </div>\n\n    <div style=\"margin-top:14px;padding:12px 16px;background:#BA751715;border-left:3px solid #BA7517;\n         border-radius:0 6px 6px 0;font-size:13px;color:var(--color-text-secondary);line-height:1.7\">\n      <strong style=\"color:var(--color-text-primary)\">They're complementary, not competing.</strong>\n      Sparse attention and KV eviction can stack: a sliding-window model can\n      <em>also</em> compress its sliding cache with SnapKV-style voting. SnapKV\n      itself is appealing precisely because it requires <em>no</em> changes to\n      the underlying attention \u2014 it's a drop-in for any standard transformer.\n    </div>\n    "
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "LkGn",
+      "code_hash": "dd19113291838be3fbcfd98507dd9d08",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">Where does this go next? Two natural directions, both in active research:</span>\n<ul>\n<li><strong>Token-level memory beyond eviction.</strong> Instead of throwing entries\n  away, <em>compress</em> them \u2014 merge similar K/V pairs, summarise blocks,\n  or learn a small recurrent state that absorbs evicted tokens.</li>\n<li><strong>Layer- and head-aware budgets.</strong> Not every layer needs the same\n  cache size; not every head deserves an equal share. Methods like\n  Ada-KV and PyramidKV start to vary the budget across the model;\n  our adaptive observation window above is one small step in that\n  direction.</li>\n</ul>\n<span class=\"paragraph\">The unifying question stays the same: <em>what should the model remember,\nand at what granularity?</em></span>\n<span class=\"paragraph\">Which is exactly the question agent designers have been asking too \u2014\njust at a different scale. That's the next section.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "zVRe",
+      "code_hash": "c583bca32b73b3f800f16e1e3fbd759e",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<h2 id=\"14-from-kv-cache-to-agentic-memory\">14 \u00b7 From KV Cache to Agentic Memory</h2>\n<span class=\"paragraph\">Zoom out one level. An LLM agent doesn't run for one prompt \u2014 it runs for\n<em>many turns</em>. Each turn appends user input, tool outputs, and assistant\nresponses. The conversation grows. The same memory crisis we just fought\nat the <strong>token level</strong> shows up at the <strong>turn level</strong>: you can't keep\neverything, you can't drop everything, and which past turns matter\ndepends on what the agent is trying to do <em>now</em>.</span>\n<span class=\"paragraph\">Modern agent systems answer this with a memory hierarchy:</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "woaO",
+      "code_hash": "2381956824ac6c3534c742df98b7f87e",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "HnMC",
+      "code_hash": "853a6fe68728b6888cc6a4ee2d23d731",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"types-of-memory-and-where-kv-cache-fits\">Types of memory \u2014 and where KV cache fits</h3>\n<span class=\"paragraph\">The hierarchy above is <em>where</em> memory lives. The picture below is\n<em>what kind</em> of memory it is. Cognitive science gives us five canonical\ntypes; map each onto an LLM agent and the role of KV cache becomes\nsharp:</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "wadT",
+      "code_hash": "eb8876d840a2f713f260819c1082b6b5",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "VCRE",
+      "code_hash": "c0af6e493fb531dd9b73175a2099656c",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">Two takeaways from the table:</span>\n<ul>\n<li><strong>KV cache management can't fix what isn't there.</strong> It won't add\n  semantic knowledge the model didn't learn, and it won't recover\n  episodes the agent never wrote down. Those are different problems\n  with different solutions (training, RAG, memory stores).</li>\n<li><strong>But it gates everything else.</strong> A retrieved episode, a tool definition,\n  a reasoning chain \u2014 all of them have to ride the cache to influence\n  the next token. So how cleverly you spend cache budget compounds with\n  every other memory layer your agent uses.</li>\n</ul>\n<span class=\"paragraph\">That's why SnapKV-style ideas matter beyond the paper's benchmarks:\nthey make the gateway wider for the same hardware budget.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "hgqU",
+      "code_hash": "291b6daafaeea6daa9580aa6ea2e21cb",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"the-same-knobs-one-level-up\">The same knobs, one level up</h3>\n<span class=\"paragraph\">Every design decision SnapKV makes at the token level has a direct\ncounterpart in agent memory:</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "PSUk",
+      "code_hash": "a2745c59bb66d0a3f2bb88350a7e6d0b",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "mfOT",
+      "code_hash": "007f564f87129090892f583ab4c07421",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">The interesting thing isn't that the analogy exists \u2014 it's that the\n<em>same shape of solution wins at both scales</em>. \"Recent + currently\nrelevant, with local context preserved\" is a good policy for tokens in\na KV cache and for turns in an agent loop. Get that wrong and either\nlayer breaks the same way: lose old context, lose the thread.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "vGiW",
+      "code_hash": "9d522697d954c39bcb837d4cb7ba3bf2",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<h2 id=\"game-6-agent-memory-over-turns\">GAME 6 \u00b7 Agent Memory Over Turns</h2>\n<span class=\"paragraph\">Run the same kinds of memory policies we used for tokens \u2014 but now over\na multi-turn agent conversation. Each turn adds tokens; the strategy\ndecides what stays in the <strong>hot tier</strong> (live context), what gets pushed\nto the <strong>cold tier</strong> (summarised / external store), and what gets lost.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "SYQT",
+      "code_hash": "c5656af4c4f01a369ac1539f7053a1e8",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "bMrW",
+      "code_hash": "fed95b00bb1c383a87bbac03c69e9be0",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "PSQn",
+      "code_hash": "c0a736867e7c4ee81a86f2fac63610ca",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">What to try:</span>\n<ul>\n<li><strong>Full Cache</strong> with a long conversation \u2014 accessible tokens stay at\n  100%, but the hot bar grows unbounded. This is what current agents\n  <em>can't</em> do indefinitely.</li>\n<li><strong>Streaming (recent only)</strong> \u2014 once you exceed the hot-tier limit,\n  tokens fall straight into the gray \"evicted\" band. Old context is\n  gone forever.</li>\n<li><strong>SnapKV-style</strong> \u2014 same eviction shape, but the surviving tokens are\n  the <em>informative</em> ones. Same hot footprint, better recall in practice.</li>\n<li><strong>Agent + Summarise</strong> \u2014 overflow gets compressed into the cold tier\n  instead of being lost. Recall rate stays close to 100%, hot tier\n  stays bounded \u2014 at the cost of running a summariser between turns.</li>\n</ul>\n<span class=\"paragraph\">The recall-rate stat in the cards is the bottom line: <em>of all the\ntokens this agent has ever seen, how many can it still get to?</em></span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "OfTS",
+      "code_hash": "e31bc71b2030e628032d011429f0e078",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<h2 id=\"summary\">Summary</h2>\n<table>\n<thead>\n<tr>\n<th>Method</th>\n<th>Core idea</th>\n<th>Budget type</th>\n<th>Long-context quality</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Full cache</td>\n<td>Keep everything</td>\n<td>100%</td>\n<td>Baseline</td>\n</tr>\n<tr>\n<td>StreamingLLM</td>\n<td>Sink tokens + recent window</td>\n<td>Fixed</td>\n<td>Degrades</td>\n</tr>\n<tr>\n<td>H2O</td>\n<td>Greedy top-k by cumulative attention</td>\n<td>Fixed</td>\n<td>Good</td>\n</tr>\n<tr>\n<td><strong>SnapKV</strong></td>\n<td><strong>Obs. window voting + clustering</strong></td>\n<td><strong>Fixed per head</strong></td>\n<td><strong>Best</strong></td>\n</tr>\n<tr>\n<td><em>Adaptive SnapKV (ours)</em></td>\n<td><em>Entropy-guided window sizing</em></td>\n<td><em>Dynamic per head</em></td>\n<td><em>\u2265 SnapKV</em></td>\n</tr>\n</tbody>\n</table>\n<hr />\n<h3 id=\"the-one-sentence-version\">The one-sentence version</h3>\n<blockquote>\n<span class=\"paragraph\">SnapKV works because the model's <strong>current intent</strong> \u2014 expressed in the last\nfew tokens of the prompt \u2014 reliably predicts which past tokens it will need\nduring generation. So we look there first, and throw the rest away.</span>\n</blockquote>\n<h3 id=\"why-this-matters-beyond-one-paper\">Why this matters beyond one paper</h3>\n<span class=\"paragraph\">The same idea generalises. At the <strong>token level</strong> it's SnapKV picking which\nKV entries to keep. At the <strong>turn level</strong> it's an agent picking which past\nmessages to keep verbatim, which to summarise, and which to drop. Same\nquestion \u2014 <em>what should we remember, given what we're trying to do now?</em> \u2014\nsame answer-shape: recent + currently relevant, with local context preserved.</span>\n<span class=\"paragraph\">SnapKV is appealing not because it's the final word on memory, but because\nit's a clean, intuitive instance of a much bigger pattern.</span>\n<hr />\n<span class=\"paragraph\"><strong>Paper:</strong> Li et al., \"SnapKV: LLM Knows What You Are Looking for Before Generation\",\nNeurIPS 2024. <a href=\"https://arxiv.org/abs/2404.14469\" rel=\"noopener noreferrer\" target=\"_blank\">arxiv.org/abs/2404.14469</a></span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "lQxp",
       "code_hash": "1d0db38904205bec4d6f6f6a1f6cec3e",
       "outputs": [
         {

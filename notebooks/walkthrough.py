@@ -19,6 +19,8 @@ def _():
         plot_attention_compute,
         plot_attention_consistency,
         plot_budget_quality,
+        plot_capability_matrix,
+        plot_competitors_table,
         plot_entropy_intuition,
         plot_human_memory,
         plot_kv_growth,
@@ -32,6 +34,7 @@ def _():
         render_algo_step,
         run_custom_policy,
         run_demo,
+        run_method_picker,
         run_needle_demo,
         simulate_agent_loop,
     )
@@ -42,6 +45,8 @@ def _():
         plot_attention_compute,
         plot_attention_consistency,
         plot_budget_quality,
+        plot_capability_matrix,
+        plot_competitors_table,
         plot_entropy_intuition,
         plot_human_memory,
         plot_kv_growth,
@@ -55,6 +60,7 @@ def _():
         render_algo_step,
         run_custom_policy,
         run_demo,
+        run_method_picker,
         run_needle_demo,
         simulate_agent_loop,
     )
@@ -873,8 +879,14 @@ def _(mo):
 
 
 @app.cell
-def _(custom_attention, custom_budget, custom_frequency, custom_recency,
-      prompt_input, run_custom_policy):
+def _(
+    custom_attention,
+    custom_budget,
+    custom_frequency,
+    custom_recency,
+    prompt_input,
+    run_custom_policy,
+):
     run_custom_policy(
         prompt=prompt_input.value,
         budget=custom_budget.value,
@@ -905,7 +917,132 @@ def _(mo):
 def _(mo):
     mo.md(r"""
     ---
-    ## 12 · The Bigger Picture: Two Axes
+    ## 12 · Competitors
+
+    SnapKV isn't alone — it sits in a fast-moving family of KV-cache
+    compression methods. Here are the nine most directly comparable papers,
+    with the **2025 wave** marked: D2O, CAKE, and SCOPE all push into
+    per-layer dynamic budgets and recoverability — territory that was mostly
+    empty when SnapKV first landed.
+    """)
+    return
+
+
+@app.cell
+def _(plot_competitors_table):
+    plot_competitors_table()
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ### What each one actually does differently
+
+    Mechanisms read similarly in prose, so here they are as a capability
+    matrix. Five axes — per-head budget, per-layer budget, adaptive sizing,
+    decode-aware behaviour, and the ability to recover evicted entries.
+    """)
+    return
+
+
+@app.cell
+def _(plot_capability_matrix):
+    plot_capability_matrix()
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    A few patterns worth pausing on:
+
+    - **SnapKV** owns the per-head column from 2024 — that's its central
+      contribution. It doesn't push per-layer or recovery, which is
+      exactly where the 2025 work has gone.
+    - **PyramidKV** was the first to seriously vary budget per layer; D2O
+      and CAKE refined the idea with dynamic and cascading variants.
+    - **Recovery** (resurrecting evicted entries from a summary or merge)
+      barely existed before D2O. It's the cleanest systems-style answer
+      to "what if the obs-window vote was wrong?"
+    - **SCOPE** is the odd one out — it doesn't push per-layer or per-head,
+      it splits compression by *phase* (prefill vs decode), which matters
+      most for long-output reasoning chains.
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ### GAME 5 · Method Picker
+
+    Pick a scenario and the picker scores all nine methods against it,
+    using the fitness profiles encoded in [`src/visualizations.py`](src/visualizations.py).
+    No ML — just transparent ranking on top of the capability matrix above.
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    pick_context = mo.ui.dropdown(
+        options=["Short (< 8K)", "Medium (8–32K)", "Long (32–128K)", "Very long (> 128K)"],
+        value="Long (32–128K)",
+        label="Context length"
+    )
+    pick_workload = mo.ui.radio(
+        options=["Single-shot Q&A", "Streaming chat", "Long generation / reasoning"],
+        value="Single-shot Q&A",
+        label="Workload type"
+    )
+    pick_dropin = mo.ui.checkbox(value=True, label="Drop-in required (no model surgery)")
+    pick_recovery = mo.ui.checkbox(value=False, label="Need to recover evicted info")
+    mo.vstack([pick_context, pick_workload, pick_dropin, pick_recovery])
+    return pick_context, pick_dropin, pick_recovery, pick_workload
+
+
+@app.cell
+def _(
+    pick_context,
+    pick_dropin,
+    pick_recovery,
+    pick_workload,
+    run_method_picker,
+):
+    run_method_picker(
+        context_length=pick_context.value,
+        workload=pick_workload.value,
+        drop_in_required=pick_dropin.value,
+        recovery_needed=pick_recovery.value,
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    Try a few scenarios:
+
+    - **Drop-in required + Single-shot Q&A on 32–128K context** → SnapKV
+      tends to win. It's the cleanest plug-and-play option in this regime.
+    - **Long generation + recovery needed** → D2O or SCOPE jump to the top —
+      they're built for long decode and the 2025 wave's recovery mechanisms.
+    - **Streaming chat** → StreamingLLM is hard to beat for that exact
+      workload; it was designed for it.
+
+    The picker has no ground truth — it's a transparent scoring function
+    over the capability matrix above. Useful as an orientation tool, not
+    a benchmark.
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ---
+    ## 13 · The Bigger Picture: Two Axes
 
     SnapKV is one move on a board with two axes. People tackling long-context
     inference usually pick one — or, increasingly, both at once.
@@ -946,7 +1083,7 @@ def _(mo):
 def _(mo):
     mo.md(r"""
     ---
-    ## 13 · From KV Cache to Agentic Memory
+    ## 14 · From KV Cache to Agentic Memory
 
     Zoom out one level. An LLM agent doesn't run for one prompt — it runs for
     *many turns*. Each turn appends user input, tool outputs, and assistant
@@ -1038,7 +1175,7 @@ def _(mo):
 def _(mo):
     mo.md(r"""
     ---
-    ## GAME 5 · Agent Memory Over Turns
+    ## GAME 6 · Agent Memory Over Turns
 
     Run the same kinds of memory policies we used for tokens — but now over
     a multi-turn agent conversation. Each turn adds tokens; the strategy
