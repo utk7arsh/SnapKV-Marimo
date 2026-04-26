@@ -78,12 +78,12 @@ def _(mo):
     Think about the last long conversation you had.
 
     When you replied, you didn't re-read every message from the beginning. You held a working
-    memory of what mattered — recent things, repeated things, things relevant to what
+    memory of what mattered that includes recent things, repeated things, things relevant to what
     you were about to say.
 
     Large language models face exactly this problem, at scale. Every token they generate
     depends on all previous tokens. As conversations grow longer, so does the memory
-    they must carry — and the cost of carrying it.
+    they must carry with their cost.
 
     **SnapKV** is a 2024 paper from UIUC, Cohere, and Princeton that solves this with a
     surprisingly human-like insight:
@@ -106,15 +106,14 @@ def _(mo):
     ## 1 · Why LLMs Need Memory
 
     LLMs generate text one token at a time. To generate token $t$, the model runs
-    **attention** over all previous tokens — it looks back at everything to decide
-    what comes next.
+    **attention** over all previous tokens.
 
     This is called **autoregressive generation**. It's powerful but expensive:
     the cost of generating each new token scales with the length of everything
     that came before it.
 
     The naive fix is to cache the intermediate representations so we don't
-    recompute them. That's the **KV cache** — a store of Key and Value vectors
+    recompute them. That's the **KV cache**: a store of Key and Value vectors
     for every past token, reused at each generation step.
 
     But here's the catch:
@@ -128,18 +127,18 @@ def _(mo):
     ### Intuition first: why does generation need memory at all?
 
     Suppose an LLM is writing the word after *"The Eiffel Tower was built in"*.
-    To pick the right word — *1889* — it needs to have "read" the earlier tokens
+    To pick the right word, say *1889*, it needs to have "read" the earlier tokens
     and formed a sense of what the sentence is about.
 
     Now imagine doing that for every single word in a long reply, one at a time.
     Each new word requires looking back at everything written so far. That's
     what **autoregressive generation** means: the model generates one token,
-    appends it, then generates the next — always attending to the full history.
+    appends it, then generates the next, always attending to the full history.
 
     Without any optimisation, this means recomputing the same representations
     over and over. The **KV cache** avoids that by storing the result of each
     token's computation the first time and reusing it on every subsequent step.
-    It trades computation for memory — and as context grows longer, the memory
+    It trades computation for memory. As context grows longer, the memory
     bill compounds fast.
     """)
     return
@@ -155,7 +154,7 @@ def _(mo):
     $$\text{bytes/token} \;=\; \underbrace{2}_{K+V} \cdot L \cdot H \cdot d_{\text{head}} \cdot \text{bytes}_{\text{dtype}}$$
 
     Drag the sliders below to see how each factor compounds. The chart's y-axis is
-    **logarithmic** — small bumps in any factor blow up the total.
+    **logarithmic**: small bumps in any factor blow up the total.
     """)
     return
 
@@ -195,8 +194,8 @@ def _(dtype_s, headdim_s, heads_s, layers_s, plot_memory_breakdown, seqmem_s):
 def _(mo):
     mo.md(r"""
     For the default 7B-style config (32 / 32 / 128 / fp16): **~0.5 MB per token**.
-    At 32K tokens that's **~16 GB**. At 128K (GPT-4 context) it's **~64 GB** —
-    just for the KV cache, before the model weights themselves.
+    At 32K tokens that's **~16 GB**. At 128K (GPT-4 context) it's **~64 GB** that is
+    just for the KV cache before the model weights themselves.
 
     This is the bottleneck that kills long-context inference at scale.
     """)
@@ -221,7 +220,7 @@ def _(mo):
     previous token at every generation step. That's $O(T^2)$ work per step.
 
     **The KV cache** stores each $K_i$ and $V_i$ after it's first computed and
-    reuses them — reducing work to $O(T)$ per step.
+    reuses them, reducing work to $O(T)$ per step.
 
     The chart below makes that gap concrete: as $T$ grows, the red curve
     (no cache) explodes while the green curve (with cache) grows linearly.
@@ -246,8 +245,8 @@ def _(mo):
 
     At each generation step the model issues a query, scans every key in the
     library to compute a relevance score, then blends the corresponding values
-    proportionally. The library never shrinks — every generated token adds a new
-    card — which is exactly why memory grows linearly with context length.
+    proportionally. The library never shrinks as every generated token adds a new
+    card, which is exactly why memory grows linearly with context length.
     """)
     return
 
@@ -321,7 +320,7 @@ def _(mo):
     mo.md(r"""
     ### Why does linear growth hurt so much?
 
-    "Linear" sounds manageable — but the constant factor is brutal. Each token's
+    "Linear" sounds manageable but the constant factor is brutal. Each token's
     KV entry is multiplied across every layer and every head before it even reaches
     the sequence length. On a standard 7B model that's ×32 layers × 32 heads, so
     a single new token adds roughly **0.5 MB** to the cache.
@@ -329,18 +328,18 @@ def _(mo):
     The practical consequences stack up fast:
 
     - **GPU memory ceiling.** A high-end A100 has 80 GB of VRAM. At 32K tokens
-      the KV cache alone consumes 16 GB — 20% of the card — leaving less room
+      the KV cache alone consumes 16 GB that is 20% of the card leaving less room
       for model weights and activations. At 128K tokens it needs 64 GB, nearly
       the entire card just for cache.
     - **Batch size collapses.** Serving many users at once means fitting multiple
       KV caches in parallel. As each grows, fewer fit, which means lower
-      throughput and higher cost per query — a direct hit to serving economics.
+      throughput and higher cost per query, a direct hit to serving economics.
     - **Memory bandwidth pressure.** Even when a cache fits, *reading* it takes
       time. Every decode step streams the full cache through the GPU's memory
       bus, so a larger cache means slower tokens-per-second regardless of
       compute.
 
-    The result: without compression, long-context models are either very slow,
+    The result is that without compression, long-context models are either very slow,
     very expensive, or both. That is the problem SnapKV was built to solve.
     """)
     return
@@ -393,7 +392,7 @@ def _(naive_budget, naive_strategy, plot_naive_strategy):
 def _(mo):
     mo.md(r"""
     None of these strategies use the **current intent** to decide what to keep.
-    They're all static — they don't know what the model is about to do.
+    They're all static that means they don't know what the model is about to do.
 
     That's the missing ingredient.
     """)
@@ -457,13 +456,13 @@ def _(goal_w, plot_human_memory, recent_w, repeat_w, topk_mem):
 def _(mo):
     mo.md(r"""
     Notice that when **goal relevance** is high, the chart naturally selects
-    "checked running routes", "opened shoe size chart", and "searched: best running shoes" —
+    "checked running routes", "opened shoe size chart", and "searched: best running shoes" that are
     exactly the events relevant to the current question.
 
     **This is the core intuition behind SnapKV.**
 
-    The model's current query — the last part of the prompt, just before it starts
-    generating — is the signal we should use to decide what to keep.
+    The model's current query that is the last part of the prompt, just before it starts
+    generating is the signal we should use to decide what to keep.
     """)
     return
 
@@ -486,7 +485,7 @@ def _(mo):
     of the prompt** (the "observation window") is highly consistent with the
     attention pattern throughout subsequent generation.
 
-    In other words: the model already "decided" what it cares about during prefill —
+    In other words: the model already "decided" what it cares about during prefill
     before generation starts. We can use those decisions to compress the cache.
 
     Instead of keeping every KV entry, we can:
@@ -494,7 +493,7 @@ def _(mo):
     2. Keep only those (plus the window itself)
     3. Decode normally with the compressed cache
 
-    The attention pattern is **consistent** — the selections made during prefill
+    The attention pattern is **consistent** with the selections made during prefill that
     remain valid throughout the generation.
     """)
     return
@@ -516,7 +515,6 @@ def _(mo):
         observation window was taken from; the y-axis is how much its attention selection
         overlaps with what the model actually attends to during generation. The last window
         (right edge) consistently hits <strong>70–100% overlap across all 32 layers</strong>
-        — the empirical foundation for SnapKV's core assumption.
       </div>
     </div>
     """)
@@ -562,7 +560,7 @@ def _(mo):
     mo.md(r"""
     Even with a small observation window, the prediction closely tracks the true
     attention pattern. The high-importance tokens (the "heavy hitters") are
-    consistently identified — which is all we need to compress the cache faithfully.
+    consistently identified that is all we need to compress the cache faithfully.
     """)
     return
 
@@ -614,7 +612,7 @@ def _(mo):
 
     Below: a 32-token prefix gets scored by a 6-token observation window.
     Purple bars are the raw votes. The orange line is what max-pooling does to
-    them — it spreads each peak over its neighbours so we keep local context,
+    them and it spreads each peak over its neighbours so we keep local context,
     not just isolated winners. Green bars are the tokens SnapKV ultimately keeps.
     """)
     return
@@ -678,7 +676,7 @@ def _(mo):
     ## GAME 2 · Live Demo — Memory DJ
 
     Paste any prompt below. Choose an eviction method and a cache budget.
-    Watch which tokens each method keeps — and which it throws away.
+    Watch which tokens each method keeps and throws away.
 
     The **observation window** (purple) is always kept by SnapKV and used
     to vote on the prefix. **Kept** tokens (green) survive compression.
@@ -743,7 +741,7 @@ def _(mo):
     ## GAME 3 · Needle in a Haystack
 
     A long prompt with one key fact buried inside, plus a question at the end.
-    Pick where to hide the needle and how tight your cache budget is — then
+    Pick where to hide the needle and how tight your cache budget is. Then
     watch which policies actually preserve it.
 
     SnapKV's observation window picks up the question's intent, so it tends to
@@ -785,8 +783,7 @@ def _(haystack_n, needle_budget, needle_pos, run_needle_demo):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    Move the needle to "early" with a tight budget — Recent Only will fail
-    immediately. SnapKV usually keeps it, because the question keywords at
+    Move the needle to "early" with a tight budget. SnapKV usually keeps it, because the question keywords at
     the end light up the needle's position via window attention.
     """)
     return
@@ -798,7 +795,7 @@ def _(mo):
     ---
     ## 9 · Per-Head Specialization
 
-    SnapKV operates **independently per attention head** — each head keeps the
+    SnapKV operates **independently per attention head** that means each head keeps the
     tokens *it* cares about, not a global average. This matters because heads
     specialize: some focus on recent tokens (positional), some on semantically
     important tokens, some on syntax.
@@ -820,20 +817,19 @@ def _(mo):
     mo.md(r"""
     ### Reading the chart
 
-    **Heads 0–1 (positional)** show a smooth exponential decay from right to left —
-    they heavily weight the most recent tokens regardless of content. These heads
+    **Heads 0–1 (positional)** show a smooth exponential decay from right to left.
+    They heavily weight the most recent tokens regardless of content. These heads
     track things like sentence position and local syntactic dependencies.
 
     **Heads 2–3 (semantic)** show sparse spikes on a handful of positions. These
-    heads identify a few high-value tokens — often named entities, key verbs, or
-    the topic of the sentence — and concentrate nearly all their attention there.
-    They are less interested in position and more interested in *meaning*.
+    heads identify a few high-value tokens, often named entities, key verbs, or
+    the topic of the sentence. They concentrate nearly all their attention there and are less interested in position and more interested in *meaning*.
 
     **Heads 4–7** are mixed: some recency bias, some semantic spikes, general-purpose.
 
     ### Why this matters for compression
 
-    Head specialisation is not just an interesting observation — it directly shapes
+    Head specialisation is not just an interesting observation, it directly shapes
     how SnapKV should compress the cache.
 
     If you were to run a single global top-k selection across all heads, the
@@ -849,7 +845,7 @@ def _(mo):
     not just the globally popular tokens.
 
     This is also why naive baselines like "keep the most-attended tokens overall"
-    underperform — they collapse that diversity into a single shared ranking, and
+    underperform where they collapse that diversity into a single shared ranking, and
     heads that specialise in rare but critical information lose out.
     """)
     return
@@ -909,10 +905,10 @@ def _(diffuse_temp_s, focus_temp_s, plot_entropy_intuition):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    The green head's attention concentrates on a handful of positions — its
+    The green head's attention concentrates on a handful of positions. As a result, its
     entropy is far below the maximum, and a small observation window already
-    sees what matters. The orange head spreads weight everywhere — high entropy,
-    needs a wider window to capture the right tokens.
+    sees what matters. In contrast, the orange head spreads weight everywhere: this means
+    it has high entropy and needs a wider window to capture the right tokens.
 
     Now apply that idea per head across the model:
     """)
@@ -944,7 +940,7 @@ def _(mo):
     ## 11 · Budget vs Quality Tradeoff
 
     How much quality do we lose as we compress more aggressively?
-    The chart below shows the qualitative shape of results on LongBench —
+    The chart below shows the qualitative shape of results on LongBench:
     a suite of long-context comprehension tasks.
     """)
     return
@@ -961,7 +957,7 @@ def _(mo):
     mo.md(r"""
     Key observations:
 
-    - **Full cache** is the ceiling — but it's unaffordable at long context
+    - **Full cache** is the ceiling but it's unaffordable at long context
     - **StreamingLLM** (sink + recent) degrades sharply below 30% budget
     - **H2O** (cumulative attention) is competitive but starts losing ground below 20%
     - **SnapKV** maintains near-full quality down to ~15–20% budget, then drops off gracefully
@@ -1033,7 +1029,7 @@ def _(mo):
     - **Reverse-engineer StreamingLLM.** Set recency = 1, others = 0. Watch
       it collapse onto the tail of the prompt and miss any earlier needle.
 
-    Mixed weights interpolate between these extremes — that's the whole
+    Mixed weights interpolate between these extremes. That's the whole
     eviction-policy design space, in three sliders.
     """)
     return
@@ -1045,11 +1041,10 @@ def _(mo):
     ---
     ## 12 · Competitors
 
-    SnapKV isn't alone — it sits in a fast-moving family of KV-cache
-    compression methods. Here are the nine most directly comparable papers,
-    with the **2025 wave** marked: D2O, CAKE, and SCOPE all push into
-    per-layer dynamic budgets and recoverability — territory that was mostly
-    empty when SnapKV first landed.
+    SnapKV isn't alone. It is part of a rapidly evolving family of KV-cache
+    compression methods. To put its place in context, here are the nine most directly comparable papers.
+    Notice that the **2025 wave**—including D2O, CAKE, and SCOPE—introduces per-layer dynamic budgets and recoverability.
+    This was largely unexplored territory when SnapKV first appeared, highlighting just how quickly the field has advanced.
     """)
     return
 
@@ -1066,7 +1061,7 @@ def _(mo):
     ### What each one actually does differently
 
     Mechanisms read similarly in prose, so here they are as a capability
-    matrix. Five axes — per-head budget, per-layer budget, adaptive sizing,
+    matrix. Five axes: per-head budget, per-layer budget, adaptive sizing,
     decode-aware behaviour, and the ability to recover evicted entries.
     """)
     return
@@ -1083,7 +1078,7 @@ def _(mo):
     mo.md(r"""
     A few patterns worth pausing on:
 
-    - **SnapKV** owns the per-head column from 2024 — that's its central
+    - **SnapKV** owns the per-head column from 2024 which is its central
       contribution. It doesn't push per-layer or recovery, which is
       exactly where the 2025 work has gone.
     - **PyramidKV** was the first to seriously vary budget per layer; D2O
@@ -1091,7 +1086,7 @@ def _(mo):
     - **Recovery** (resurrecting evicted entries from a summary or merge)
       barely existed before D2O. It's the cleanest systems-style answer
       to "what if the obs-window vote was wrong?"
-    - **SCOPE** is the odd one out — it doesn't push per-layer or per-head,
+    - **SCOPE** is the odd one out as it doesn't push per-layer or per-head,
       it splits compression by *phase* (prefill vs decode), which matters
       most for long-output reasoning chains.
     """)
@@ -1105,7 +1100,7 @@ def _(mo):
 
     Pick a scenario and the picker scores all nine methods against it,
     using the fitness profiles encoded in [`src/visualizations.py`](src/visualizations.py).
-    No ML — just transparent ranking on top of the capability matrix above.
+    No ML, just transparent ranking on top of the capability matrix above.
     """)
     return
 
@@ -1152,12 +1147,12 @@ def _(mo):
 
     - **Drop-in required + Single-shot Q&A on 32–128K context** → SnapKV
       tends to win. It's the cleanest plug-and-play option in this regime.
-    - **Long generation + recovery needed** → D2O or SCOPE jump to the top —
+    - **Long generation + recovery needed** → D2O or SCOPE jump to the top as
       they're built for long decode and the 2025 wave's recovery mechanisms.
     - **Streaming chat** → StreamingLLM is hard to beat for that exact
       workload; it was designed for it.
 
-    The picker has no ground truth — it's a transparent scoring function
+    The picker has no ground truth, it's a transparent scoring function
     over the capability matrix above. Useful as an orientation tool, not
     a benchmark.
     """)
@@ -1171,7 +1166,7 @@ def _(mo):
     ## 13 · The Bigger Picture: Two Axes
 
     SnapKV is one move on a board with two axes. People tackling long-context
-    inference usually pick one — or, increasingly, both at once.
+    inference usually pick one, or increasingly, both at once.
     """)
     return
 
@@ -1188,7 +1183,7 @@ def _(mo):
     Where does this go next? Two natural directions, both in active research:
 
     - **Token-level memory beyond eviction.** Instead of throwing entries
-      away, *compress* them — merge similar K/V pairs, summarise blocks,
+      away, *compress* them, merge similar K/V pairs, summarise blocks,
       or learn a small recurrent state that absorbs evicted tokens.
     - **Layer- and head-aware budgets.** Not every layer needs the same
       cache size; not every head deserves an equal share. Methods like
@@ -1199,7 +1194,7 @@ def _(mo):
     The unifying question stays the same: *what should the model remember,
     and at what granularity?*
 
-    Which is exactly the question agent designers have been asking too —
+    Which is exactly the question agent designers have been asking too as
     just at a different scale. That's the next section.
     """)
     return
@@ -1211,7 +1206,7 @@ def _(mo):
     ---
     ## 14 · From KV Cache to Agentic Memory
 
-    Zoom out one level. An LLM agent doesn't run for one prompt — it runs for
+    Zoom out one level. An LLM agent doesn't run for one prompt. It runs for
     *many turns*. Each turn appends user input, tool outputs, and assistant
     responses. The conversation grows. The same memory crisis we just fought
     at the **token level** shows up at the **turn level**: you can't keep
@@ -1258,7 +1253,7 @@ def _(mo):
       episodes the agent never wrote down. Those are different problems
       with different solutions (training, RAG, memory stores).
     - **But it gates everything else.** A retrieved episode, a tool definition,
-      a reasoning chain — all of them have to ride the cache to influence
+      a reasoning chain, all of them have to ride the cache to influence
       the next token. So how cleverly you spend cache budget compounds with
       every other memory layer your agent uses.
 
@@ -1288,7 +1283,7 @@ def _(plot_agent_mapping):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    The interesting thing isn't that the analogy exists — it's that the
+    The interesting thing isn't that the analogy exists. It's that the
     *same shape of solution wins at both scales*. "Recent + currently
     relevant, with local context preserved" is a good policy for tokens in
     a KV cache and for turns in an agent loop. Get that wrong and either
@@ -1303,7 +1298,7 @@ def _(mo):
     ---
     ## GAME 6 · Agent Memory Over Turns
 
-    Run the same kinds of memory policies we used for tokens — but now over
+    Run the same kinds of memory policies we used for tokens but now over
     a multi-turn agent conversation. Each turn adds tokens; the strategy
     decides what stays in the **hot tier** (live context), what gets pushed
     to the **cold tier** (summarised / external store), and what gets lost.
@@ -1346,7 +1341,7 @@ def _(mo):
     mo.md(r"""
     What to try:
 
-    - **Full Cache** with a long conversation — accessible tokens stay at
+    - **Full Cache** with a long conversation. Accessible tokens stay at
       100%, but the hot bar grows unbounded. This is what current agents
       *can't* do indefinitely.
     - **Streaming (recent only)** — once you exceed the hot-tier limit,
@@ -1356,7 +1351,7 @@ def _(mo):
       the *informative* ones. Same hot footprint, better recall in practice.
     - **Agent + Summarise** — overflow gets compressed into the cold tier
       instead of being lost. Recall rate stays close to 100%, hot tier
-      stays bounded — at the cost of running a summariser between turns.
+      stays bounded at the cost of running a summariser between turns.
 
     The recall-rate stat in the cards is the bottom line: *of all the
     tokens this agent has ever seen, how many can it still get to?*
@@ -1382,8 +1377,8 @@ def _(mo):
 
     ### The one-sentence version
 
-    > SnapKV works because the model's **current intent** — expressed in the last
-    > few tokens of the prompt — reliably predicts which past tokens it will need
+    > SnapKV works because the model's **current intent** is expressed in the last
+    > few tokens of the prompt that reliably predicts which past tokens it will need
     > during generation. So we look there first, and throw the rest away.
 
     ### Why this matters beyond one paper
@@ -1391,7 +1386,7 @@ def _(mo):
     The same idea generalises. At the **token level** it's SnapKV picking which
     KV entries to keep. At the **turn level** it's an agent picking which past
     messages to keep verbatim, which to summarise, and which to drop. Same
-    question — *what should we remember, given what we're trying to do now?* —
+    question *what should we remember, given what we're trying to do now?* that is
     same answer-shape: recent + currently relevant, with local context preserved.
 
     SnapKV is appealing not because it's the final word on memory, but because
