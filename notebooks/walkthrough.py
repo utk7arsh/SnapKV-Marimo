@@ -71,7 +71,7 @@ def _(mo):
     mo.md(r"""
     # What Should an LLM Remember?
 
-    ### An interactive exploration of SnapKV · NeurIPS 2024
+    ### An interactive exploration of SnapKV: LLM Knows What You Are Looking for Before Generation · NeurIPS 2024
 
     ---
 
@@ -118,6 +118,29 @@ def _(mo):
     for every past token, reused at each generation step.
 
     But here's the catch:
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ### Intuition first: why does generation need memory at all?
+
+    Suppose an LLM is writing the word after *"The Eiffel Tower was built in"*.
+    To pick the right word — *1889* — it needs to have "read" the earlier tokens
+    and formed a sense of what the sentence is about.
+
+    Now imagine doing that for every single word in a long reply, one at a time.
+    Each new word requires looking back at everything written so far. That's
+    what **autoregressive generation** means: the model generates one token,
+    appends it, then generates the next — always attending to the full history.
+
+    Without any optimisation, this means recomputing the same representations
+    over and over. The **KV cache** avoids that by storing the result of each
+    token's computation the first time and reusing it on every subsequent step.
+    It trades computation for memory — and as context grows longer, the memory
+    bill compounds fast.
     """)
     return
 
@@ -206,6 +229,29 @@ def _(mo):
     return
 
 
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ### Intuition: the library analogy
+
+    Think of the KV cache as a reference library the model builds while reading
+    your prompt.
+
+    - **Keys** are like the index cards in that library — a compact summary of
+      what each past token is "about", used to decide if it's relevant.
+    - **Values** are the actual content on those cards — the rich representation
+      the model reads once it decides a token matters.
+    - **Queries** are the search terms the model issues for the current token —
+      "what do I need from my history to predict what comes next?"
+
+    At each generation step the model issues a query, scans every key in the
+    library to compute a relevance score, then blends the corresponding values
+    proportionally. The library never shrinks — every generated token adds a new
+    card — which is exactly why memory grows linearly with context length.
+    """)
+    return
+
+
 @app.cell
 def _(plot_attention_compute):
     plot_attention_compute()
@@ -267,6 +313,36 @@ def _(mo, plot_kv_growth, seq_len_slider):
         · savings = **{full_mb - snap_mb:.0f} MB**
         """),
     ])
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ### Why does linear growth hurt so much?
+
+    "Linear" sounds manageable — but the constant factor is brutal. Each token's
+    KV entry is multiplied across every layer and every head before it even reaches
+    the sequence length. On a standard 7B model that's ×32 layers × 32 heads, so
+    a single new token adds roughly **0.5 MB** to the cache.
+
+    The practical consequences stack up fast:
+
+    - **GPU memory ceiling.** A high-end A100 has 80 GB of VRAM. At 32K tokens
+      the KV cache alone consumes 16 GB — 20% of the card — leaving less room
+      for model weights and activations. At 128K tokens it needs 64 GB, nearly
+      the entire card just for cache.
+    - **Batch size collapses.** Serving many users at once means fitting multiple
+      KV caches in parallel. As each grows, fewer fit, which means lower
+      throughput and higher cost per query — a direct hit to serving economics.
+    - **Memory bandwidth pressure.** Even when a cache fits, *reading* it takes
+      time. Every decode step streams the full cache through the GPU's memory
+      bus, so a larger cache means slower tokens-per-second regardless of
+      compute.
+
+    The result: without compression, long-context models are either very slow,
+    very expensive, or both. That is the problem SnapKV was built to solve.
+    """)
     return
 
 
@@ -420,6 +496,29 @@ def _(mo):
 
     The attention pattern is **consistent** — the selections made during prefill
     remain valid throughout the generation.
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.Html("""
+    <div style="margin:16px 0">
+      <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;
+                  color:var(--color-text-secondary);margin-bottom:8px">
+        Figure 2 · directly from the paper
+      </div>
+      <img src="https://arxiv.org/html/2404.14469v2/x2.png"
+           alt="Figure 2 from the SnapKV paper: overlap rates for observation windows within prompt tokens, showing that the last window achieves ~70–100% overlap with generation-time attention across all layers"
+           style="max-width:100%;border-radius:8px;border:1px solid var(--color-border, #e5e5e5)" />
+      <div style="font-size:12px;color:var(--color-text-secondary);margin-top:8px;line-height:1.6">
+        Each line is a transformer layer. The x-axis is which part of the prompt the
+        observation window was taken from; the y-axis is how much its attention selection
+        overlaps with what the model actually attends to during generation. The last window
+        (right edge) consistently hits <strong>70–100% overlap across all 32 layers</strong>
+        — the empirical foundation for SnapKV's core assumption.
+      </div>
+    </div>
     """)
     return
 
@@ -719,12 +818,39 @@ def _(plot_per_head_heatmap, prompt_input):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    Heads 0–1 (positional) have smooth decay curves — they weight recent tokens heavily.
-    Heads 2–3 (semantic) show sparse spikes — they find a few high-value tokens and
-    attend to them almost exclusively. Heads 4–7 are mixed.
+    ### Reading the chart
 
-    Per-head budgets mean each head gets to keep what it specialises in,
-    rather than being forced to share a single global selection.
+    **Heads 0–1 (positional)** show a smooth exponential decay from right to left —
+    they heavily weight the most recent tokens regardless of content. These heads
+    track things like sentence position and local syntactic dependencies.
+
+    **Heads 2–3 (semantic)** show sparse spikes on a handful of positions. These
+    heads identify a few high-value tokens — often named entities, key verbs, or
+    the topic of the sentence — and concentrate nearly all their attention there.
+    They are less interested in position and more interested in *meaning*.
+
+    **Heads 4–7** are mixed: some recency bias, some semantic spikes, general-purpose.
+
+    ### Why this matters for compression
+
+    Head specialisation is not just an interesting observation — it directly shapes
+    how SnapKV should compress the cache.
+
+    If you were to run a single global top-k selection across all heads, the
+    "winners" would inevitably be the tokens every head agrees on: the very first
+    token (a universal attention sink), the most recent tokens, and perhaps a
+    few prominent nouns. Semantic heads would have to accept whatever the positional
+    heads voted for, and vice versa.
+
+    By selecting top-k **per head**, each head gets its own private budget. The
+    positional head keeps recent tokens. The semantic head keeps its sparse set of
+    high-value tokens. Neither cannibalises the other. The result is a compressed
+    cache that preserves the full *diversity* of the model's attention behaviour,
+    not just the globally popular tokens.
+
+    This is also why naive baselines like "keep the most-attended tokens overall"
+    underperform — they collapse that diversity into a single shared ranking, and
+    heads that specialise in rare but critical information lose out.
     """)
     return
 
