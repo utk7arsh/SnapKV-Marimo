@@ -361,7 +361,168 @@ def plot_adaptive_window(prompt: str, n_heads: int = 8, seq_len: int = 48):
     return mo.Html(html)
 
 
-# ── 7. Live demo token highlighting ──────────────────────────────────────────
+# ── 7. Human memory triage ───────────────────────────────────────────────────
+
+def plot_human_memory(
+    recent_weight: float = 0.35,
+    repeat_weight: float = 0.25,
+    goal_weight: float = 0.40,
+    top_k: int = 3,
+):
+    """
+    Bar chart: simulate human memory triage using recency, repetition, and goal relevance.
+    Maps to SnapKV's observation-window voting concept.
+    """
+    import json
+
+    events = [
+        "saw a shoe ad",
+        "friend mentioned sneakers",
+        "walked past a sports store",
+        "read laptop review",
+        "checked running routes",
+        "opened shoe size chart",
+        "searched: best running shoes",
+    ]
+    n = len(events)
+
+    repeat_score = [0.3, 0.7, 0.6, 0.2, 0.5, 0.8, 1.0]
+    goal_score   = [0.4, 0.7, 0.8, 0.1, 0.9, 0.95, 1.0]
+    recent_score = [round(0.2 + 0.8 * i / (n - 1), 3) for i in range(n)]
+
+    total = recent_weight + repeat_weight + goal_weight + 1e-9
+    rw = recent_weight / total
+    pw = repeat_weight / total
+    gw = goal_weight  / total
+
+    final_score = [
+        round(rw * recent_score[i] + pw * repeat_score[i] + gw * goal_score[i], 4)
+        for i in range(n)
+    ]
+
+    indexed = sorted(enumerate(final_score), key=lambda x: x[1], reverse=True)
+    keep_idx = set(i for i, _ in indexed[:top_k])
+
+    colors = [KEPT_COLOR if i in keep_idx else NEUTRAL_COLOR for i in range(n)]
+
+    html = f"""
+    <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:12px;line-height:1.7">
+      Current goal: <strong style="color:var(--color-text-primary)">"Which running shoes fit my trip under budget?"</strong>
+      &nbsp;— which past events should you remember?
+      &nbsp;<span style="color:{KEPT_COLOR}">■ kept</span>
+      &nbsp;<span style="color:{NEUTRAL_COLOR}">■ evicted</span>
+    </div>
+    <div style="position:relative;width:100%;height:280px;">
+    <canvas id="humanmem" role="img" aria-label="Human memory triage bar chart"></canvas>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+    <script>
+    new Chart(document.getElementById('humanmem'),{{
+      type:'bar',
+      data:{{
+        labels:{json.dumps(events)},
+        datasets:[{{
+          label:'Memory importance score',
+          data:{json.dumps(final_score)},
+          backgroundColor:{json.dumps(colors)},
+          borderWidth:0,
+          borderRadius:4
+        }}]
+      }},
+      options:{{
+        responsive:true, maintainAspectRatio:false,
+        plugins:{{
+          legend:{{display:false}},
+          tooltip:{{callbacks:{{
+            label: ctx => 'score: ' + ctx.parsed.y.toFixed(3)
+          }}}}
+        }},
+        scales:{{
+          x:{{ticks:{{maxRotation:30, font:{{size:11}}}}}},
+          y:{{beginAtZero:true, max:1.05,
+              title:{{display:true,text:'Importance score'}}}}
+        }}
+      }}
+    }});
+    </script>
+    <div style="margin-top:10px;font-size:12px;color:var(--color-text-secondary)">
+      Weights: recency={recent_weight:.0%} · repetition={repeat_weight:.0%} · goal relevance={goal_weight:.0%}
+      &nbsp;·&nbsp; keeping top {top_k} memories
+    </div>
+    """
+    return mo.Html(html)
+
+
+def plot_naive_strategy(strategy: str, n_tokens: int = 36, budget_pct: float = 0.35):
+    """
+    Colour-coded token strip: show which tokens a naive eviction policy keeps.
+    """
+    import json
+
+    n_keep = max(2, int(n_tokens * budget_pct))
+    labels  = [f"t{i}" for i in range(n_tokens)]
+
+    if strategy == "Keep Everything":
+        kept = list(range(n_tokens))
+    elif strategy == "Recent Only":
+        kept = list(range(n_tokens - n_keep, n_tokens))
+    elif strategy == "Random Drop":
+        import random; random.seed(42)
+        kept = sorted(random.sample(range(n_tokens), n_keep))
+    elif strategy == "Uniform Stride":
+        step = max(1, n_tokens // n_keep)
+        kept = list(range(0, n_tokens, step))[:n_keep]
+    else:
+        kept = list(range(n_tokens))
+
+    kept_set = set(kept)
+    colors  = [KEPT_COLOR if i in kept_set else EVICTED_COLOR for i in range(n_tokens)]
+    opacity = ["ff"       if i in kept_set else "55"          for i in range(n_tokens)]
+
+    token_spans = "".join(
+        f'<span title="{"kept" if i in kept_set else "evicted"}" '
+        f'style="display:inline-block;margin:2px 1px;padding:4px 7px;'
+        f'background:{colors[i]}33;border:1.5px solid {colors[i]};'
+        f'border-radius:4px;font-size:11px;font-family:monospace">{labels[i]}</span>'
+        for i in range(n_tokens)
+    )
+
+    compression = len(kept_set) / n_tokens
+    problems = {
+        "Keep Everything": "Problem: memory grows without bound. At 32K tokens you need &gt;100 GB just for KV cache.",
+        "Recent Only": "Problem: loses all earlier context. If the answer is in the first paragraph, it's gone.",
+        "Random Drop": "Problem: random eviction may discard critical tokens. Results are unpredictable.",
+        "Uniform Stride": "Problem: no notion of importance. Evenly spaced tokens often miss key content.",
+    }
+    problem_text = problems.get(strategy, "")
+
+    html = f"""
+    <div style="display:flex;gap:12px;margin-bottom:14px;align-items:center">
+      <div style="background:var(--color-background-secondary);border-radius:8px;padding:10px 16px;text-align:center">
+        <div style="font-size:10px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.06em">Strategy</div>
+        <div style="font-size:16px;font-weight:500;color:var(--color-text-primary)">{strategy}</div>
+      </div>
+      <div style="background:var(--color-background-secondary);border-radius:8px;padding:10px 16px;text-align:center">
+        <div style="font-size:10px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.06em">Tokens kept</div>
+        <div style="font-size:16px;font-weight:500;color:{KEPT_COLOR}">{len(kept_set)} / {n_tokens}</div>
+      </div>
+      <div style="background:var(--color-background-secondary);border-radius:8px;padding:10px 16px;text-align:center">
+        <div style="font-size:10px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.06em">Cache size</div>
+        <div style="font-size:16px;font-weight:500;color:#BA7517">{compression:.0%}</div>
+      </div>
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:8px;padding:12px;line-height:2;margin-bottom:10px">
+      {token_spans}
+    </div>
+    <div style="padding:10px 14px;background:#D85A3015;border-left:3px solid {EVICTED_COLOR};
+         border-radius:0 6px 6px 0;font-size:13px;color:var(--color-text-secondary)">
+      ⚠ {problem_text}
+    </div>
+    """
+    return mo.Html(html)
+
+
+# ── 8. Live demo token highlighting ──────────────────────────────────────────
 
 def run_demo(prompt: str, budget: float, method: str):
     """
