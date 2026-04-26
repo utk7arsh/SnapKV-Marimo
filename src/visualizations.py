@@ -6,7 +6,6 @@ All functions return marimo-compatible objects (plots, html, md).
 import math
 import json
 import html as _html
-import torch
 import numpy as np
 import marimo as mo
 
@@ -18,6 +17,26 @@ WINDOW_COLOR  = "#534AB7"   # purple — observation window
 NEUTRAL_COLOR = "#888780"   # gray
 ACCENT_COLORS = ["#534AB7", "#1D9E75", "#D85A30", "#BA7517",
                  "#3266ad", "#639922", "#D4537E", "#888780"]
+
+
+def _rng(seed: int) -> np.random.Generator:
+    return np.random.default_rng(seed)
+
+
+def _softmax(x) -> np.ndarray:
+    arr = np.asarray(x, dtype=float)
+    shifted = arr - np.max(arr)
+    exps = np.exp(shifted)
+    return exps / (exps.sum() + 1e-12)
+
+
+def _topk_indices(x, k: int) -> np.ndarray:
+    arr = np.asarray(x, dtype=float)
+    if arr.size == 0 or k <= 0:
+        return np.array([], dtype=int)
+    k = min(k, arr.size)
+    idx = np.argpartition(arr, -k)[-k:]
+    return idx[np.argsort(arr[idx])[::-1]]
 
 
 # ── Internal: robust Chart.js renderer ────────────────────────────────────────
@@ -245,11 +264,11 @@ def plot_attention_compute(max_T: int = 4096):
 
 def plot_attention_consistency(window_size: int = 16, head_idx: int = 0, seq_len: int = 64):
     """Show that attention patterns in the obs. window predict full-sequence attention."""
-    torch.manual_seed(42 + head_idx)
-    true_importance = torch.zeros(seq_len)
-    heavy_positions = torch.randint(0, seq_len - window_size, (5,))
-    true_importance[heavy_positions] = torch.rand(5) * 0.5 + 0.5
-    true_importance = true_importance + torch.rand(seq_len) * 0.1
+    rng = _rng(42 + head_idx)
+    true_importance = np.zeros(seq_len, dtype=float)
+    heavy_positions = rng.integers(0, max(1, seq_len - window_size), size=5)
+    true_importance[heavy_positions] = rng.random(5) * 0.5 + 0.5
+    true_importance = true_importance + rng.random(seq_len) * 0.1
     true_importance = (true_importance / true_importance.sum()).tolist()
 
     obs_prediction = [(v + np.random.uniform(0, 0.02)) for v in true_importance]
@@ -302,16 +321,17 @@ def plot_per_head_heatmap(prompt: str, n_heads: int = 8, n_show: int = 32):
     if T == 0:
         return mo.md("*Enter a prompt above to see per-head attention.*")
 
-    torch.manual_seed(7)
+    rng = _rng(7)
     head_patterns = []
     for h in range(n_heads):
         if h < 2:
-            w = torch.exp(-torch.arange(T, dtype=torch.float) * 0.15).flip(0)
+            w = np.exp(-np.arange(T, dtype=float) * 0.15)[::-1]
         elif h < 4:
-            w = torch.zeros(T)
-            w[torch.randperm(T)[:max(1, T//5)]] = torch.rand(max(1, T//5))
+            w = np.zeros(T, dtype=float)
+            idx = rng.permutation(T)[:max(1, T // 5)]
+            w[idx] = rng.random(max(1, T // 5))
         else:
-            w = torch.rand(T)
+            w = rng.random(T)
         w = (w / (w.sum() + 1e-9)).tolist()
         head_patterns.append([round(v, 4) for v in w])
 
@@ -433,9 +453,9 @@ def plot_vote_cluster(seq_len: int = 32, window_size: int = 6, budget: int = 8,
     Tiny end-to-end visualization of SnapKV's two stages on a toy sequence.
     Shows: raw votes from window, pooled scores, final selection.
     """
-    torch.manual_seed(11)
+    rng = _rng(11)
     prefix_len = seq_len - window_size
-    raw_scores = torch.rand(prefix_len)
+    raw_scores = rng.random(prefix_len)
     raw_scores[5] += 1.2
     raw_scores[18] += 1.0
     raw_scores[24] += 0.8
@@ -499,14 +519,14 @@ def plot_vote_cluster(seq_len: int = 32, window_size: int = 6, budget: int = 8,
 # ── 6. Extension: adaptive obs. window ───────────────────────────────────────
 
 def plot_adaptive_window(prompt: str, n_heads: int = 8, seq_len: int = 48):
-    torch.manual_seed(3)
+    rng = _rng(3)
     entropies, fixed_w, adaptive_w = [], [], []
     base_window = 16
 
     for h in range(n_heads):
-        logits = torch.randn(seq_len)
-        attn = torch.softmax(logits, dim=0)
-        entropy = -(attn * (attn + 1e-9).log()).sum().item()
+        logits = rng.standard_normal(seq_len)
+        attn = _softmax(logits)
+        entropy = float(-(attn * np.log(attn + 1e-9)).sum())
         max_entropy = math.log(seq_len)
         norm_entropy = entropy / max_entropy
 
@@ -557,13 +577,13 @@ def plot_entropy_intuition(focus_temp: float = 0.4, diffuse_temp: float = 4.0,
     Two side-by-side attention distributions — one focused, one diffuse —
     with their Shannon entropies labelled. Makes the entropy formula concrete.
     """
-    torch.manual_seed(5)
-    base = torch.randn(n_positions)
-    focused = torch.softmax(base / max(1e-3, focus_temp),  dim=0)
-    diffuse = torch.softmax(base / max(1e-3, diffuse_temp), dim=0)
+    rng = _rng(5)
+    base = rng.standard_normal(n_positions)
+    focused = _softmax(base / max(1e-3, focus_temp))
+    diffuse = _softmax(base / max(1e-3, diffuse_temp))
 
     def H(p):
-        return float(-(p * (p + 1e-12).log()).sum())
+        return float(-(p * np.log(p + 1e-12)).sum())
 
     H_focus = H(focused)
     H_diff  = H(diffuse)
@@ -747,8 +767,8 @@ def run_demo(prompt: str, budget: float, method: str):
         return mo.md("*Enter a prompt above.*")
 
     T = len(tokens)
-    torch.manual_seed(99)
-    importance = torch.rand(T)
+    rng = _rng(99)
+    importance = rng.random(T)
     importance[0:3] += 0.4
     importance[-4:] += 0.3
     importance = importance / importance.sum()
@@ -764,9 +784,9 @@ def run_demo(prompt: str, budget: float, method: str):
         obs_set = set(range(T - n_recent, T))
     elif method == "H2O":
         n_recent = max(1, n_keep // 4)
-        scores = importance.clone()
+        scores = importance.copy()
         scores[-n_recent:] = 2.0
-        _, idx = scores.topk(n_keep)
+        idx = _topk_indices(scores, n_keep)
         kept = set(idx.tolist())
         obs_set = set(range(T - n_recent, T))
     else:  # SnapKV
@@ -774,7 +794,7 @@ def run_demo(prompt: str, budget: float, method: str):
         obs_set = set(range(T - obs_w, T))
         prefix_scores = importance[:-obs_w]
         n_prefix = max(1, n_keep - obs_w)
-        _, idx = prefix_scores.topk(min(n_prefix, len(prefix_scores)))
+        idx = _topk_indices(prefix_scores, min(n_prefix, len(prefix_scores)))
         kept = set(idx.tolist()) | obs_set
 
     spans = []
@@ -821,7 +841,7 @@ def run_demo(prompt: str, budget: float, method: str):
 
 # ── Internal: shared scoring helper used by GAME 3 and GAME 4 ────────────────
 
-def _score_methods(T: int, importance: torch.Tensor, n_keep: int, method: str):
+def _score_methods(T: int, importance: np.ndarray, n_keep: int, method: str):
     """
     Returns (kept_set, obs_set) for a method on a sequence of length T.
     Same logic as run_demo, factored out so other games can reuse it.
@@ -840,16 +860,16 @@ def _score_methods(T: int, importance: torch.Tensor, n_keep: int, method: str):
         return set(range(n_sink)) | set(range(T - n_recent, T)), set(range(T - n_recent, T))
     if method == "H2O":
         n_recent = max(1, n_keep // 4)
-        scores = importance.clone()
+        scores = importance.copy()
         scores[-n_recent:] = 2.0
-        _, idx = scores.topk(min(n_keep, T))
+        idx = _topk_indices(scores, min(n_keep, T))
         return set(idx.tolist()), set(range(T - n_recent, T))
     # SnapKV
     obs_w = max(1, min(int(T * 0.25), 16))
     obs_set = set(range(T - obs_w, T))
-    prefix_scores = importance[:-obs_w] if obs_w < T else importance.clone()
+    prefix_scores = importance[:-obs_w] if obs_w < T else importance.copy()
     n_prefix = max(1, n_keep - obs_w)
-    _, idx = prefix_scores.topk(min(n_prefix, len(prefix_scores)))
+    idx = _topk_indices(prefix_scores, min(n_prefix, len(prefix_scores)))
     return set(idx.tolist()) | obs_set, obs_set
 
 
@@ -883,8 +903,8 @@ def run_needle_demo(needle_position: str = "middle", budget: float = 0.30,
     # Synthetic importance: needle gets a moderate boost (model usually learns
     # the keyword pattern), recent tokens get a small one. SnapKV's window
     # attention will *also* boost the needle if the question keywords correlate.
-    torch.manual_seed(123 + needle_idx)
-    importance = torch.rand(T) * 0.3
+    rng = _rng(123 + needle_idx)
+    importance = rng.random(T) * 0.3
     importance[needle_idx] = 0.95
     importance[-4:] += 0.4
     importance = importance / importance.sum()
@@ -970,7 +990,7 @@ def run_custom_policy(prompt: str, budget: float, recency_w: float,
     n_keep = max(1, int(T * budget))
 
     # Signal 1: recency — linearly increasing toward the end
-    recency = torch.linspace(0.0, 1.0, T)
+    recency = np.linspace(0.0, 1.0, T)
 
     # Signal 2: frequency — count occurrences of each token (case-insensitive)
     counts = {}
@@ -978,13 +998,13 @@ def run_custom_policy(prompt: str, budget: float, recency_w: float,
         k = t.lower().strip(".,!?:;")
         counts[k] = counts.get(k, 0) + 1
     max_count = max(counts.values())
-    frequency = torch.tensor(
+    frequency = np.array(
         [counts[t.lower().strip(".,!?:;")] / max_count for t in tokens]
     )
 
     # Signal 3: simulated obs-window attention (same source as run_demo)
-    torch.manual_seed(99)
-    attention = torch.rand(T)
+    rng = _rng(99)
+    attention = rng.random(T)
     attention[0:3] += 0.4
     attention[-4:] += 0.3
     attention = attention / attention.max()
@@ -993,7 +1013,7 @@ def run_custom_policy(prompt: str, budget: float, recency_w: float,
     rw, fw, aw = recency_w / total_w, frequency_w / total_w, attention_w / total_w
     custom_score = rw * recency + fw * frequency + aw * attention
 
-    _, custom_idx = custom_score.topk(n_keep)
+    custom_idx = _topk_indices(custom_score, n_keep)
     custom_kept = set(custom_idx.tolist())
 
     # SnapKV reference selection on the same prompt and budget
@@ -1760,8 +1780,8 @@ def simulate_agent_loop(n_turns: int = 12, strategy: str = "Agent + Summarise",
     conversation, partitioned into hot (in KV) / cold (summarised, recoverable) /
     evicted (gone) tiers, under different memory strategies.
     """
-    torch.manual_seed(7)
-    per_turn = [int(60 + float(torch.rand(1)) * 80) for _ in range(n_turns)]
+    rng = _rng(7)
+    per_turn = [int(60 + float(rng.random()) * 80) for _ in range(n_turns)]
 
     hot_series, cold_series, evicted_series = [], [], []
     hot, cold, evicted = 0, 0, 0
