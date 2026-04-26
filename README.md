@@ -34,8 +34,3 @@ cd snapkv-notebook
 pip install -r requirements.txt
 marimo edit notebooks/walkthrough.py
 ```
-
-## Team
-
-- [Your name]
-- [Teammate name]
