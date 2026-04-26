@@ -1353,13 +1353,9 @@ def _(mo):
 
     ---
 
-    ### The one-sentence version
-
     > SnapKV works because the model's **current intent** is expressed in the last
     > few tokens of the prompt that reliably predicts which past tokens it will need
     > during generation. So we look there first, and throw the rest away.
-
-    ### Why this matters beyond one paper
 
     The same idea generalises. At the **token level** it's SnapKV picking which
     KV entries to keep. At the **turn level** it's an agent picking which past
