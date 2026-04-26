@@ -501,28 +501,6 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.Html("""
-    <div style="margin:16px 0">
-      <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;
-                  color:var(--color-text-secondary);margin-bottom:8px">
-        Figure 2 · directly from the paper
-      </div>
-      <img src="https://arxiv.org/html/2404.14469v2/x2.png"
-           alt="Figure 2 from the SnapKV paper: overlap rates for observation windows within prompt tokens, showing that the last window achieves ~70–100% overlap with generation-time attention across all layers"
-           style="max-width:100%;border-radius:8px;border:1px solid var(--color-border, #e5e5e5)" />
-      <div style="font-size:12px;color:var(--color-text-secondary);margin-top:8px;line-height:1.6">
-        Each line is a transformer layer. The x-axis is which part of the prompt the
-        observation window was taken from; the y-axis is how much its attention selection
-        overlaps with what the model actually attends to during generation. The last window
-        (right edge) consistently hits <strong>70–100% overlap across all 32 layers</strong>
-      </div>
-    </div>
-    """)
-    return
-
-
-@app.cell(hide_code=True)
-def _(mo):
     mo.md("""
     ### Attention consistency: observation window vs full-sequence attention
     """)
