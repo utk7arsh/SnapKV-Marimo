@@ -811,3 +811,659 @@ def run_demo(prompt: str, budget: float, method: str):
       {''.join(spans)}
     </div>
     """)
+
+
+# ── Internal: shared scoring helper used by GAME 3 and GAME 4 ────────────────
+
+def _score_methods(T: int, importance: torch.Tensor, n_keep: int, method: str):
+    """
+    Returns (kept_set, obs_set) for a method on a sequence of length T.
+    Same logic as run_demo, factored out so other games can reuse it.
+    """
+    if method == "Full Cache":
+        return set(range(T)), set()
+    if method == "Recent Only":
+        return set(range(T - n_keep, T)), set()
+    if method == "Random":
+        import random
+        random.seed(42)
+        return set(random.sample(range(T), min(n_keep, T))), set()
+    if method == "StreamingLLM":
+        n_sink = max(1, min(4, T // 10))
+        n_recent = max(1, n_keep - n_sink)
+        return set(range(n_sink)) | set(range(T - n_recent, T)), set(range(T - n_recent, T))
+    if method == "H2O":
+        n_recent = max(1, n_keep // 4)
+        scores = importance.clone()
+        scores[-n_recent:] = 2.0
+        _, idx = scores.topk(min(n_keep, T))
+        return set(idx.tolist()), set(range(T - n_recent, T))
+    # SnapKV
+    obs_w = max(1, min(int(T * 0.25), 16))
+    obs_set = set(range(T - obs_w, T))
+    prefix_scores = importance[:-obs_w] if obs_w < T else importance.clone()
+    n_prefix = max(1, n_keep - obs_w)
+    _, idx = prefix_scores.topk(min(n_prefix, len(prefix_scores)))
+    return set(idx.tolist()) | obs_set, obs_set
+
+
+# ── GAME 3. Needle in a haystack ─────────────────────────────────────────────
+
+def run_needle_demo(needle_position: str = "middle", budget: float = 0.30,
+                    haystack_size: int = 60):
+    """
+    Hide one important fact in a sea of filler tokens, then run every policy
+    and show which ones preserved the needle.
+    """
+    filler = ["the", "and", "of", "in", "to", "a", "is", "that", "for", "it",
+              "on", "as", "with", "at", "by", "an", "or", "this", "from", "but"]
+    tokens = [filler[i % len(filler)] for i in range(haystack_size)]
+
+    if needle_position == "early":
+        needle_idx = max(2, haystack_size // 8)
+    elif needle_position == "late":
+        needle_idx = haystack_size - max(2, haystack_size // 8)
+    else:
+        needle_idx = haystack_size // 2
+
+    needle_text = "★capital=Lima★"
+    tokens[needle_idx] = needle_text
+    question = ["What", "is", "the", "capital?"]
+    tokens.extend(question)
+
+    T = len(tokens)
+    n_keep = max(2, int(T * budget))
+
+    # Synthetic importance: needle gets a moderate boost (model usually learns
+    # the keyword pattern), recent tokens get a small one. SnapKV's window
+    # attention will *also* boost the needle if the question keywords correlate.
+    torch.manual_seed(123 + needle_idx)
+    importance = torch.rand(T) * 0.3
+    importance[needle_idx] = 0.95
+    importance[-4:] += 0.4
+    importance = importance / importance.sum()
+
+    methods = ["SnapKV", "H2O", "StreamingLLM", "Recent Only", "Random"]
+    rows_html = []
+    for m in methods:
+        kept, _ = _score_methods(T, importance, n_keep, m)
+        survived = needle_idx in kept
+        badge_color = KEPT_COLOR if survived else EVICTED_COLOR
+        badge_text = "✓ needle kept" if survived else "✗ needle lost"
+
+        spans = []
+        for i, tok in enumerate(tokens):
+            is_needle = i == needle_idx
+            in_kept = i in kept
+            if is_needle and in_kept:
+                bg, border = "#FFD66B", "#BA7517"
+            elif is_needle and not in_kept:
+                bg, border = "#F5C4B3", "#D85A30"
+            elif in_kept:
+                bg, border = "#9FE1CB", "#1D9E75"
+            else:
+                bg, border = "#EEECE5", "#B4B2A9"
+            weight = "600" if is_needle else "400"
+            spans.append(
+                f'<span style="display:inline-block;margin:1px;padding:2px 5px;'
+                f'background:{bg};border:1px solid {border};border-radius:3px;'
+                f'font-size:10px;font-family:var(--font-mono);font-weight:{weight}">{tok}</span>'
+            )
+
+        rows_html.append(f"""
+        <div style="margin-bottom:14px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+            <div style="font-weight:600;font-size:13px;min-width:90px">{m}</div>
+            <div style="background:{badge_color}22;border:1px solid {badge_color};
+                        color:{badge_color};border-radius:12px;padding:2px 10px;
+                        font-size:11px;font-weight:500">{badge_text}</div>
+            <div style="color:var(--color-text-secondary);font-size:11px">
+              {len(kept)} / {T} tokens kept
+            </div>
+          </div>
+          <div style="background:var(--color-background-secondary);border-radius:6px;
+                      padding:8px;line-height:1.8">{''.join(spans)}</div>
+        </div>
+        """)
+
+    legend = """
+    <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:10px">
+      <span style="background:#FFD66B;border:1px solid #BA7517;border-radius:3px;padding:1px 6px;font-weight:600">★ needle kept</span>
+      &nbsp;<span style="background:#F5C4B3;border:1px solid #D85A30;border-radius:3px;padding:1px 6px;font-weight:600">★ needle lost</span>
+      &nbsp;<span style="background:#9FE1CB;border:1px solid #1D9E75;border-radius:3px;padding:1px 6px">other kept</span>
+      &nbsp;<span style="background:#EEECE5;border:1px solid #B4B2A9;border-radius:3px;padding:1px 6px">evicted</span>
+    </div>
+    """
+    intro = f"""
+    <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:8px;line-height:1.6">
+      Hidden fact at position <strong>{needle_idx}</strong>
+      ({needle_position}) in a {haystack_size}-token haystack.
+      Question is appended at the end. Budget = <strong>{int(budget*100)}%</strong>
+      ({n_keep} of {T} tokens).
+    </div>
+    """
+    return mo.Html(intro + legend + "".join(rows_html))
+
+
+# ── GAME 4. Build your own memory policy ─────────────────────────────────────
+
+def run_custom_policy(prompt: str, budget: float, recency_w: float,
+                      frequency_w: float, attention_w: float):
+    """
+    Score every token by a user-weighted combination of three signals:
+      - recency:  how close to the end the token is
+      - frequency: how often the token (or stem) repeats
+      - attention: simulated obs.-window attention (the SnapKV signal)
+    Compare the user's selection to SnapKV's selection on the same prompt.
+    """
+    tokens = prompt.split()
+    if not tokens:
+        return mo.md("*Enter a prompt above.*")
+
+    T = len(tokens)
+    n_keep = max(1, int(T * budget))
+
+    # Signal 1: recency — linearly increasing toward the end
+    recency = torch.linspace(0.0, 1.0, T)
+
+    # Signal 2: frequency — count occurrences of each token (case-insensitive)
+    counts = {}
+    for t in tokens:
+        k = t.lower().strip(".,!?:;")
+        counts[k] = counts.get(k, 0) + 1
+    max_count = max(counts.values())
+    frequency = torch.tensor(
+        [counts[t.lower().strip(".,!?:;")] / max_count for t in tokens]
+    )
+
+    # Signal 3: simulated obs-window attention (same source as run_demo)
+    torch.manual_seed(99)
+    attention = torch.rand(T)
+    attention[0:3] += 0.4
+    attention[-4:] += 0.3
+    attention = attention / attention.max()
+
+    total_w = recency_w + frequency_w + attention_w + 1e-9
+    rw, fw, aw = recency_w / total_w, frequency_w / total_w, attention_w / total_w
+    custom_score = rw * recency + fw * frequency + aw * attention
+
+    _, custom_idx = custom_score.topk(n_keep)
+    custom_kept = set(custom_idx.tolist())
+
+    # SnapKV reference selection on the same prompt and budget
+    snapkv_kept, _ = _score_methods(T, attention, n_keep, "SnapKV")
+
+    overlap = len(custom_kept & snapkv_kept)
+    overlap_pct = overlap / max(1, len(snapkv_kept))
+
+    def _strip(kept_set):
+        spans = []
+        for i, tok in enumerate(tokens):
+            if i in kept_set:
+                bg, border = "#9FE1CB", "#1D9E75"
+            else:
+                bg, border = "#F5C4B3", "#D85A30"
+            spans.append(
+                f'<span style="display:inline-block;margin:2px 1px;padding:3px 6px;'
+                f'background:{bg};border:1px solid {border};border-radius:4px;'
+                f'font-size:12px;font-family:var(--font-mono)">{tok}</span>'
+            )
+        return "".join(spans)
+
+    return mo.Html(f"""
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px">
+      <div style="background:var(--color-background-secondary);border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:10px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.06em">Tokens kept</div>
+        <div style="font-size:16px;font-weight:500;color:{KEPT_COLOR}">{n_keep} / {T}</div>
+      </div>
+      <div style="background:var(--color-background-secondary);border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:10px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.06em">Weights (norm.)</div>
+        <div style="font-size:13px;font-weight:500">R {rw:.2f} · F {fw:.2f} · A {aw:.2f}</div>
+      </div>
+      <div style="background:var(--color-background-secondary);border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:10px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.06em">Overlap with SnapKV</div>
+        <div style="font-size:16px;font-weight:500;color:{WINDOW_COLOR}">{overlap_pct:.0%} ({overlap}/{len(snapkv_kept)})</div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:6px;font-size:12px;font-weight:600;color:var(--color-text-primary)">
+      Your custom policy
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:8px;padding:10px;line-height:1.9;margin-bottom:14px">
+      {_strip(custom_kept)}
+    </div>
+
+    <div style="margin-bottom:6px;font-size:12px;font-weight:600;color:var(--color-text-primary)">
+      SnapKV (same prompt, same budget)
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:8px;padding:10px;line-height:1.9">
+      {_strip(snapkv_kept)}
+    </div>
+
+    <div style="margin-top:10px;padding:10px 14px;background:#534AB715;border-left:3px solid {WINDOW_COLOR};
+         border-radius:0 6px 6px 0;font-size:12px;color:var(--color-text-secondary);line-height:1.6">
+      Crank <strong>attention</strong> to 1 and the others to 0 → your policy converges to SnapKV.
+      Crank <strong>recency</strong> alone → you reproduce StreamingLLM's recent-window behaviour.
+      Crank <strong>frequency</strong> alone → you get a "common-words" baseline (rarely useful on its own).
+    </div>
+    """)
+
+
+# ── Two axes: sparse attention vs cache eviction ─────────────────────────────
+
+def plot_two_axes():
+    """
+    Side-by-side comparison panel: the two complementary axes for taming
+    long-context costs. HTML only — no chart needed, the contrast IS the visual.
+    """
+    return mo.Html(f"""
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div style="background:var(--color-background-secondary);border-left:3px solid {WINDOW_COLOR};
+                  border-radius:0 8px 8px 0;padding:14px 16px">
+        <div style="font-size:11px;color:{WINDOW_COLOR};font-weight:600;text-transform:uppercase;
+                    letter-spacing:.06em;margin-bottom:6px">Axis 1 · Sparse attention</div>
+        <div style="font-size:14px;font-weight:500;margin-bottom:8px">Reduce <em>compute</em></div>
+        <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.6">
+          Change the attention math itself so each token only attends to a
+          subset of others — sliding windows, global tokens, blocks, random
+          patterns. The full KV cache is still built; you just don't visit
+          all of it.
+          <br><br>
+          <strong style="color:var(--color-text-primary)">Examples:</strong>
+          Longformer, BigBird, sliding-window attention, block-sparse attention.
+          <br><br>
+          <strong style="color:var(--color-text-primary)">Cost cut:</strong>
+          attention compute drops from O(T²) toward O(T·w).
+        </div>
+      </div>
+
+      <div style="background:var(--color-background-secondary);border-left:3px solid {KEPT_COLOR};
+                  border-radius:0 8px 8px 0;padding:14px 16px">
+        <div style="font-size:11px;color:{KEPT_COLOR};font-weight:600;text-transform:uppercase;
+                    letter-spacing:.06em;margin-bottom:6px">Axis 2 · KV cache eviction</div>
+        <div style="font-size:14px;font-weight:500;margin-bottom:8px">Reduce <em>memory</em></div>
+        <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.6">
+          Keep the attention math intact. After computing K and V for every
+          token, throw away the entries that aren't worth holding onto. The
+          model still sees full attention during prefill — it just decodes
+          against a slimmer cache.
+          <br><br>
+          <strong style="color:var(--color-text-primary)">Examples:</strong>
+          SnapKV, H2O, StreamingLLM, Scissorhands, Ada-KV.
+          <br><br>
+          <strong style="color:var(--color-text-primary)">Cost cut:</strong>
+          KV memory drops from O(T) toward O(k) per layer per head.
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:14px;padding:12px 16px;background:#BA751715;border-left:3px solid #BA7517;
+         border-radius:0 6px 6px 0;font-size:13px;color:var(--color-text-secondary);line-height:1.7">
+      <strong style="color:var(--color-text-primary)">They're complementary, not competing.</strong>
+      Sparse attention and KV eviction can stack: a sliding-window model can
+      <em>also</em> compress its sliding cache with SnapKV-style voting. SnapKV
+      itself is appealing precisely because it requires <em>no</em> changes to
+      the underlying attention — it's a drop-in for any standard transformer.
+    </div>
+    """)
+
+
+# ── Agentic memory: 3-tier hierarchy panel ───────────────────────────────────
+
+def plot_memory_hierarchy():
+    """
+    Three-column panel: hot / warm / cold memory tiers, with parallels
+    between LLM-internal memory and agent-system memory.
+    """
+    HOT, WARM, COLD = "#D85A30", "#BA7517", "#534AB7"
+    return mo.Html(f"""
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      <div style="background:var(--color-background-secondary);border-top:4px solid {HOT};
+                  border-radius:6px;padding:14px 16px">
+        <div style="font-size:10px;color:{HOT};font-weight:600;text-transform:uppercase;
+                    letter-spacing:.06em;margin-bottom:4px">Hot tier</div>
+        <div style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--color-text-primary)">
+          fast · expensive · small
+        </div>
+        <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.6">
+          <strong style="color:var(--color-text-primary)">In an LLM:</strong>
+          the KV cache. Every generation step touches it. Bytes per token are
+          enormous; size is bounded by GPU memory.<br><br>
+          <strong style="color:var(--color-text-primary)">In an agent:</strong>
+          the live context window. Whatever the model can see <em>right now</em>
+          while planning the next action.
+        </div>
+      </div>
+
+      <div style="background:var(--color-background-secondary);border-top:4px solid {WARM};
+                  border-radius:6px;padding:14px 16px">
+        <div style="font-size:10px;color:{WARM};font-weight:600;text-transform:uppercase;
+                    letter-spacing:.06em;margin-bottom:4px">Warm tier</div>
+        <div style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--color-text-primary)">
+          medium · cheaper · larger
+        </div>
+        <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.6">
+          <strong style="color:var(--color-text-primary)">In an LLM:</strong>
+          the prompt text itself, sitting in CPU/RAM, ready to be re-prefilled
+          if needed.<br><br>
+          <strong style="color:var(--color-text-primary)">In an agent:</strong>
+          a scratchpad, working notes, recent tool outputs — text the agent
+          can pull back into context cheaply on the next turn.
+        </div>
+      </div>
+
+      <div style="background:var(--color-background-secondary);border-top:4px solid {COLD};
+                  border-radius:6px;padding:14px 16px">
+        <div style="font-size:10px;color:{COLD};font-weight:600;text-transform:uppercase;
+                    letter-spacing:.06em;margin-bottom:4px">Cold tier</div>
+        <div style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--color-text-primary)">
+          slow · cheap · ~unbounded
+        </div>
+        <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.6">
+          <strong style="color:var(--color-text-primary)">In an LLM:</strong>
+          retrieval (RAG). Not really "the model's memory" — it's a database
+          the model queries on demand.<br><br>
+          <strong style="color:var(--color-text-primary)">In an agent:</strong>
+          long-term memory store: vector DB, episodic logs, learned skills,
+          summarised past sessions (MemGPT, Letta, Claude memory).
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:14px;padding:12px 16px;background:#1D9E7515;border-left:3px solid {KEPT_COLOR};
+         border-radius:0 6px 6px 0;font-size:13px;color:var(--color-text-secondary);line-height:1.7">
+      <strong style="color:var(--color-text-primary)">The same question, three scales.</strong>
+      SnapKV asks "what should I keep in the hot tier?" using the model's own
+      attention as the signal. Agents face the identical question one level up:
+      "what should I keep in context, what should I summarise, what should I
+      drop?" The answer-shape is the same — <em>recent + currently relevant</em> —
+      and the design knobs (budget, observation window, importance signal) all
+      have direct agent counterparts.
+    </div>
+    """)
+
+
+def plot_memory_types():
+    """
+    Five canonical memory types and how KV cache management does (or doesn't)
+    affect each of them. The point: KV cache is the working-memory layer —
+    every other type only matters when it's surfaced through it.
+    """
+    # impact levels: "direct" (green), "gateway" (orange), "none" (gray)
+    rows = [
+        {
+            "name": "Working",
+            "icon": "🔥",
+            "what": "What the model is actively manipulating right now to produce the next token.",
+            "where": "KV cache (in GPU)",
+            "where_color": "#D85A30",
+            "impact": "direct",
+            "impact_text": "★ This <em>is</em> the KV cache. SnapKV optimises here.",
+        },
+        {
+            "name": "Short-term",
+            "icon": "⚡",
+            "what": "Recent turns of the conversation — still in the prompt the agent sees.",
+            "where": "Context window → KV cache",
+            "where_color": "#BA7517",
+            "impact": "direct",
+            "impact_text": "Cache size sets a hard ceiling on how much of this stays addressable.",
+        },
+        {
+            "name": "Episodic",
+            "icon": "📓",
+            "what": "Specific past events: previous sessions, what the user said yesterday, prior tool calls.",
+            "where": "External store · vector DB · summary log",
+            "where_color": "#534AB7",
+            "impact": "gateway",
+            "impact_text": "Indirect. Only matters once retrieved into context — then it's working memory again.",
+        },
+        {
+            "name": "Semantic",
+            "icon": "📚",
+            "what": "World knowledge and facts the model already learned during training.",
+            "where": "Model weights (parametric)",
+            "where_color": "#888780",
+            "impact": "none",
+            "impact_text": "Separate substrate. KV cache compression cannot help or hurt it.",
+        },
+        {
+            "name": "Procedural",
+            "icon": "🛠",
+            "what": "Skills and how-to: tool use, output formats, reasoning patterns.",
+            "where": "Model weights + tool definitions in prompt",
+            "where_color": "#888780",
+            "impact": "gateway",
+            "impact_text": "Skills live in weights; tool definitions live in context — those <em>do</em> share the cache.",
+        },
+    ]
+
+    impact_styles = {
+        "direct":  ("#1D9E75", "#1D9E7515"),
+        "gateway": ("#BA7517", "#BA751715"),
+        "none":    ("#888780", "#88878015"),
+    }
+
+    body = ""
+    for r in rows:
+        border, bg = impact_styles[r["impact"]]
+        body += f"""
+        <tr>
+          <td style="padding:10px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);
+                     vertical-align:top;width:120px">
+            <div style="font-size:18px;line-height:1">{r['icon']}</div>
+            <div style="font-size:13px;font-weight:600;margin-top:2px;color:var(--color-text-primary)">
+              {r['name']}
+            </div>
+          </td>
+          <td style="padding:10px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);
+                     font-size:12px;color:var(--color-text-secondary);vertical-align:top;line-height:1.55">
+            {r['what']}
+          </td>
+          <td style="padding:10px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);
+                     vertical-align:top;width:200px">
+            <span style="display:inline-block;background:{r['where_color']}22;
+                         color:{r['where_color']};border:1px solid {r['where_color']};
+                         border-radius:10px;padding:2px 8px;font-size:11px;font-weight:500">
+              {r['where']}
+            </span>
+          </td>
+          <td style="padding:10px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);
+                     vertical-align:top;background:{bg};border-left:3px solid {border};
+                     font-size:12px;color:var(--color-text-secondary);line-height:1.55">
+            {r['impact_text']}
+          </td>
+        </tr>
+        """
+
+    return mo.Html(f"""
+    <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:10px;line-height:1.6">
+      Cognitive science distinguishes several memory types. Map them onto an
+      LLM agent and a clear picture appears: <strong style="color:var(--color-text-primary)">KV
+      cache is the gateway</strong> — anything from any memory type, to shape
+      the next token, must pass through it.
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:8px;
+                padding:4px 10px;overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse">
+        <thead>
+          <tr>
+            <th style="text-align:left;padding:8px 12px;font-size:10px;
+                       text-transform:uppercase;letter-spacing:.06em;
+                       color:var(--color-text-secondary);font-weight:600">Type</th>
+            <th style="text-align:left;padding:8px 12px;font-size:10px;
+                       text-transform:uppercase;letter-spacing:.06em;
+                       color:var(--color-text-secondary);font-weight:600">In an agent</th>
+            <th style="text-align:left;padding:8px 12px;font-size:10px;
+                       text-transform:uppercase;letter-spacing:.06em;
+                       color:var(--color-text-secondary);font-weight:600">Where it lives</th>
+            <th style="text-align:left;padding:8px 12px;font-size:10px;
+                       text-transform:uppercase;letter-spacing:.06em;
+                       color:var(--color-text-secondary);font-weight:600">KV cache role</th>
+          </tr>
+        </thead>
+        <tbody>{body}</tbody>
+      </table>
+    </div>
+    <div style="margin-top:12px;padding:10px 14px;background:#1D9E7515;border-left:3px solid #1D9E75;
+         border-radius:0 6px 6px 0;font-size:12px;color:var(--color-text-secondary);line-height:1.6">
+      <strong style="color:var(--color-text-primary)">The bottleneck principle:</strong>
+      a great long-term memory store doesn't help if the agent can't fit the
+      retrieved chunk into context. A clever KV-cache policy is what lets the
+      gateway carry richer episodic and procedural content per turn.
+      That's why working-memory optimisation (SnapKV and friends) compounds
+      with every other memory layer you add.
+    </div>
+    """)
+
+
+def plot_agent_mapping():
+    """Side-by-side mapping table: SnapKV concept ↔ agent memory concept."""
+    pairs = [
+        ("KV cache",                      "Conversation context window"),
+        ("Observation window (last w tokens)", "Current user message · current goal"),
+        ("Per-token attention voting",    "Per-turn relevance scoring"),
+        ("Top-k token selection",         "Which past turns to keep verbatim"),
+        ("Max-pool clustering",           "Keeping local context around an important turn"),
+        ("Per-head budget",               "Per-tool / per-skill memory budget"),
+        ("Adaptive observation window",   "Adaptive recall depth based on task uncertainty"),
+        ("Eviction (drop entry)",         "Drop or summarise an old turn"),
+    ]
+    rows = "".join(
+        f"""
+        <tr>
+          <td style="padding:8px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);
+                     font-size:13px;font-family:var(--font-mono);color:#1D9E75">{a}</td>
+          <td style="padding:8px 12px;border-bottom:1px solid var(--color-border, #e5e5e5);
+                     font-size:13px;color:var(--color-text-primary)">→ &nbsp;{b}</td>
+        </tr>
+        """
+        for a, b in pairs
+    )
+    return mo.Html(f"""
+    <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:8px">
+      Every SnapKV design knob has a direct counterpart in an agent's memory loop.
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:8px;
+                padding:6px 10px;overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse">
+        <thead>
+          <tr>
+            <th style="text-align:left;padding:8px 12px;font-size:11px;
+                       text-transform:uppercase;letter-spacing:.06em;
+                       color:var(--color-text-secondary);font-weight:600">SnapKV (tokens)</th>
+            <th style="text-align:left;padding:8px 12px;font-size:11px;
+                       text-transform:uppercase;letter-spacing:.06em;
+                       color:var(--color-text-secondary);font-weight:600">Agent memory (turns)</th>
+          </tr>
+        </thead>
+        <tbody>{rows}</tbody>
+      </table>
+    </div>
+    """)
+
+
+# ── GAME 5. Agent memory over turns ──────────────────────────────────────────
+
+def simulate_agent_loop(n_turns: int = 12, strategy: str = "Agent + Summarise",
+                        kv_limit: int = 800):
+    """
+    Stacked-bar simulator: tokens accumulating across turns of an agent
+    conversation, partitioned into hot (in KV) / cold (summarised, recoverable) /
+    evicted (gone) tiers, under different memory strategies.
+    """
+    torch.manual_seed(7)
+    per_turn = [int(60 + float(torch.rand(1)) * 80) for _ in range(n_turns)]
+
+    hot_series, cold_series, evicted_series = [], [], []
+    hot, cold, evicted = 0, 0, 0
+    SUMMARY_RATIO = 0.15  # summary = ~15% of summarised tokens
+
+    for added in per_turn:
+        hot += added
+        if strategy == "Full Cache":
+            pass
+        elif strategy == "Streaming (recent only)":
+            if hot > kv_limit:
+                evicted += hot - kv_limit
+                hot = kv_limit
+        elif strategy == "SnapKV-style (intent-aware)":
+            # Same eviction rate as streaming, but informed selection — modeled
+            # as a slightly higher effective cap because the kept tokens are
+            # the "right" ones (less re-prefill needed in practice).
+            cap = int(kv_limit * 1.0)
+            if hot > cap:
+                evicted += hot - cap
+                hot = cap
+        elif strategy == "Agent + Summarise":
+            if hot > kv_limit:
+                overflow = hot - kv_limit
+                hot = kv_limit
+                cold += int(overflow * SUMMARY_RATIO)
+                # nothing fully evicted — recoverable from cold tier
+        hot_series.append(hot)
+        cold_series.append(cold)
+        evicted_series.append(evicted)
+
+    total_seen = sum(per_turn)
+    accessible = hot_series[-1] + cold_series[-1]
+    compression = accessible / max(1, total_seen)
+
+    labels = [f"T{i+1}" for i in range(n_turns)]
+    cfg = f"""{{
+      type:'bar',
+      data:{{
+        labels:{json.dumps(labels)},
+        datasets:[
+          {{label:'Hot — in KV cache',
+            data:{json.dumps(hot_series)},
+            backgroundColor:'#D85A30', borderWidth:0, stack:'mem'}},
+          {{label:'Cold — summarised / external',
+            data:{json.dumps(cold_series)},
+            backgroundColor:'#534AB7', borderWidth:0, stack:'mem'}},
+          {{label:'Evicted — lost',
+            data:{json.dumps(evicted_series)},
+            backgroundColor:'#B4B2A9', borderWidth:0, stack:'mem'}}
+        ]
+      }},
+      options:{{
+        responsive:true, maintainAspectRatio:false, animation:{{duration:400}},
+        plugins:{{
+          legend:{{position:'top',labels:{{boxWidth:12,font:{{size:11}}}}}},
+          tooltip:{{callbacks:{{label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y.toLocaleString() + ' tokens'}}}}
+        }},
+        scales:{{
+          x:{{stacked:true, title:{{display:true,text:'Conversation turn'}}}},
+          y:{{stacked:true, title:{{display:true,text:'Tokens'}}, beginAtZero:true}}
+        }}
+      }}
+    }}"""
+
+    summary = f"""
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px">
+      <div style="background:var(--color-background-secondary);border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:10px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.06em">Strategy</div>
+        <div style="font-size:13px;font-weight:500;color:var(--color-text-primary)">{strategy}</div>
+      </div>
+      <div style="background:var(--color-background-secondary);border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:10px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.06em">Total seen</div>
+        <div style="font-size:16px;font-weight:500">{total_seen:,}</div>
+      </div>
+      <div style="background:var(--color-background-secondary);border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:10px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.06em">Still accessible</div>
+        <div style="font-size:16px;font-weight:500;color:#1D9E75">{accessible:,}</div>
+      </div>
+      <div style="background:var(--color-background-secondary);border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:10px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.06em">Recall rate</div>
+        <div style="font-size:16px;font-weight:500;color:#BA7517">{compression:.0%}</div>
+      </div>
+    </div>
+    <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:6px;line-height:1.6">
+      KV limit = {kv_limit:,} tokens · {n_turns} turns · summarised tokens compressed to
+      ~{int(SUMMARY_RATIO*100)}% of original.
+    </div>
+    """
+    return mo.Html(_chart_block("Agent memory over turns by strategy", cfg,
+                                height_px=320, pre_canvas_html=summary))
+
+

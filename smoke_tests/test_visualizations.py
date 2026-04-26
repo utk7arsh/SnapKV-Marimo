@@ -27,6 +27,7 @@ if str(ROOT) not in sys.path:
 
 from src.visualizations import (  # noqa: E402
     plot_adaptive_window,
+    plot_agent_mapping,
     plot_attention_compute,
     plot_attention_consistency,
     plot_budget_quality,
@@ -34,11 +35,17 @@ from src.visualizations import (  # noqa: E402
     plot_human_memory,
     plot_kv_growth,
     plot_memory_breakdown,
+    plot_memory_hierarchy,
+    plot_memory_types,
     plot_naive_strategy,
     plot_per_head_heatmap,
+    plot_two_axes,
     plot_vote_cluster,
     render_algo_step,
+    run_custom_policy,
     run_demo,
+    run_needle_demo,
+    simulate_agent_loop,
 )
 
 
@@ -73,6 +80,18 @@ CASES = [
     ("render_algo_step/2",        lambda: render_algo_step(2),                               False),
     ("render_algo_step/3",        lambda: render_algo_step(3),                               False),
     ("render_algo_step/4",        lambda: render_algo_step(4),                               False),
+    ("run_needle_demo/early",     lambda: run_needle_demo("early",  0.25, 60),               False),
+    ("run_needle_demo/middle",    lambda: run_needle_demo("middle", 0.25, 60),               False),
+    ("run_needle_demo/late",      lambda: run_needle_demo("late",   0.25, 60),               False),
+    ("run_custom_policy",         lambda: run_custom_policy(SAMPLE_PROMPT, 0.3, 0.3, 0.2, 0.5), False),
+    ("plot_two_axes",             lambda: plot_two_axes(),                                   False),
+    ("plot_memory_hierarchy",     lambda: plot_memory_hierarchy(),                           False),
+    ("plot_memory_types",         lambda: plot_memory_types(),                               False),
+    ("plot_agent_mapping",        lambda: plot_agent_mapping(),                              False),
+    ("simulate_agent_loop/full",  lambda: simulate_agent_loop(12, "Full Cache", 800),        True),
+    ("simulate_agent_loop/stream",lambda: simulate_agent_loop(12, "Streaming (recent only)", 800), True),
+    ("simulate_agent_loop/snap",  lambda: simulate_agent_loop(12, "SnapKV-style (intent-aware)", 800), True),
+    ("simulate_agent_loop/sum",   lambda: simulate_agent_loop(12, "Agent + Summarise", 800), True),
 ]
 
 IFRAME_RE = re.compile(r'<iframe srcdoc="([^"]+)"', re.S)

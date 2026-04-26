@@ -15,6 +15,7 @@ def _():
 
     from src.visualizations import (
         plot_adaptive_window,
+        plot_agent_mapping,
         plot_attention_compute,
         plot_attention_consistency,
         plot_budget_quality,
@@ -22,15 +23,22 @@ def _():
         plot_human_memory,
         plot_kv_growth,
         plot_memory_breakdown,
+        plot_memory_hierarchy,
+        plot_memory_types,
         plot_naive_strategy,
         plot_per_head_heatmap,
+        plot_two_axes,
         plot_vote_cluster,
         render_algo_step,
+        run_custom_policy,
         run_demo,
+        run_needle_demo,
+        simulate_agent_loop,
     )
 
     return (
         plot_adaptive_window,
+        plot_agent_mapping,
         plot_attention_compute,
         plot_attention_consistency,
         plot_budget_quality,
@@ -38,11 +46,17 @@ def _():
         plot_human_memory,
         plot_kv_growth,
         plot_memory_breakdown,
+        plot_memory_hierarchy,
+        plot_memory_types,
         plot_naive_strategy,
         plot_per_head_heatmap,
+        plot_two_axes,
         plot_vote_cluster,
         render_algo_step,
+        run_custom_policy,
         run_demo,
+        run_needle_demo,
+        simulate_agent_loop,
     )
 
 
@@ -254,7 +268,7 @@ def _(mo, plot_kv_growth, seq_len_slider):
 def _(mo):
     mo.md(r"""
     ---
-    ## 4 · A Game: What Would You Keep?
+    ## GAME 1 · What Would You Keep?
 
     Suppose you must throw away some tokens to fit within a memory budget.
     You don't yet know exactly what the model will need to generate next.
@@ -556,7 +570,7 @@ def _(mo):
 def _(mo):
     mo.md(r"""
     ---
-    ## 8 · Memory DJ: Live Demo
+    ## GAME 2 · Live Demo — Memory DJ
 
     Paste any prompt below. Choose an eviction method and a cache budget.
     Watch which tokens each method keeps — and which it throws away.
@@ -611,6 +625,64 @@ def _(mo):
 
     SnapKV should keep the needle because the question (observation window) attends
     to it. "Recent Only" will drop it. "Random Drop" is unpredictable.
+
+    GAME 3 below makes that contrast explicit.
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ---
+    ## GAME 3 · Needle in a Haystack
+
+    A long prompt with one key fact buried inside, plus a question at the end.
+    Pick where to hide the needle and how tight your cache budget is — then
+    watch which policies actually preserve it.
+
+    SnapKV's observation window picks up the question's intent, so it tends to
+    pull the needle in. Recent-only and random can't.
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    needle_pos = mo.ui.radio(
+        options=["early", "middle", "late"],
+        value="middle",
+        label="Where is the needle hidden?",
+        inline=True,
+    )
+    needle_budget = mo.ui.slider(
+        start=0.10, stop=0.60, step=0.05, value=0.25,
+        label="Cache budget"
+    )
+    haystack_n = mo.ui.slider(
+        start=30, stop=100, step=10, value=60,
+        label="Haystack size (filler tokens)"
+    )
+    mo.vstack([needle_pos, needle_budget, haystack_n])
+    return haystack_n, needle_budget, needle_pos
+
+
+@app.cell
+def _(haystack_n, needle_budget, needle_pos, run_needle_demo):
+    run_needle_demo(
+        needle_position=needle_pos.value,
+        budget=needle_budget.value,
+        haystack_size=haystack_n.value,
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    Move the needle to "early" with a tight budget — Recent Only will fail
+    immediately. SnapKV usually keeps it, because the question keywords at
+    the end light up the needle's position via window attention.
     """)
     return
 
@@ -772,6 +844,267 @@ def _(mo):
 def _(mo):
     mo.md(r"""
     ---
+    ## GAME 4 · Live Demo — Build Your Own Memory Policy
+
+    You've now seen recency, frequency, and the SnapKV-style window-attention
+    signal. Combine them yourself and see how close you can get to SnapKV
+    with a hand-tuned formula:
+
+    $$\text{score}(t) \;=\; w_r \cdot \text{recency}(t) \;+\; w_f \cdot \text{frequency}(t) \;+\; w_a \cdot \text{attention}(t)$$
+
+    Then keep the top-budget tokens. Compare your selection to SnapKV's on
+    the same prompt.
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    custom_recency = mo.ui.slider(start=0.0, stop=1.0, step=0.05, value=0.30,
+                                  label="Recency weight  (wᵣ)")
+    custom_frequency = mo.ui.slider(start=0.0, stop=1.0, step=0.05, value=0.20,
+                                    label="Frequency weight (w_f)")
+    custom_attention = mo.ui.slider(start=0.0, stop=1.0, step=0.05, value=0.50,
+                                    label="Attention weight (wₐ)")
+    custom_budget = mo.ui.slider(start=0.10, stop=0.80, step=0.05, value=0.30,
+                                 label="Cache budget")
+    mo.vstack([custom_recency, custom_frequency, custom_attention, custom_budget])
+    return custom_attention, custom_budget, custom_frequency, custom_recency
+
+
+@app.cell
+def _(custom_attention, custom_budget, custom_frequency, custom_recency,
+      prompt_input, run_custom_policy):
+    run_custom_policy(
+        prompt=prompt_input.value,
+        budget=custom_budget.value,
+        recency_w=custom_recency.value,
+        frequency_w=custom_frequency.value,
+        attention_w=custom_attention.value,
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    Two ways to play:
+
+    - **Reverse-engineer SnapKV.** Set attention = 1, others = 0. Watch the
+      overlap with SnapKV jump to ~100%.
+    - **Reverse-engineer StreamingLLM.** Set recency = 1, others = 0. Watch
+      it collapse onto the tail of the prompt and miss any earlier needle.
+
+    Mixed weights interpolate between these extremes — that's the whole
+    eviction-policy design space, in three sliders.
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ---
+    ## 12 · The Bigger Picture: Two Axes
+
+    SnapKV is one move on a board with two axes. People tackling long-context
+    inference usually pick one — or, increasingly, both at once.
+    """)
+    return
+
+
+@app.cell
+def _(plot_two_axes):
+    plot_two_axes()
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    Where does this go next? Two natural directions, both in active research:
+
+    - **Token-level memory beyond eviction.** Instead of throwing entries
+      away, *compress* them — merge similar K/V pairs, summarise blocks,
+      or learn a small recurrent state that absorbs evicted tokens.
+    - **Layer- and head-aware budgets.** Not every layer needs the same
+      cache size; not every head deserves an equal share. Methods like
+      Ada-KV and PyramidKV start to vary the budget across the model;
+      our adaptive observation window above is one small step in that
+      direction.
+
+    The unifying question stays the same: *what should the model remember,
+    and at what granularity?*
+
+    Which is exactly the question agent designers have been asking too —
+    just at a different scale. That's the next section.
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ---
+    ## 13 · From KV Cache to Agentic Memory
+
+    Zoom out one level. An LLM agent doesn't run for one prompt — it runs for
+    *many turns*. Each turn appends user input, tool outputs, and assistant
+    responses. The conversation grows. The same memory crisis we just fought
+    at the **token level** shows up at the **turn level**: you can't keep
+    everything, you can't drop everything, and which past turns matter
+    depends on what the agent is trying to do *now*.
+
+    Modern agent systems answer this with a memory hierarchy:
+    """)
+    return
+
+
+@app.cell
+def _(plot_memory_hierarchy):
+    plot_memory_hierarchy()
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ### Types of memory — and where KV cache fits
+
+    The hierarchy above is *where* memory lives. The picture below is
+    *what kind* of memory it is. Cognitive science gives us five canonical
+    types; map each onto an LLM agent and the role of KV cache becomes
+    sharp:
+    """)
+    return
+
+
+@app.cell
+def _(plot_memory_types):
+    plot_memory_types()
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    Two takeaways from the table:
+
+    - **KV cache management can't fix what isn't there.** It won't add
+      semantic knowledge the model didn't learn, and it won't recover
+      episodes the agent never wrote down. Those are different problems
+      with different solutions (training, RAG, memory stores).
+    - **But it gates everything else.** A retrieved episode, a tool definition,
+      a reasoning chain — all of them have to ride the cache to influence
+      the next token. So how cleverly you spend cache budget compounds with
+      every other memory layer your agent uses.
+
+    That's why SnapKV-style ideas matter beyond the paper's benchmarks:
+    they make the gateway wider for the same hardware budget.
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ### The same knobs, one level up
+
+    Every design decision SnapKV makes at the token level has a direct
+    counterpart in agent memory:
+    """)
+    return
+
+
+@app.cell
+def _(plot_agent_mapping):
+    plot_agent_mapping()
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    The interesting thing isn't that the analogy exists — it's that the
+    *same shape of solution wins at both scales*. "Recent + currently
+    relevant, with local context preserved" is a good policy for tokens in
+    a KV cache and for turns in an agent loop. Get that wrong and either
+    layer breaks the same way: lose old context, lose the thread.
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ---
+    ## GAME 5 · Agent Memory Over Turns
+
+    Run the same kinds of memory policies we used for tokens — but now over
+    a multi-turn agent conversation. Each turn adds tokens; the strategy
+    decides what stays in the **hot tier** (live context), what gets pushed
+    to the **cold tier** (summarised / external store), and what gets lost.
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    agent_strategy = mo.ui.radio(
+        options=[
+            "Full Cache",
+            "Streaming (recent only)",
+            "SnapKV-style (intent-aware)",
+            "Agent + Summarise",
+        ],
+        value="Agent + Summarise",
+        label="Memory strategy",
+    )
+    agent_turns = mo.ui.slider(start=4, stop=30, step=1, value=14,
+                               label="Number of conversation turns")
+    agent_limit = mo.ui.slider(start=200, stop=4000, step=100, value=800,
+                               label="Hot-tier limit (tokens)")
+    mo.vstack([agent_strategy, agent_turns, agent_limit])
+    return agent_limit, agent_strategy, agent_turns
+
+
+@app.cell
+def _(agent_limit, agent_strategy, agent_turns, simulate_agent_loop):
+    simulate_agent_loop(
+        n_turns=agent_turns.value,
+        strategy=agent_strategy.value,
+        kv_limit=agent_limit.value,
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    What to try:
+
+    - **Full Cache** with a long conversation — accessible tokens stay at
+      100%, but the hot bar grows unbounded. This is what current agents
+      *can't* do indefinitely.
+    - **Streaming (recent only)** — once you exceed the hot-tier limit,
+      tokens fall straight into the gray "evicted" band. Old context is
+      gone forever.
+    - **SnapKV-style** — same eviction shape, but the surviving tokens are
+      the *informative* ones. Same hot footprint, better recall in practice.
+    - **Agent + Summarise** — overflow gets compressed into the cold tier
+      instead of being lost. Recall rate stays close to 100%, hot tier
+      stays bounded — at the cost of running a summariser between turns.
+
+    The recall-rate stat in the cards is the bottom line: *of all the
+    tokens this agent has ever seen, how many can it still get to?*
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ---
     ## Summary
 
     | Method | Core idea | Budget type | Long-context quality |
@@ -789,6 +1122,17 @@ def _(mo):
     > SnapKV works because the model's **current intent** — expressed in the last
     > few tokens of the prompt — reliably predicts which past tokens it will need
     > during generation. So we look there first, and throw the rest away.
+
+    ### Why this matters beyond one paper
+
+    The same idea generalises. At the **token level** it's SnapKV picking which
+    KV entries to keep. At the **turn level** it's an agent picking which past
+    messages to keep verbatim, which to summarise, and which to drop. Same
+    question — *what should we remember, given what we're trying to do now?* —
+    same answer-shape: recent + currently relevant, with local context preserved.
+
+    SnapKV is appealing not because it's the final word on memory, but because
+    it's a clean, intuitive instance of a much bigger pattern.
 
     ---
 
