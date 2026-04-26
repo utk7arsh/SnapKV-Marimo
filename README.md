@@ -1,8 +1,8 @@
-# SnapKV: Interactive Notebook
+# What Should an LLM Remember?
 
-**molab x alphaXiv Competition Submission**
+**molab × alphaXiv Competition Submission**
 
-An interactive marimo notebook that brings [SnapKV (NeurIPS 2024)](https://arxiv.org/abs/2404.14469) to life — from the core insight to a live token-level demo and a novel adaptive extension.
+An interactive marimo notebook that turns [SnapKV (NeurIPS 2024)](https://arxiv.org/abs/2404.14469) into a story — from the first intuition about memory all the way to agentic systems, with six interactive games along the way.
 
 ## Paper
 
@@ -12,19 +12,35 @@ An interactive marimo notebook that brings [SnapKV (NeurIPS 2024)](https://arxiv
 
 ## What's in the notebook
 
-| Section | What you'll see |
-|---|---|
-| 1 · The problem | KV cache memory growth across methods |
-| 2 · The insight | Attention consistency between obs. window and full sequence |
-| 3 · The algorithm | Interactive step-through of voting + clustering |
-| 4 · Live demo | Type a prompt — watch tokens get kept/evicted per method |
-| 5 · Head-level analysis | Per-head attention specialization heatmap |
-| 6 · Extension | Adaptive observation window via attention entropy |
-| 7 · Budget vs quality | SnapKV vs H2O vs StreamingLLM tradeoff curves |
+| # | Section | What you'll see |
+|---|---|---|
+| 1 | Why LLMs Need Memory | Autoregressive generation intuition; interactive KV cache memory equation |
+| 2 | What is KV Cache? | Library analogy for K/V/Q; O(T²) vs O(T) compute chart |
+| 3 | The Problem: Memory Grows Linearly | Memory footprint across methods; why linear growth breaks GPU serving |
+| **G1** | **Game: What Would You Keep?** | **Try naive eviction strategies — each one has a fatal flaw** |
+| 5 | How Humans Handle This | Editable memory-triage chart: recency vs repetition vs goal relevance |
+| 6 | SnapKV's Key Insight | Attention consistency; Figure 2 embedded from the original paper |
+| 7 | How SnapKV Works | 4-step algorithm walkthrough; interactive vote + cluster pipeline |
+| **G2** | **Game: Memory DJ** | **Paste any prompt, pick a method and budget, watch token selection live** |
+| **G3** | **Game: Needle in a Haystack** | **Hide a fact at early/middle/late position; see which methods preserve it** |
+| 9 | Per-Head Specialization | Per-head attention heatmap; why global budgets destroy head diversity |
+| 10 | Our Extension | Entropy-guided adaptive observation window per head |
+| 11 | Budget vs Quality | LongBench-style tradeoff curves across methods |
+| **G4** | **Game: Build Your Own Policy** | **Mix recency + frequency + attention weights; converge on SnapKV yourself** |
+| 12 | Competitors | Method comparison table and capability matrix |
+| **G5** | **Game: Method Picker** | **Answer a few questions about your use-case; get a recommendation** |
+| 13 | The Bigger Picture | Sparse attention vs KV eviction — two orthogonal axes |
+| 14 | From KV Cache to Agentic Memory | Hot/warm/cold memory hierarchy; SnapKV concepts mapped to agent turns |
+| **G6** | **Game: Agent Memory Over Turns** | **Simulate a multi-turn agent loop under different memory strategies** |
 
 ## Our extension
 
-The original paper uses a fixed observation window size `w` across all heads. We propose **entropy-guided adaptive windowing**: heads with high attention entropy (diffuse, uncertain attention) receive a larger observation window, while focused heads need fewer tokens. This mirrors Ada-KV's per-head budget idea but applies it to the *observation stage* rather than the cache budget.
+The original paper uses a fixed observation window size `w` across all heads. We propose **entropy-guided adaptive windowing**: each head's observation window is sized proportionally to its attention entropy.
+
+- High-entropy heads (diffuse, uncertain attention) get a **larger** window — they need more tokens before their selection stabilises.
+- Low-entropy heads (focused, specialised attention) get a **smaller** window — a few tokens already tell you what they care about.
+
+This applies Ada-KV's per-head adaptation idea one stage earlier — to the *observation window* rather than the cache budget — and requires no additional parameters or training.
 
 ## Run locally
 
