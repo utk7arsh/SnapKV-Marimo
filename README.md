@@ -1,6 +1,8 @@
 # What Should an LLM Remember?
 
-**molab × alphaXiv Competition Submission**
+**molab × alphaXiv Competition Submission** 
+
+Link: https://molab.marimo.io/github/utk7arsh/SnapKV-Marimo/blob/master/notebooks/walkthrough.py/wasm
 
 An interactive marimo notebook that turns [SnapKV (NeurIPS 2024)](https://arxiv.org/abs/2404.14469) into a story — from the first intuition about memory all the way to agentic systems, with six interactive games along the way.
 
